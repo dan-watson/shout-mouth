@@ -6,6 +6,7 @@ gem "haml"
 
 group :development do
 	gem "shotgun"
+	gem "dm-sqlite-adapter"
 end
 
 group :test do
