@@ -6,7 +6,7 @@
 *.exe
 *.o
 *.so
-.rvmrc
+*.rvmrc
 
 # Packages #
 ############
@@ -33,6 +33,7 @@
 ehthumbs.db
 Icon?
 Thumbs.db
+
 
 
 
