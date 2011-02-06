@@ -2,6 +2,7 @@ GEM
   remote: http://rubygems.org/
   specs:
     addressable (2.2.4)
+    crypt (1.1.4)
     data_objects (0.10.3)
       addressable (~> 2.1)
     datamapper (1.0.2)
@@ -75,6 +76,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  crypt
   datamapper
   dm-sqlite-adapter
   haml

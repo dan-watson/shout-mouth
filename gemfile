@@ -3,6 +3,7 @@ source "http://rubygems.org/"
 gem "sinatra" 
 gem "datamapper"
 gem "haml"
+gem "crypt"
 
 group :development do
 	gem "shotgun"
