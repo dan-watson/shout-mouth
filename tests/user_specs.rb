@@ -24,9 +24,9 @@ describe User, "defaults" do
     user.is_active.should be_true
   end
   
-  it "should have an four length array random salt" do
+  it "should have an eight character random salt" do
     user = User.new(:email => "test@rails.com", :password => "password@1")
-    user.salt.length.should == 4
+    user.salt.length.should == 8
   end
   
   it "should not be able to change the default values for an already saved user" do
@@ -44,7 +44,7 @@ end
 
 
 describe User, "encryption and authentication" do
-  it "should encrypt the plain password before save" do
+  it "should encrypt the plain password on creation" do
     user = User.new(:email => "dan@d.com", :password => "passwwwwooord")
     user.password.should_not == "passwwwwooord"
   end

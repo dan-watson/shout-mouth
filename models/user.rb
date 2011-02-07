@@ -42,7 +42,7 @@ class User < Base
     private
     
     def generate_salt
-      (0...4).map{rand(25).chr}.join
+      (0...8).map{rand(25).chr}.join
     end
     
     def encrypt_password password, salt
