@@ -1,12 +1,11 @@
-require_relative 'base'
+require_relative 'base/shout_record'
 
 class Comment
-  include Base
+  include Shout::Record
   
     property :comment, Text
     property :email, String
 
-  
     validates_presence_of :comment
     validates_format_of :email, :as => :email_address
   

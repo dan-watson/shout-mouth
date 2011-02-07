@@ -1,8 +1,8 @@
 require 'digest/sha1'
-require_relative 'base'
+require_relative 'base/shout_record'
 
 class User
-    include Base
+    include Shout::Record
 
       property :email, String
       property :password, Object

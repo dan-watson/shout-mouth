@@ -1,5 +1,4 @@
 TODO:
 
-1) Move active and created_at properties down to the base class
 3) Add askimet properties to comment
 4) Implement askimet using new keys

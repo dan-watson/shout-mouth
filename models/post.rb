@@ -1,7 +1,7 @@
-require_relative 'base'
+require_relative 'base/shout_record'
 
 class Post
-  include Base
+  include Shout::Record
     
     property :title, String
     property :body, Text
