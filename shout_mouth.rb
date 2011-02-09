@@ -7,7 +7,7 @@ require Dir.pwd + '/models/comment'
 require Dir.pwd + '/models/legacy_route'
 
 class ShoutMouth < Sinatra::Base
-  
+    
   get '/' do
     "Hello world, it's #{Time.now} at the server!"
   end

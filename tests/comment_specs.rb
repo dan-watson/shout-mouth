@@ -1,5 +1,6 @@
+require File.dirname(__FILE__) + '/../shout_mouth.rb'
+
 require 'rspec'
-require File.dirname(__FILE__) + '/../models/comment'
 
 describe Comment, "validation" do
   it "should not be valid if the email address and comment are not present" do

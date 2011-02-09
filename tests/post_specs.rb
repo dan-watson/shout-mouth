@@ -1,5 +1,6 @@
+require File.dirname(__FILE__) + '/../shout_mouth.rb'
+
 require 'rspec'
-require File.dirname(__FILE__) + '/../models/post'
 
 describe Post, "validation" do
   it "should not be valid if the title and body are not present" do

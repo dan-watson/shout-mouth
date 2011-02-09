@@ -2,11 +2,7 @@ namespace :db do
     require 'fileutils'
     require 'dm-core'
     require 'dm-migrations'
-    require File.dirname(__FILE__) + '/models/comment.rb'
-    require File.dirname(__FILE__) + '/models/post.rb'
-    require File.dirname(__FILE__) + '/models/user.rb'
-    require File.dirname(__FILE__) + '/models/legacy_route.rb'
-    require File.dirname(__FILE__) + '/models/base/shout_record.rb'
+    require File.dirname(__FILE__) + '/shout_mouth.rb'
         
     desc "Create The Database"
     task :create do |t, args|

@@ -6,8 +6,6 @@ require 'rack/test'
 require 'factory_girl'
 
 
-set :environment, :test
-
 describe "Catching all legacy routes" do
   include Rack::Test::Methods
   
@@ -34,9 +32,4 @@ describe "Catching all legacy routes" do
       last_response.should be_redirect
   end
   
-  after(:all) do
-    Factory.rspec_reset
-  end
-  
-
 end

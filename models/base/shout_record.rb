@@ -3,9 +3,9 @@ require 'dm-validations'
 
 module Shout
   module Record
+    
     DataMapper.setup(:default, "sqlite:///#{File.dirname(__FILE__)}/../../db/shout_mouth.db")
-    DataMapper::Logger.new(STDOUT, :debug)
-  
+    
     def self.included(base)
       base.class_eval do
         include DataMapper::Resource
