@@ -12,11 +12,23 @@ class ShoutMouth < Sinatra::Base
     "Hello world, it's #{Time.now} at the server!"
   end
   
+  get '/post/:slug' do
+    params[:slug]
+  end
+  
+  get '/page/:slug' do
+    params[:slug]
+  end
+  
+  get '/archive' do
+  
+  end
+      
   # Catches all routes - Will first check the legacy routes to see if 
   # a redirect is needed else it will render a 404 
   get '/*' do
     legacy_route = LegacyRoute.first(:slug => params[:splat])
-    redirect "/#{legacy_route.post.slug}", 301 unless legacy_route.nil?
+    redirect "/post/#{legacy_route.post.slug}", 301 unless legacy_route.nil?
     redirect '/', 404
   end
 
