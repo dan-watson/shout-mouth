@@ -5,6 +5,7 @@ namespace :db do
     require File.dirname(__FILE__) + '/models/comment.rb'
     require File.dirname(__FILE__) + '/models/post.rb'
     require File.dirname(__FILE__) + '/models/user.rb'
+    require File.dirname(__FILE__) + '/models/legacy_route.rb'
     require File.dirname(__FILE__) + '/models/base/shout_record.rb'
         
     desc "Create The Database"

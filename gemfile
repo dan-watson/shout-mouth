@@ -3,7 +3,6 @@ source "http://rubygems.org/"
 gem "sinatra" 
 gem "datamapper"
 gem "haml"
-gem "crypt"
 
 group :development do
 	gem "shotgun"
@@ -12,6 +11,7 @@ end
 
 group :test do
 	gem "rspec"
+	gem "factory_girl"
 end
 
 #gem "i18n", "~> 0.4.1"

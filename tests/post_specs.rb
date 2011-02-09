@@ -8,7 +8,11 @@ describe Post, "validation" do
   end
   
   it "should be valid if the required fields are supplied correctly" do
-    post = Post.new(:title => "T1", :body => "bd1")
+    #arrange
+    user = User.new(:email => "test@rails.com", :password => "password@1")
+    user.save
+    post = Post.new(:title => "T1", :body => "bd1", :user => user)
+    #assert
     post.should be_valid
   end
 end
