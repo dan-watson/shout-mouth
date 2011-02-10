@@ -31,5 +31,4 @@ describe "Catching all legacy routes" do
       last_response.headers["Location"].should include "this-is-how-we-roll"
       last_response.should be_redirect
   end
-  
 end

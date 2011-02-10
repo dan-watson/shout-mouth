@@ -37,10 +37,6 @@ describe User, "defaults" do
     lambda { user.salt = "" }.should raise_error(NoMethodError)
     lambda { user.created_at = DateTime.now }.should raise_error(NoMethodError)
   end
-  
-  after(:all) do
-      User.all.each{|user| user.destroy}
-  end
 end
 
 

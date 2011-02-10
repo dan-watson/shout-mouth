@@ -17,10 +17,6 @@ describe Post, "validation" do
     post.should be_valid
   end
   
-  after(:all) do
-      User.all.each{|user| user.destroy}
-  end
-  
 end
 
 describe Post, "defaults" do

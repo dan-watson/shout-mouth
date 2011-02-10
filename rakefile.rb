@@ -16,13 +16,17 @@ namespace :db do
     
     desc "Delete Database File"
     task :delete do |t, args|
-      FileUtils.rm_rf(File.dirname(__FILE__) + '/db/shout_mouth.db')
+      FileUtils.rm_rf(File.dirname(__FILE__) + "/db/shout_mouth.db")
     end 
 end
 
 namespace :specs do
+  
+  ENV['RACK_ENV'] = 'test'
+
   desc "Run All The Specs"
   task :run_all do |t, args|
+    Rake::Task["db:create"].invoke
     exec 'rspec -c ' + File.dirname(__FILE__) + '/tests/*.rb'
   end
 end

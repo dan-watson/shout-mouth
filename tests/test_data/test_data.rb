@@ -12,8 +12,10 @@ Factory.define :valid_post, :class => Post do |f|
 end
 
 Factory.define :valid_comment, :class => Comment do |f|
-  f.email 'ham@ok.com'
-  f.comment 'This is something that needs more discussion!'
+  f.comment_author 'Ham Ok'
+  f.comment_author_email 'ham@ok.com'
+  f.comment_author_url 'http://myblog.com'
+  f.comment_content 'This is something that needs more discussion!'
   f.association :post, :factory => :valid_post
 end
 

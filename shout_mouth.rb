@@ -5,6 +5,7 @@ require Dir.pwd + '/models/user'
 require Dir.pwd + '/models/post'
 require Dir.pwd + '/models/comment'
 require Dir.pwd + '/models/legacy_route'
+require Dir.pwd + '/models/blog'
 
 class ShoutMouth < Sinatra::Base
     

@@ -3,7 +3,6 @@ require 'dm-validations'
 
 module Shout
   module Record
-    
     DataMapper.setup(:default, "sqlite:///#{File.dirname(__FILE__)}/../../db/shout_mouth.db")
     
     def self.included(base)
