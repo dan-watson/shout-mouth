@@ -33,4 +33,16 @@ describe Post, "defaults" do
     post = Post.new(:title => "T1", :body => "bd1")
     post.created_at.should_not be_nil
   end
+  
+  it "should have the is_page value set to false" do
+    post = Post.new(:title => "T1", :body => "bd1")
+    post.is_page.should be_false
+  end
+end
+
+describe Post, "slug" do
+    it "should change the title to a valid url string" do
+      post = Post.new(:title => "The wheels on my bus don't go round and round!", :body => "bd1")
+      post.slug.should == "the-wheels-on-my-bus-dont-go-round-and-round"
+    end
 end

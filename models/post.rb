@@ -5,6 +5,7 @@ class Post
     
     property :title, String
     property :body, Text
+    property :is_page, Boolean, :default => false
   
     validates_presence_of :title, :body
   
