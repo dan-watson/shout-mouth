@@ -23,4 +23,8 @@ class Post
       slug
     end
     
+    def permalink
+         "#{Blog.url}/#{slug}"
+    end
+    
 end

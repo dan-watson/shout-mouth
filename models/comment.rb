@@ -24,23 +24,19 @@ class Comment
         comment_attributes = {
           :key => Blog.akismet_key,  #Grab From Config
           :blog => Blog.url, #Grab From Config
-          :user_ip => self.user_ip,
-          :user_agent => self.user_agent, 
-          :referrer => self.referrer,
-          :permalink => self.permalink,
+          :user_ip => user_ip,
+          :user_agent => user_agent, 
+          :referrer => referrer,
+          :permalink => post.permalink,
           :comment_type => 'comment',
-          :comment_author => self.comment_author,
-          :comment_author_email => self.comment_author_email,
-          :comment_author_url => self.comment_author_url,
-          :comment_content => self.comment_content
+          :comment_author => comment_author,
+          :comment_author_email => comment_author_email,
+          :comment_author_url => comment_author_url,
+          :comment_content => comment_content
         }
         Akismetor.spam?(comment_attributes)
     end
-    
-    def permalink
-       "#{Blog.url}/#{self.post.slug}"
-    end
-    
+   
     before :save do
        self.is_spam = spam?
     end

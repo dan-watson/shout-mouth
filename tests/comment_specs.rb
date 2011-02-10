@@ -35,25 +35,6 @@ describe Comment, "defaults" do
   end
 end
 
-
-describe Comment, "method" do
-  before(:all) do
-    user = User.new(:email => "test@rails.com", :password => "password@1")
-    user.save
-    post = Post.new(:title => "T1", :body => "bd1", :user => user)
-    post.save
-    
-    @comment = Comment.new(:comment_author_email => "test@rails.com", :comment_content => "This is a test.", 
-                          :comment_author => "viagra-test-123", :comment_author_url => "http://myblog.com",
-                          :user_ip => "127.0.0.1", :user_agent => "Mozilla/5.0 (Macintosh; U; PPC Mac OS X 10.5; en-US; rv:1.9.0.3) Gecko/2008092414 Firefox/3.0.3",
-                          :referrer => "http://google.com", :post => post)
-  end
-  
-  it "permalink should join the blog url and slug correctly" do
-      @comment.permalink.should == "http://test.myblog.com/t1"
-  end
-end
-
 describe Comment, "spam checker" do
   
     before(:all) do

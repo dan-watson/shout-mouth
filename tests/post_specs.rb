@@ -42,3 +42,10 @@ describe Post, "slug" do
       post.slug.should == "the-wheels-on-my-bus-dont-go-round-and-round"
     end
 end
+
+describe Post, "permalink" do
+  it " should join the blog url and slug correctly" do
+      post = Post.new(:title => "The wheels on my bus don't go round and round!", :body => "bd1")
+      post.permalink.should == "http://test.myblog.com/the-wheels-on-my-bus-dont-go-round-and-round"
+  end
+end
