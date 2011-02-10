@@ -1,4 +1,8 @@
 TODO:
-
-3) Add askimet properties to comment
-4) Implement askimet using new keys
+--------------------------
+1) Add ability to theme the blog
+2) Add default theme
+3) Add default scope for user, post and comment
+4) Wire back to front
+5) Implement Metaweblog API
+--------------------------
