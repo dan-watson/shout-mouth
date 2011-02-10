@@ -17,6 +17,10 @@ class ShoutMouth < Sinatra::Base
     params[:slug]
   end
   
+  post '/post/:slug/add_comment' do
+    
+  end
+  
   get '/page/:slug' do
     params[:slug]
   end

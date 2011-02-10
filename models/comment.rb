@@ -19,8 +19,7 @@ class Comment
   
     belongs_to :post
     
-    def spam?
-        
+    def spam?       
         comment_attributes = {
           :key => Blog.akismet_key,  #Grab From Config
           :blog => Blog.url, #Grab From Config
