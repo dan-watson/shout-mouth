@@ -1,5 +1,6 @@
 require 'rubygems'
 require 'sinatra'
+require 'haml'
 require Dir.pwd + '/models/base/shout_record'
 require Dir.pwd + '/models/user'
 require Dir.pwd + '/models/post'
@@ -8,9 +9,12 @@ require Dir.pwd + '/models/legacy_route'
 require Dir.pwd + '/models/blog'
 
 class ShoutMouth < Sinatra::Base
-    
+  
+  set :public, File.dirname(__FILE__) + '/public'
+  
   get '/' do
-    "Hello world, it's #{Time.now} at the server!"
+    #"Hello world, it's #{Time.now} at the server!"
+    haml :index
   end
   
   get '/post/:slug' do
@@ -27,6 +31,10 @@ class ShoutMouth < Sinatra::Base
   
   get '/archive' do
   
+  end
+  
+  get '/site.css' do
+      
   end
       
   # Catches all routes - Will first check the legacy routes to see if 

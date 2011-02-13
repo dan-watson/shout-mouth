@@ -1,8 +1,10 @@
 TODO:
 --------------------------
 1) Add ability to theme the blog
-2) Add default theme
+2) Add default theme - Comments (Single Post)
+   See how RC does his code snippets - when importing current blog replace markup.
 3) Add default scope for user, post and comment
 4) Wire back to front
 5) Implement Metaweblog API
+6) Add functionality to have month and year in the url.
 --------------------------
