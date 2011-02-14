@@ -46,6 +46,6 @@ end
 describe Post, "permalink" do
   it " should join the blog url and slug correctly" do
       post = Post.new(:title => "The wheels on my bus don't go round and round!", :body => "bd1")
-      post.permalink.should == "http://test.myblog.com/the-wheels-on-my-bus-dont-go-round-and-round"
+      post.permalink.should == "http://test.myblog.com/post/#{DateTime.now.to_date.strftime("%Y/%m/%d")}/the-wheels-on-my-bus-dont-go-round-and-round"
   end
 end

@@ -24,7 +24,11 @@ class Post
     end
     
     def permalink
-         "#{Blog.url}/#{slug}"
+         "#{Blog.url}/post/#{url_date}/#{slug}"
+    end
+    
+    def url_date
+        created_at.to_date.strftime("%Y/%m/%d")
     end
     
 end

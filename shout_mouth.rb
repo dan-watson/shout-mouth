@@ -17,7 +17,7 @@ class ShoutMouth < Sinatra::Base
     haml :index
   end
   
-  get '/post/:slug' do
+  get '/post/:year/:month/:day/:slug' do
     params[:slug]
     haml :post
   end
