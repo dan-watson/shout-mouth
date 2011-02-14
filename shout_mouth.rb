@@ -19,6 +19,7 @@ class ShoutMouth < Sinatra::Base
   
   get '/post/:slug' do
     params[:slug]
+    haml :post
   end
   
   post '/post/:slug/add_comment' do
@@ -30,7 +31,7 @@ class ShoutMouth < Sinatra::Base
   end
   
   get '/archive' do
-  
+    haml :archive
   end
   
   get '/site.css' do
