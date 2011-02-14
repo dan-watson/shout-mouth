@@ -40,7 +40,7 @@ describe Comment, "spam checker" do
     before(:all) do
       user = User.new(:email => "test@rails.com", :password => "password@1")
       user.save
-      @post = Post.new(:title => "T1", :body => "bd1", :user => user)
+      @post = Post.new(:title => "T1", :body => "bd1", :tags => "tag1, tag2", :categories => "category1, category2", :user => user)
       @post.save
     end
     

@@ -5,5 +5,5 @@ TODO:
 3) Add default scope for user, post and comment
 4) Wire back to front
 5) Implement Metaweblog API
-6) Add functionality to have month and year in the url.
+6) Add Category and Tags to post.
 --------------------------

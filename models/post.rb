@@ -6,8 +6,10 @@ class Post
     property :title, String
     property :body, Text
     property :is_page, Boolean, :default => false
-  
-    validates_presence_of :title, :body
+    property :tags, CommaSeparatedList
+    property :categories, CommaSeparatedList
+    
+    validates_presence_of :title, :body, :tags, :categories
   
     belongs_to  :user
     has n, :comments

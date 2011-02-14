@@ -1,5 +1,6 @@
 require 'dm-core'
 require 'dm-validations'
+require 'dm-types'
 
 module Shout
   module Record
