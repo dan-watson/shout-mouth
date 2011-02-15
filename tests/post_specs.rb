@@ -49,3 +49,19 @@ describe Post, "permalink" do
       post.permalink.should == "http://test.myblog.com/post/#{DateTime.now.to_date.strftime("%Y/%m/%d")}/the-wheels-on-my-bus-dont-go-round-and-round"
   end
 end
+
+describe Post, "querying" do
+  before(:all) do
+   valid_post = Factory(:valid_post)
+   valid_post.save  
+  
+   inactive_post = Factory(:inactive_post)
+   inactive_post.save
+  
+  end
+  it "should not pull back inactive posts" do
+    all_posts = Post.all.count
+    active_posts = Post.all_active.count
+    active_posts.should be < all_posts
+  end
+end

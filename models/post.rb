@@ -1,5 +1,7 @@
 require_relative 'base/shout_record'
 
+require 'factory_girl'
+
 class Post
   include Shout::Record
     
@@ -32,5 +34,4 @@ class Post
     def url_date
         created_at.to_date.strftime("%Y/%m/%d")
     end
-    
 end

@@ -74,3 +74,21 @@ describe Comment, "spam checker" do
               
     end
 end
+
+describe Comment, "querying" do
+  before(:all) do
+   valid_comment = Factory(:valid_comment)
+   valid_comment.save  
+  
+   inactive_comment = Factory(:inactive_comment)
+   inactive_comment.save
+   
+   spam_comment = Factory(:spam_comment)
+   spam_comment.save
+  
+  end
+  it "should not pull back inactive and spam comments" do
+    Comment.all_active_and_ham.each{|comment| comment.is_active.should be_true}
+    Comment.all_active_and_ham.each{|comment| comment.is_spam.should be_false}
+  end
+end

@@ -12,6 +12,11 @@ module Shout
         property :id, DataMapper::Property::Serial
         property :is_active, DataMapper::Property::Boolean, :writer => :protected, :default => true
         property :created_at, DataMapper::Property::DateTime, :writer => :protected, :default => lambda{ |p,s| DateTime.now}
+        
+        #Scope
+        def self.all_active
+          all(:is_active => true, :order => [ :created_at.desc ])
+        end
       end
     end
   end

@@ -29,7 +29,7 @@ class User
       def authenticate password
         encrypt_password(password, self.salt) == self.password 
       end
-    
+          
       private
     
       def generate_salt

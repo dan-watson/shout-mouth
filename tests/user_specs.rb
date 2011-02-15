@@ -1,4 +1,5 @@
 require File.dirname(__FILE__) + '/../shout_mouth.rb'
+require File.dirname(__FILE__) + '/test_data/test_data.rb'
 
 require 'rspec'
 
@@ -49,5 +50,21 @@ describe User, "encryption and authentication" do
   it "should be able to authenticate the user against the encrypted password" do
     user = User.new(:email => "dan@d.com", :password => "pass")
     user.authenticate("pass").should be_true
+  end
+end
+
+describe User, "querying" do
+  before(:all) do
+   valid_user = Factory(:valid_user)
+   valid_user.save  
+  
+   inactive_user = Factory(:inactive_user)
+   inactive_user.save
+  
+  end
+  it "should not pull back inactive users" do
+    all_users = User.all.count
+    active_users = User.all_active.count
+    active_users.should be < all_users
   end
 end

@@ -39,4 +39,9 @@ class Comment
     before :save do
        self.is_spam = spam?
     end
+    
+    #Scope
+    def self.all_active_and_ham
+        all_active.all(:is_spam => false)
+    end
 end
