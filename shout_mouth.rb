@@ -100,7 +100,7 @@ class ShoutMouth < Sinatra::Base
   end
   
   def get_user_info(xmlrpc_call)
-    
+    return raise_xmlrpc_error("get on your bike")
     data = xmlrpc_call[1]
       # blog_id = data[0]; user = data[1]; pass = data[2]
     user = data[1]
@@ -128,6 +128,25 @@ class ShoutMouth < Sinatra::Base
     else
       false
     end
+  end
+  
+  def raise_xmlrpc_error(message)  
+    "<methodResponse>
+      <fault>
+        <value>
+          <struct>
+            <member>
+              <name>faultCode</name>
+              <value><int>40003</int></value>
+            </member>
+            <member>
+              <name>faultString</name>
+              <value><string>#{message}</string></value>
+          </member>
+        </struct>
+      </value>
+    </fault>
+    </methodResponse>"
   end
   
 end
