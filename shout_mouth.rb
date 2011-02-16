@@ -92,7 +92,14 @@ class ShoutMouth < Sinatra::Base
   end
   
   def get_user_info(xmlrpc_call)
+    
+    data = xmlrpc_call[1]
+      # blog_id = data[0]; user = data[1]; pass = data[2]
+    user = data[1]
+    password = data[2]
     resp = {
+          :user => user,
+          :password => password,
           :dateCreated => DateTime.now,
           :userid => 1,
           :postid => 1,
@@ -103,7 +110,16 @@ class ShoutMouth < Sinatra::Base
           :categories => ["General"],
           :date_created_gmt => DateTime.now,
         }
-        dateCreated = DateTime.now
-    XMLRPC::Marshal.dump_response(dateCreated)
+    XMLRPC::Marshal.dump_response(resp)
   end
+  
+  def authenticate(xmlrpc_call)
+    user = User.find(:email => xmlrpc_call[1][1])
+    if user.exists?
+      user.authenticate(xmlrpc_call[1][2])
+    else
+      false
+    end
+  end
+  
 end
