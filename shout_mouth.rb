@@ -31,6 +31,14 @@ class ShoutMouth < Sinatra::Base
     params[:slug]
   end
   
+  get '/category/:category' do
+    params[:category]
+  end
+  
+  get '/tag/:tag' do
+    params[:tag]
+  end 
+  
   get '/archive' do
     haml :archive
   end
