@@ -34,4 +34,20 @@ class Post
     def url_date
         created_at.to_date.strftime("%Y/%m/%d")
     end
+    
+    def to_metaweblog
+      {
+        :postid => id,
+        :dateCreated => created_at,
+        :title => title,
+        :description => body,
+        :link => permalink,
+        :wp_slug => slug,
+        :mt_excerpt => "",
+        :mt_allow_comments => "",
+        :mt_keywords => tags.join(","),
+        :publish => is_active,
+        :categories => categories
+      }
+    end
 end

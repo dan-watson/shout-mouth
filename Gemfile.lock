@@ -55,6 +55,7 @@ GEM
     fastercsv (1.5.4)
     haml (3.0.25)
     json_pure (1.5.1)
+    nokogiri (1.4.4)
     rack (1.2.1)
     rspec (2.4.0)
       rspec-core (~> 2.4.0)
@@ -82,6 +83,7 @@ DEPENDENCIES
   dm-sqlite-adapter
   factory_girl
   haml
+  nokogiri
   rspec
   shotgun
   sinatra

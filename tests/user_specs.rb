@@ -15,7 +15,7 @@ describe User, "validation" do
   end
   
   it "should be valid if the required field and email address are supplied correctly" do
-    user = User.new(:email => "test@rails.com", :password => "password@1")
+    user = User.new(:email => "test@rails.com", :password => "password@1", :firstname => "Test", :lastname => "Rails")
     user.should be_valid
   end
 end

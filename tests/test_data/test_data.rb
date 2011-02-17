@@ -3,11 +3,15 @@ require 'factory_girl'
 Factory.define :valid_user, :class => User do |f|
   f.email 'dan@shout_mouth.com'
   f.password 'password123'
+  f.firstname 'Daniel'
+  f.lastname 'Watson'
 end
 
 Factory.define :inactive_user, :class => User do |f|
   f.email 'dan@shout_mouth.com'
   f.password 'password123'
+  f.firstname 'Daniel'
+  f.lastname 'Watson'
   f.is_active false
 end
 

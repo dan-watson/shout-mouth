@@ -42,24 +42,6 @@ class ShoutMouth < Sinatra::Base
   get '/archive' do
     haml :archive
   end
-    
-  #Metaweblog API
-  post '/metaweblog' do
-    xml = @request.body.read
-    if xml.empty?
-      hash = @request.params
-      xml = (hash.keys + hash.values).join
-    end
-    
-    raise "Nothing supplied" if xml.empty?
-
-    call = XMLRPC::Marshal.load_call(xml)
-    
-    # convert metaWeblog.getPost to get_post
-    method = call[0].gsub(/(.*)\.(.*)/, '\2').gsub(/([A-Z])/, '_\1').downcase
-    response.headers['Content-Type'] = 'text/xml;'
-    send(method, call)
-  end
   
   # Catches all routes - Will first check the legacy routes to see if 
   # a redirect is needed else it will render a 404 
@@ -69,65 +51,84 @@ class ShoutMouth < Sinatra::Base
     redirect '/', 404
   end
   
-  
+  #---------------------------------------------------------#
+  #--------------------Metaweblog API-----------------------#
+  #---------------------------------------------------------#
+  post '/metaweblog' do
+    xml = @request.body.read
+    if xml.empty?
+      hash = @request.params
+      xml = (hash.keys + hash.values).join
+    end
+    
+    return raise_xmlrpc_error("no information has been sent") if xml.empty?
+
+    call = XMLRPC::Marshal.load_call(xml)
+    
+    # convert metaWeblog.getPost or blogger.getPost to get_post
+    method = call[0].gsub(/(.*)\.(.*)/, '\2').gsub(/([A-Z])/, '_\1').downcase
+    response.headers['Content-Type'] = 'text/xml;'
+    send(method, call)
+  end
+
   private
+  def new_media_object(xmlrpc_call)
+    raise_xmlrpc_error("Not Implemented")
+  end
+  
   def new_post(xmlrpc_call)
-    raise "Not Implemented"
+    raise_xmlrpc_error("Not Implemented")
   end
 
   def edit_post(xmlrpc_call)
-    raise "Not Implemented"
+    raise_xmlrpc_error("Not Implemented")
   end
   
   def get_post(xmlrpc_call)
-    raise "Not Implemented"
+     return raise_xmlrpc_error("User credentials supplied are incorrect") unless authenticated?(xmlrpc_call)
+     post = Post.all_active.all(:id => xmlrpc_call[1][0]).first
+     XMLRPC::Marshal.dump_response(post.to_metaweblog)
   end
   
   def get_categories(xmlrpc_call)
-    raise "Not Implemented"
+    return raise_xmlrpc_error("User credentials supplied are incorrect") unless authenticated?(xmlrpc_call)
+    categories = []
+    posts = Post.all_active.all.each{|post| categories << post.categories}
+    XMLRPC::Marshal.dump_response(categories.flatten.uniq.map{|c| {:description => c, :title => c}}) 
   end
 
   def get_recent_posts(xmlrpc_call)
-    raise "Not Implemented"
+    return raise_xmlrpc_error("User credentials supplied are incorrect") unless authenticated?(xmlrpc_call)
+    posts = Post.all_active.all(:limit => xmlrpc_call[1][3], :order => [:created_at.desc])
+    XMLRPC::Marshal.dump_response(posts.map{|p| p.to_metaweblog})
   end
   
   def delete_post(xmlrpc_call)
-    raise "Not Implemented"
+    raise_xmlrpc_error("Not Implemented")
   end
 
   def get_users_blogs(xmlrpc_call)
-    raise "Not Implemented"
+    return raise_xmlrpc_error("User credentials supplied are incorrect") unless authenticated?(xmlrpc_call)
+    XMLRPC::Marshal.dump_response(Blog.to_metaweblog)
   end
   
   def get_user_info(xmlrpc_call)
-    return raise_xmlrpc_error("get on your bike")
-    data = xmlrpc_call[1]
-      # blog_id = data[0]; user = data[1]; pass = data[2]
-    user = data[1]
-    password = data[2]
-    resp = {
-          :user => user,
-          :password => password,
-          :dateCreated => DateTime.now,
-          :userid => 1,
-          :postid => 1,
-          :description => "description",
-          :title => "title",
-          :link => "full_permalink",
-          :permaLink => "#full_permalink",
-          :categories => ["General"],
-          :date_created_gmt => DateTime.now,
-        }
-    XMLRPC::Marshal.dump_response(resp)
-  end
+    return raise_xmlrpc_error("User credentials supplied are incorrect") unless authenticated?(xmlrpc_call)
+    user = find_current_user(xmlrpc_call)
+    XMLRPC::Marshal.dump_response(user.to_metaweblog)
+ end
   
-  def authenticate(xmlrpc_call)
-    user = User.find(:email => xmlrpc_call[1][1])
-    if user.exists?
+  def authenticated?(xmlrpc_call)
+    user = find_current_user(xmlrpc_call)
+    if user
       user.authenticate(xmlrpc_call[1][2])
     else
       false
     end
+  end
+  
+  def find_current_user(xmlrpc_call)
+      User.find(:email => xmlrpc_call[1][1]).first
   end
   
   def raise_xmlrpc_error(message)  
@@ -148,5 +149,5 @@ class ShoutMouth < Sinatra::Base
     </fault>
     </methodResponse>"
   end
-  
+
 end
