@@ -3,4 +3,10 @@ TODO:
 1) See how RC does his code snippets - when importing current blog replace markup.
 2) Wire back to front
 3) Add categories and tags url
-4) Implement Metaweblog API ---realised this is going to be involved....
+4) Implement Metaweblog/Wordpress API ---realised this is going to be involved....
+		
+		
+		-See how to implement tags and author on edit and new (WORDPRESS API).
+		-See How Adding A Page Works (WORDPRESS API)
+		
+5) Make rsd.xml dynamic

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+<manifest xmlns="http://schemas.microsoft.com/wlw/manifest/weblog">
+  <options>
+    <clientType>Metaweblog</clientType>
+    <supportsEmbeds>Yes</supportsEmbeds>
+	  <supportsKeywords>Yes</supportsKeywords>
+	  <supportsNewCategories>Yes</supportsNewCategories>
+	  <supportsNewCategoriesInline>Yes</supportsNewCategoriesInline>
+	  <supportsCommentPolicy>Yes</supportsCommentPolicy>
+	  <supportsSlug>No</supportsSlug>
+	  <supportsExcerpt>No</supportsExcerpt>
+	  <supportsPages>Yes</supportsPages>
+	  <supportsPageParent>No</supportsPageParent>
+    <supportsAuthor>Yes</supportsAuthor>
+    <supportsGetTags>Yes</supportsGetTags>
+    <requiresHtmlTitles>No</requiresHtmlTitles>
+    <fileUploadNameFormat>{FileName}</fileUploadNameFormat>
+</options>
+</manifest>

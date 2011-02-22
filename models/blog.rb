@@ -21,7 +21,7 @@ class Blog
   def self.to_metaweblog
     [:url => self.url,
      :blogid => 2000,
-     :blogname => self.site_name]
+     :blogName => self.site_name]
   end
   
   private 

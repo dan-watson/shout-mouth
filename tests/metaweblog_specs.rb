@@ -36,7 +36,7 @@ describe "metaweblog api" do
   end
     
   it "should return correct response when the getUserInfo method is called" do
-    post '/metaweblog',  "<methodCall> 
+    post '/xmlrpc/',  "<methodCall> 
                           <methodName>blogger.getUserInfo</methodName>
                           <params>
                           <param><value><string>Blog Name</string></value></param>
@@ -48,13 +48,13 @@ describe "metaweblog api" do
     find_value(last_response.body, "userid", ["member", "name", "value", "i4"]).should == @user.id.to_s
     find_value(last_response.body, "firstname", ["member", "name", "value", "string"]).should == "Dan"
     find_value(last_response.body, "lastname", ["member", "name", "value", "string"]).should == "Watson"
-    find_value(last_response.body, "url", ["member", "name", "value", "string"]).should == "http://127.0.0.1:9393"
+    find_value(last_response.body, "url", ["member", "name", "value", "string"]).should == "http://192.168.1.68:9393"
     find_value(last_response.body, "email", ["member", "name", "value", "string"]).should == "api@email.com"
     find_value(last_response.body, "nickname", ["member", "name", "value", "string"]).should == "Dan Watson"
   end
   
   it "should return correct response when the getUsersBlogs method is called" do
-    post '/metaweblog',  "<methodCall>
+    post '/xmlrpc/',  "<methodCall>
                           <methodName>blogger.getUsersBlogs</methodName>
                           <params>
                           <param><value><string>Blog Name</string></value></param>
@@ -63,14 +63,14 @@ describe "metaweblog api" do
                           </params>
                           </methodCall>"
                       
-    find_value(last_response.body, "url", ["member", "name", "value", "string"]).should == "http://127.0.0.1:9393"
+    find_value(last_response.body, "url", ["member", "name", "value", "string"]).should == "http://192.168.1.68:9393"
     find_value(last_response.body, "blogid", ["member", "name", "value", "i4"]).should == "2000"
-    find_value(last_response.body, "blogname", ["member", "name", "value", "string"]).should == "Test Site"
+    find_value(last_response.body, "blogName", ["member", "name", "value", "string"]).should == "Test Site"
   end
   
   
   it "should return correct response when the getRecentPosts method is called" do
-    post '/metaweblog',  "<methodCall> 
+    post '/xmlrpc/',  "<methodCall> 
                           <methodName>metaWeblog.getRecentPosts</methodName>
                           <params>
                           <param><value><string>Blog Name</string></value></param>
@@ -108,7 +108,7 @@ describe "metaweblog api" do
   end
   
   it "should return correct response when the getPost method is called" do
-    post '/metaweblog',  "<methodCall> 
+    post '/xmlrpc/',  "<methodCall> 
                           <methodName>metaWeblog.getPost</methodName>
                           <params>
                           <param><value><string>#{@second_post.id.to_s}</string></value></param>
@@ -132,7 +132,7 @@ describe "metaweblog api" do
   end
   
   it "should return correct response when the getCategories method is called" do
-    post '/metaweblog',  "<methodCall>
+    post '/xmlrpc/',  "<methodCall>
                           <methodName>blogger.getCategories</methodName>
                           <params>
                           <param><value><string>Blog Name</string></value></param>
@@ -146,7 +146,215 @@ describe "metaweblog api" do
     find_value(last_response.body, "title", ["member", "name", "value", "string"], 1).should == "cat2" 
   end
   
+  it "should update the correct post and give the correct response when the editPost method is called" do
+    
+    post_to_update_id = Post.first.id
+    
+    post '/xmlrpc/',  "<methodCall>
+     <methodName>metaWeblog.editPost</methodName>
+     <params>
+      <param>
+       <value>
+        <string>#{post_to_update_id}</string>
+       </value>
+      </param>
+      <param>
+       <value>
+        <string>api@email.com</string>
+       </value>
+      </param>
+      <param>
+       <value>
+        <string>password111</string>
+       </value>
+      </param>
+      <param>
+       <value>
+        <struct>
+         <member>
+          <name>title</name>
+          <value>
+           <string>New Title</string>
+          </value>
+         </member>
+         <member>
+          <name>description</name>
+          <value>
+           <string>New Body</string>
+          </value>
+         </member>
+         <member>
+          <name>categories</name>
+          <value>
+           <array>
+            <data>
+             <value>
+              <string>cat4</string>
+             </value>
+             <value>
+              <string>cat5</string>
+             </value>
+            </data>
+           </array>
+          </value>
+         </member>
+         <member>
+          <name>dateCreated</name>
+          <value>
+           <dateTime.iso8601>20110221T21:41:00</dateTime.iso8601>
+          </value>
+         </member>
+         <member>
+          <name>date_created_gmt</name>
+          <value>
+           <dateTime.iso8601>20110221T21:41:00</dateTime.iso8601>
+          </value>
+         </member>
+        </struct>
+       </value>
+      </param>
+      <param>
+       <value>
+        <boolean>1</boolean>
+       </value>
+      </param>
+     </params>
+    </methodCall>"
+    
+    post = Post.find(:id => post_to_update_id).first
+    post.title.should == "New Title"
+    post.body.should == "New Body"
+    post.categories.should include("cat4", "cat5")
+    
+    find_value(last_response.body, "postid", ["member", "name", "value", "i4"]).should == post_to_update_id.to_s
+    find_value(last_response.body, "dateCreated", ["member", "name", "value", "dateTime.iso8601"]).should == post.created_at_iso8601
+    find_value(last_response.body, "title", ["member", "name", "value", "string"]).should == post.title
+    find_value(last_response.body, "description", ["member", "name", "value", "string"]).should == post.body
+    find_value(last_response.body, "link", ["member", "name", "value", "string"]).should == post.permalink
+    find_value(last_response.body, "wp_slug", ["member", "name", "value", "string"]).should == post.slug
+    find_value(last_response.body, "mt_excerpt", ["member", "name", "value", "string"]).should == ""
+    find_value(last_response.body, "mt_allow_comments", ["member", "name", "value", "string"]).should == ""
+    find_value(last_response.body, "mt_keywords", ["member", "name", "value", "string"]).should == "tag1,tag2"
+    find_value(last_response.body, "publish", ["member", "name", "value", "boolean"]).should == "1"
+    find_value(last_response.body, "categories", ["member", "name", "value", "array/data/value[1]/string"]).should == "cat4"
+    find_value(last_response.body, "categories", ["member", "name", "value", "array/data/value[2]/string"]).should == "cat5"
+    
+  end
   
+  
+  it "should create a new post and give the correct response when the newPost method is called" do  
+    post '/xmlrpc/',  "<methodCall>
+     <methodName>metaWeblog.newPost</methodName>
+     <params>
+      <param>
+       <value>
+        <string>2000</string>
+       </value>
+      </param>
+      <param>
+       <value>
+        <string>api@email.com</string>
+       </value>
+      </param>
+      <param>
+       <value>
+        <string>password111</string>
+       </value>
+      </param>
+      <param>
+       <value>
+        <struct>
+         <member>
+          <name>title</name>
+          <value>
+           <string>New Post From Metaweblog Client</string>
+          </value>
+         </member>
+         <member>
+          <name>description</name>
+          <value>
+           <string>&lt;p&gt;Some Body&lt;/p&gt;</string>
+          </value>
+         </member>
+         <member>
+          <name>categories</name>
+          <value>
+           <array>
+            <data>
+             <value>
+              <string>cat1</string>
+             </value>
+             <value>
+              <string>cat2</string>
+             </value>
+             <value>
+              <string>cat4</string>
+             </value>
+            </data>
+           </array>
+          </value>
+         </member>
+        </struct>
+       </value>
+      </param>
+      <param>
+       <value>
+        <boolean>1</boolean>
+       </value>
+      </param>
+     </params>
+    </methodCall>"
+    
+    post = Post.first(:title => "New Post From Metaweblog Client")
+    post.title.should == "New Post From Metaweblog Client"
+    post.body.should == "<p>Some Body</p>"
+    post.categories.should include("cat1", "cat2", "cat4")
+    post.is_active.should be_true
+    
+    last_response.body.should include("<i4>#{post.id}</i4>")
+  end
+  
+  it "should mark a post as not published and give the correct response when the deletePost method is called" do  
+    
+    post_to_delete = Factory(:valid_post)
+    post_to_delete.user = @user
+    post_to_delete.save
+    
+    post '/xmlrpc/',  "<methodCall>
+     <methodName>blogger.deletePost</methodName>
+     <params>
+      <param>
+       <value>
+        <string>0123456789ABCDEF</string>
+       </value>
+      </param>
+      <param>
+       <value>
+        <string>#{post_to_delete.id}</string>
+       </value>
+      </param>
+      <param>
+       <value>
+        <string>api@email.com</string>
+       </value>
+      </param>
+      <param>
+       <value>
+        <string>password111</string>
+       </value>
+      </param>
+      <param>
+       <value>
+        <boolean>1</boolean>
+       </value>
+      </param>
+     </params>
+    </methodCall>"
+    
+    Post.first(:id => post_to_delete.id).is_active.should be_false
+    last_response.body.should include("<boolean>1</boolean>")
+    
+  end
   private 
   def find_value(xml, find, hierarchy = [], nth = nil)
     return Nokogiri::XML(xml).xpath("//#{hierarchy[0]}/#{hierarchy[1]}[text()='#{find}']")[nth.nil? ? 0 : nth].parent.xpath("#{hierarchy[2]}/#{hierarchy[3]}").text

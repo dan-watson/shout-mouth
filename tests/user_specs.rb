@@ -31,12 +31,11 @@ describe User, "defaults" do
     user.salt.length.should == 8
   end
   
-  it "should not be able to change the default values for an already saved user" do
+  it "should not be able to change the set values for an already saved user" do
     user = User.new(:email => "test@rails.com", :password => "password@1")
     user.save
     
     lambda { user.salt = "" }.should raise_error(NoMethodError)
-    lambda { user.created_at = DateTime.now }.should raise_error(NoMethodError)
   end
 end
 

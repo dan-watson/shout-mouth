@@ -5,7 +5,7 @@ require 'rspec'
 
 describe Blog, "configuration" do
   it "should return the correct configuration variable for the Url" do
-    Blog.url.should == "http://127.0.0.1:9393"
+    Blog.url.should == "http://192.168.1.68:9393"
   end
   
   it "should return the correct configuration variable for the askimet key" do

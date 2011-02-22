@@ -11,8 +11,8 @@ module Shout
       base.class_eval do
         include DataMapper::Resource
         property :id, DataMapper::Property::Serial
-        property :is_active, DataMapper::Property::Boolean, :writer => :protected, :default => true
-        property :created_at, DataMapper::Property::DateTime, :writer => :protected, :default => lambda{ |p,s| DateTime.now}
+        property :is_active, DataMapper::Property::Boolean, :default => true
+        property :created_at, DataMapper::Property::DateTime, :default => lambda{ |p,s| DateTime.now}
         
         #Scope
         def self.all_active
