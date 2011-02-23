@@ -7,6 +7,13 @@ TODO:
 
 5) Editing a post - need to add a legacy_url if the page title changes
 
+6) Refactor API methods - encapsulate xmlrpc call to object with strategy pattern due to the variation
+						   in the xml parameter ordering
+						- encapsulate update and delete logic inside the model classes.
+						- add default scopes for pages and posts with ordering and active
+						
+
+
 
 		
 
