@@ -234,7 +234,7 @@ describe "metaweblog api" do
     find_value(last_response.body, "wp_slug", ["member", "name", "value", "string"]).should == post.slug
     find_value(last_response.body, "mt_excerpt", ["member", "name", "value", "string"]).should == ""
     find_value(last_response.body, "mt_allow_comments", ["member", "name", "value", "string"]).should == ""
-    find_value(last_response.body, "mt_keywords", ["member", "name", "value", "string"]).should == "tag1,tag2"
+    find_value(last_response.body, "mt_keywords", ["member", "name", "value", "string"]).should == "cat4,cat5"
     find_value(last_response.body, "publish", ["member", "name", "value", "boolean"]).should == "1"
     find_value(last_response.body, "categories", ["member", "name", "value", "array/data/value[1]/string"]).should == "cat4"
     find_value(last_response.body, "categories", ["member", "name", "value", "array/data/value[2]/string"]).should == "cat5"
@@ -355,6 +355,334 @@ describe "metaweblog api" do
     last_response.body.should include("<boolean>1</boolean>")
     
   end
+  
+  #Wordpress - Pages
+  
+  it "should return correct response when the getPages method is called" do
+    
+    page = Factory(:valid_page)
+    page.user = @user
+    page.save
+    
+    post '/xmlrpc/',  "<methodCall> 
+                      <methodName>wp.getPages</methodName>
+                       <params>
+                        <param>
+                         <value>
+                          <string>2000</string>
+                         </value>
+                        </param>
+                        <param>
+                         <value>
+                          <string>api@email.com</string>
+                         </value>
+                        </param>
+                        <param>
+                         <value>
+                          <string>password111</string>
+                         </value>
+                        </param>
+                        <param>
+                         <value>
+                          <int>50</int>
+                         </value>
+                        </param>
+                       </params>
+                      </methodCall>"
+
+    find_value(last_response.body, "page_id", ["member", "name", "value", "i4"]).should == page.id.to_s
+    find_value(last_response.body, "title", ["member", "name", "value", "string"]).should == page.title
+    find_value(last_response.body, "description", ["member", "name", "value", "string"]).should == page.body
+    find_value(last_response.body, "link", ["member", "name", "value", "string"]).should == page.permalink
+    find_value(last_response.body, "mt_convert_breaks", ["member", "name", "value", "string"]).should == "__default__"
+    find_value(last_response.body, "dateCreated", ["member", "name", "value",  "dateTime.iso8601"]).should == page.created_at_iso8601
+    find_value(last_response.body, "page_parent_id", ["member", "name", "value", "i4"]).should == 0.to_s
+    
+    page.destroy
+  end
+  
+  it "should return correct response when the getPage method is called" do
+    
+    page = Factory(:valid_page)
+    page.user = @user
+    page.save
+    
+    post '/xmlrpc/',  "<methodCall>
+                       <methodName>wp.getPage</methodName>
+                       <params>
+                        <param>
+                         <value>
+                          <string>2000</string>
+                         </value>
+                        </param>
+                        <param>
+                         <value>
+                          <string>#{page.id.to_s}</string>
+                         </value>
+                        </param>
+                        <param>
+                         <value>
+                          <string>api@email.com</string>
+                         </value>
+                        </param>
+                        <param>
+                         <value>
+                          <string>password111</string>
+                         </value>
+                        </param>
+                       </params>
+                      </methodCall>"
+
+    find_value(last_response.body, "page_id", ["member", "name", "value", "i4"]).should == page.id.to_s
+    find_value(last_response.body, "title", ["member", "name", "value", "string"]).should == page.title
+    find_value(last_response.body, "description", ["member", "name", "value", "string"]).should == page.body
+    find_value(last_response.body, "link", ["member", "name", "value", "string"]).should == page.permalink
+    find_value(last_response.body, "mt_convert_breaks", ["member", "name", "value", "string"]).should == "__default__"
+    find_value(last_response.body, "dateCreated", ["member", "name", "value",  "dateTime.iso8601"]).should == page.created_at_iso8601
+    find_value(last_response.body, "page_parent_id", ["member", "name", "value", "i4"]).should == 0.to_s
+    
+    page.destroy
+  end
+  
+  it "should return correct response and update record when the editPage method is called" do
+    
+    page = Factory(:valid_page)
+    page.user = @user
+    page.save
+    
+    post '/xmlrpc/',  "<methodCall>
+     <methodName>wp.editPage</methodName>
+     <params>
+      <param>
+       <value>
+        <string>2000</string>
+       </value>
+      </param>
+      <param>
+       <value>
+        <string>#{page.id.to_s}</string>
+       </value>
+      </param>
+      <param>
+       <value>
+        <string>api@email.com</string>
+       </value>
+      </param>
+      <param>
+       <value>
+        <string>password111</string>
+       </value>
+      </param>
+      <param>
+       <value>
+        <struct>
+         <member>
+          <name>title</name>
+          <value>
+           <string>Page Test Update</string>
+          </value>
+         </member>
+         <member>
+          <name>description</name>
+          <value>
+           <string>Update</string>
+          </value>
+         </member>
+         <member>
+          <name>mt_keywords</name>
+          <value>
+           <string />
+          </value>
+         </member>
+        </struct>
+       </value>
+      </param>
+      <param>
+       <value>
+        <boolean>1</boolean>
+       </value>
+      </param>
+     </params>
+    </methodCall>"
+
+    page.reload
+    page.title.should == "Page Test Update"
+    page.tags.should include("page")
+    page.categories.should include ("page")
+    page.body.should == "Update"
+    last_response.body.should include("<boolean>1</boolean>")
+
+    
+    page.destroy
+  end
+ 
+  it "should return mark the record as inactive when the detelePage method is called" do
+    
+    page = Factory(:valid_page)
+    page.user = @user
+    page.save
+    
+    post '/xmlrpc/',  "<methodCall>
+     <methodName>wp.deletePage</methodName>
+     <params>
+      <param>
+       <value>
+        <string>2000</string>
+       </value>
+      </param>
+      <param>
+       <value>
+        <string>api@email.com</string>
+       </value>
+      </param>
+      <param>
+       <value>
+        <string>password111</string>
+       </value>
+      </param>
+      <param>
+       <value>
+        <string>#{page.id.to_s}</string>
+       </value>
+      </param>
+     </params>
+    </methodCall>"
+
+    page.reload
+    page.is_active.should be_false
+    last_response.body.should include("<boolean>1</boolean>")
+
+    
+    page.destroy
+  end 
+  
+  it "should return create a new record when the newPage method is called" do
+    
+    post '/xmlrpc/',  "<methodCall>
+     <methodName>wp.newPage</methodName>
+     <params>
+      <param>
+       <value>
+        <string>2000</string>
+       </value>
+      </param>
+      <param>
+       <value>
+        <string>api@email.com</string>
+       </value>
+      </param>
+      <param>
+       <value>
+        <string>password111</string>
+       </value>
+      </param>
+      <param>
+       <value>
+        <struct>
+         <member>
+          <name>title</name>
+          <value>
+           <string>Title New Page</string>
+          </value>
+         </member>
+         <member>
+          <name>description</name>
+          <value>
+           <string>&lt;p&gt;Body New Page&lt;/p&gt;</string>
+          </value>
+         </member>
+         <member>
+          <name>mt_keywords</name>
+          <value>
+           <string />
+          </value>
+         </member>
+        </struct>
+       </value>
+      </param>
+      <param>
+       <value>
+        <boolean>1</boolean>
+       </value>
+      </param>
+     </params>
+    </methodCall>
+    "
+
+    page = Post.first(:title => "Title New Page")
+    page.is_page.should be_true
+    page.title.should ==  "Title New Page"
+    page.body.should == "<p>Body New Page</p>"
+    page.tags.should include("page")
+    page.categories.should include("page")
+    page.is_active.should be_true
+    last_response.body.should include("<i4>#{page.id.to_s}</i4>")
+
+    
+    page.destroy
+  end
+  
+  
+  it "should return correct response when the getAuthors method is called" do
+
+    
+    post '/xmlrpc/',  "<methodCall>
+                      <methodName>wp.getAuthors</methodName>
+                      <params>
+                      <param>
+                       <value>
+                        <string>2000</string>
+                       </value>
+                      </param>
+                      <param>
+                       <value>
+                        <string>api@email.com</string>
+                       </value>
+                      </param>
+                      <param>
+                       <value>
+                        <string>password111</string>
+                       </value>
+                      </param>
+                      </params>
+                      </methodCall>"
+
+    find_value(last_response.body, "user_id", ["member", "name", "value", "i4"]).should == @user.id.to_s
+    find_value(last_response.body, "user_login", ["member", "name", "value", "string"]).should == @user.email
+    find_value(last_response.body, "display_name", ["member", "name", "value", "string"]).should == @user.fullname
+    find_value(last_response.body, "user_email", ["member", "name", "value", "string"]).should == @user.email
+
+
+  end
+  
+  it "should return correct response when the getTags method is called" do
+
+    
+    post '/xmlrpc/',  "<methodCall>
+                       <methodName>wp.getTags</methodName>
+                       <params>
+                        <param>
+                         <value>
+                          <string>2000</string>
+                         </value>
+                        </param>
+                        <param>
+                         <value>
+                          <string>api@email.com</string>
+                         </value>
+                        </param>
+                        <param>
+                         <value>
+                          <string>password111</string>
+                         </value>
+                        </param>
+                       </params>
+                      </methodCall>"
+
+    find_value(last_response.body, "name", ["member", "name", "value", "string"], 0).should == "tag1"               
+    find_value(last_response.body, "name", ["member", "name", "value", "string"], 1).should == "tag2"               
+  end
+  
   private 
   def find_value(xml, find, hierarchy = [], nth = nil)
     return Nokogiri::XML(xml).xpath("//#{hierarchy[0]}/#{hierarchy[1]}[text()='#{find}']")[nth.nil? ? 0 : nth].parent.xpath("#{hierarchy[2]}/#{hierarchy[3]}").text

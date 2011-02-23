@@ -16,4 +16,9 @@
     <requiresHtmlTitles>No</requiresHtmlTitles>
     <fileUploadNameFormat>{FileName}</fileUploadNameFormat>
 </options>
+<views>
+    <default>WebLayout</default>
+    <view type="WebLayout" src="/webpreview.html" />
+    <view type="WebPreview" src="/webpreview.html" />
+</views>
 </manifest>

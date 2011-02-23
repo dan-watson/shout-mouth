@@ -46,7 +46,17 @@ class User
             :nickname => fullname
           }
       end
-          
+      
+      def to_wordpress_author
+          {
+            :user_id => id,
+            :user_login => email,
+            :display_name => fullname,
+            :user_email => email,
+            :meta_value => ""
+          }
+      end
+
       private
     
       def generate_salt

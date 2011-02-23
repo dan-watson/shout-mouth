@@ -50,4 +50,18 @@ class Post
         :categories => categories
       }
     end
+    
+    def to_wordpress_page
+      {
+        :page_id => id,
+        :title => title,
+        :description => body,
+        :link => permalink,
+        :mt_convert_breaks => "__default__",
+        :dateCreated => created_at,
+        :page_parent_id => 0
+      }
+    end
+    
 end
+

@@ -88,11 +88,14 @@ a:hover {
 .comments{
 	margin-top:20px;
 }
+.comments h4{
+	font-weight:bold;
+}
 .comment{
 	padding-top:20px;
 	padding-bottom:20px;
 }
-.comment:not(:last-child){
+.comment{
 	border-bottom:solid 1px #EEEEEE;
 }
 .comment_name{
@@ -122,30 +125,36 @@ a:hover {
 	
 }
 .add_comment_form{
-	padding-top:30px;
 	width:100%;
+	display:block;
 }
 .add_comment_form span, input{
-	float:left;
+	display:block;
 }
 .add_comment_form span{
 	font-size:0.8em;
 	font-weight:bold;
-	width:15%;
+	width:550px;
+	padding:20px 0px 0px 5px;
 }
 .add_comment_form input, textarea{
 	font-size:0.8em;
-	width:450px;
+	width:550px;
+	height:25px;
 }
 .add_comment_form textarea{
 	height:100px;
 	font-size:0.8em;
 }
-.add_comment_form input[type="submit"]{
+#add_comment_submit{
 	width:150px;
+	height:32px;
 }
 .add_comment_form br{
 	clear:both;
+}
+.add_comment_form p{
+	
 }
 .archive{
 	
@@ -172,13 +181,14 @@ a:hover {
 	color:#555555;
 }
 .widget ul{
-	margin-left:-15px;
+	
 }
 .widget a, li{
 	color:#999999;
 }
 .widget li{
   line-height:1.4em;
+  margin-left:-18px
 }
 #footer{
 	float:left;
