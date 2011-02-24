@@ -3,16 +3,17 @@ require 'sinatra'
 require 'haml'
 require 'xmlrpc/marshal'
 require 'aws/s3'
-require Dir.pwd + '/models/base/shout_record'
-require Dir.pwd + '/models/user'
-require Dir.pwd + '/models/post'
-require Dir.pwd + '/models/comment'
-require Dir.pwd + '/models/legacy_route'
-require Dir.pwd + '/models/blog'
+require Dir.pwd + '/app/models/base/shout_record'
+require Dir.pwd + '/app/models/user'
+require Dir.pwd + '/app/models/post'
+require Dir.pwd + '/app/models/comment'
+require Dir.pwd + '/app/models/legacy_route'
+require Dir.pwd + '/app/models/blog'
 
 class ShoutMouth < Sinatra::Base
   
-  set :public, File.dirname(__FILE__) + '/public'
+  set :public, File.dirname(__FILE__) + '/../public'
+  set :views, File.dirname(__FILE__) + '/views'
   
   get '/' do
     #"Hello world, it's #{Time.now} at the server!"

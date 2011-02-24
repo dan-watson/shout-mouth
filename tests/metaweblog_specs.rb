@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../shout_mouth.rb'
+require File.dirname(__FILE__) + '/../app/shout_mouth.rb'
 require File.dirname(__FILE__) + '/test_data/test_data.rb'
 
 require 'rspec'

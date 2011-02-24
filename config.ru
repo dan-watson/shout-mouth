@@ -1,2 +1,2 @@
-require File.dirname(__FILE__) + '/shout_mouth'
+require File.dirname(__FILE__) + '/app/shout_mouth'
 run ShoutMouth
