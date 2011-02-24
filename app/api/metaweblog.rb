@@ -4,13 +4,7 @@ module Metaweblog
     return raise_xmlrpc_error("User credentials supplied are incorrect") unless authenticated?(xmlrpc_call[1][1],xmlrpc_call[1][2])
       
       data = xmlrpc_call[1][3]
-      
-      
       name = data["name"].gsub(/\//,'')
-      
-      
-      puts Blog.amazon_s3_key
-      puts Blog.amazon_s3_secret_key
       
       AWS::S3::Base.establish_connection!(
                  :access_key_id     => Blog.amazon_s3_key, 
@@ -27,13 +21,7 @@ module Metaweblog
   
   def new_post(xmlrpc_call)
     return raise_xmlrpc_error("User credentials supplied are incorrect") unless authenticated?(xmlrpc_call[1][1],xmlrpc_call[1][2])
-    post = Post.new(:title => xmlrpc_call[1][3]["title"], 
-                    :body => xmlrpc_call[1][3]["description"], 
-                    :tags => xmlrpc_call[1][3]["mt_keywords"].nil? ? xmlrpc_call[1][3]["categories"].join(",") : xmlrpc_call[1][3]["mt_keywords"],
-                    :categories => xmlrpc_call[1][3]["categories"].join(","), 
-                    :user => find_current_user(xmlrpc_call[1][1]),
-                    :is_active => xmlrpc_call[1][4])
-                    
+    post = Post.new_post_from_xmlrpc_payload(xmlrpc_call)
     return raise_xmlrpc_error(post.errors.full_messages.to_s) unless post.valid?
     
     post.save
@@ -44,15 +32,7 @@ module Metaweblog
 
   def edit_post(xmlrpc_call)
     return raise_xmlrpc_error("User credentials supplied are incorrect") unless authenticated?(xmlrpc_call[1][1],xmlrpc_call[1][2])
-   
-    post = Post.first(:id => xmlrpc_call[1][0])
-    post.title = xmlrpc_call[1][3]["title"]
-    post.body = xmlrpc_call[1][3]["description"]
-    post.categories = xmlrpc_call[1][3]["categories"].join(",")
-    post.tags = xmlrpc_call[1][3]["mt_keywords"].nil? ? xmlrpc_call[1][3]["categories"].join(",") : xmlrpc_call[1][3]["mt_keywords"]
-    post.is_active = xmlrpc_call[1][4]
-    post.created_at = xmlrpc_call[1][3]["dateCreated"].to_time  unless xmlrpc_call[1][3]["dateCreated"].nil?
-    
+    post = Post.edit_post_from_xmlrpc_payload(xmlrpc_call)
     return raise_xmlrpc_error(post.errors.full_messages.to_s) unless post.valid?
     
     post.save
@@ -69,9 +49,7 @@ module Metaweblog
   
   def get_categories(xmlrpc_call)
     return raise_xmlrpc_error("User credentials supplied are incorrect") unless authenticated?(xmlrpc_call[1][1],xmlrpc_call[1][2])
-    categories = []
-    posts = Post.all_active_posts.each{|post| categories << post.categories}
-    XMLRPC::Marshal.dump_response(categories.flatten.uniq.map{|c| {:description => c, :title => c}}) 
+    XMLRPC::Marshal.dump_response(Category.all_categories.map{|c| {:description => c, :title => c}}) 
   end
 
   def get_recent_posts(xmlrpc_call)
@@ -82,11 +60,7 @@ module Metaweblog
   
   def delete_post(xmlrpc_call)
      return raise_xmlrpc_error("User credentials supplied are incorrect") unless authenticated?(xmlrpc_call[1][2],xmlrpc_call[1][3])
-     
-     post = Post.get(xmlrpc_call[1][1])
-     post.is_active = false
-     post.save
-     
+     Post.mark_as_inactive(xmlrpc_call[1][1])
      XMLRPC::Marshal.dump_response(true)
   end
 
@@ -97,7 +71,7 @@ module Metaweblog
   
   def get_user_info(xmlrpc_call)
     return raise_xmlrpc_error("User credentials supplied are incorrect") unless authenticated?(xmlrpc_call[1][1],xmlrpc_call[1][2])
-    user = find_current_user(xmlrpc_call[1][1])
+    user = User.find_user(xmlrpc_call[1][1])
     XMLRPC::Marshal.dump_response(user.to_metaweblog)
   end
   
@@ -121,35 +95,23 @@ module Metaweblog
   
   def edit_page(xmlrpc_call)
     return raise_xmlrpc_error("User credentials supplied are incorrect") unless authenticated?(xmlrpc_call[1][2],xmlrpc_call[1][3])
-    page = Post.first(:id => xmlrpc_call[1][1])
-    page.title = xmlrpc_call[1][4]["title"]
-    page.body = xmlrpc_call[1][4]["description"]
-    page.is_active = xmlrpc_call[1][5]
-    
+    page = Post.edit_page_from_xmlrpc_payload(xmlrpc_call)
     return raise_xmlrpc_error(page.errors.full_messages.to_s) unless page.valid?
     
     page.save
+    
     XMLRPC::Marshal.dump_response(true)
   end
   
   def delete_page(xmlrpc_call)
      return raise_xmlrpc_error("User credentials supplied are incorrect") unless authenticated?(xmlrpc_call[1][1],xmlrpc_call[1][2])
-     page = Post.first(:id => xmlrpc_call[1][3])
-     page.is_active = false
-     page.save
+     Post.mark_as_inactive(xmlrpc_call[1][3])
      XMLRPC::Marshal.dump_response(true)
   end
   
   def new_page(xmlrpc_call)
     return raise_xmlrpc_error("User credentials supplied are incorrect") unless authenticated?(xmlrpc_call[1][1],xmlrpc_call[1][2])
-    page = Post.new(:title => xmlrpc_call[1][3]["title"], 
-                    :body => xmlrpc_call[1][3]["description"], 
-                    :tags => "page", 
-                    :categories => "page", 
-                    :user => find_current_user(xmlrpc_call[1][1]),
-                    :is_page => true,
-                    :is_active => xmlrpc_call[1][4])
-                    
+    page = Post.new_page_from_xmlrpc_payload(xmlrpc_call)
     return raise_xmlrpc_error(page.errors.full_messages.to_s) unless page.valid?
 
     page.save
@@ -160,31 +122,25 @@ module Metaweblog
   
   def get_authors(xmlrpc_call)
     return raise_xmlrpc_error("User credentials supplied are incorrect") unless authenticated?(xmlrpc_call[1][1],xmlrpc_call[1][2])
-    users = [] << find_current_user(xmlrpc_call[1][1])
+    users = [] << User.find_user(xmlrpc_call[1][1])
     XMLRPC::Marshal.dump_response(users.map{|u| u.to_wordpress_author})
   end
   
   def get_tags(xmlrpc_call)
     return raise_xmlrpc_error("User credentials supplied are incorrect") unless authenticated?(xmlrpc_call[1][1],xmlrpc_call[1][2])
-    tags = []
-    Post.all_active_posts.each{|post| tags << post.tags}
-    XMLRPC::Marshal.dump_response(tags.flatten.uniq.sort.map{|t| {:name => t}})
+    XMLRPC::Marshal.dump_response(Tag.all_tags.map{|t| {:name => t}})
   end
 
   #General Methods
   def authenticated?(email, password)
-    user = find_current_user(email)
+    user = User.find_user(email)
     if user
       user.authenticate(password)
     else
       false
     end
   end
-  
-  def find_current_user(email)
-      User.first(:email => email, :is_active => true)
-  end
-  
+
   def raise_xmlrpc_error(message)  
     "<methodResponse>
       <fault>

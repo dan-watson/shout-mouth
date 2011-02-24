@@ -9,6 +9,8 @@ require Dir.pwd + '/app/models/post'
 require Dir.pwd + '/app/models/comment'
 require Dir.pwd + '/app/models/legacy_route'
 require Dir.pwd + '/app/models/blog'
+require Dir.pwd + '/app/models/tag'
+require Dir.pwd + '/app/models/category'
 require Dir.pwd + '/app/api/metaweblog'
 
 class ShoutMouth < Sinatra::Base

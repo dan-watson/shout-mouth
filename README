@@ -7,7 +7,7 @@ TODO:
 						   in the xml parameter ordering
 						- look at callbacks for the authentication - would be nice to just call :before(:all, authenticate) DRY
 						- encapsulate update and delete logic inside the model classes.
-						- add default scopes for pages and posts with ordering and active
+						
 						
 7) Add take task not in the public repo that will pull data from current blog and transform markup and also the
    image url + upload.

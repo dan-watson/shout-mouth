@@ -28,6 +28,10 @@ class User
           end
       end
       
+      def self.find_user email
+          User.first(:email => email, :is_active => true)
+      end
+      
       def authenticate password
         encrypt_password(password, self.salt) == self.password 
       end
