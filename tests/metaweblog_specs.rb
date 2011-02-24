@@ -40,7 +40,7 @@ describe "metaweblog api" do
                           <methodName>blogger.getUserInfo</methodName>
                           <params>
                           <param><value><string>Blog Name</string></value></param>
-                          <param><value><string>#{@user.email}</string></value></param>
+                          <param><value><string>api@email.com</string></value></param>
                           <param><value><string>password111</string></value></param>
                           </params>
                           </methodCall>"
@@ -58,7 +58,7 @@ describe "metaweblog api" do
                           <methodName>blogger.getUsersBlogs</methodName>
                           <params>
                           <param><value><string>Blog Name</string></value></param>
-                          <param><value><string>@user.email</string></value></param>
+                          <param><value><string>api@email.com</string></value></param>
                           <param><value><string>password111</string></value></param>
                           </params>
                           </methodCall>"
@@ -74,7 +74,7 @@ describe "metaweblog api" do
                           <methodName>metaWeblog.getRecentPosts</methodName>
                           <params>
                           <param><value><string>Blog Name</string></value></param>
-                          <param><value><string>@user.email</string></value></param>
+                          <param><value><string>api@email.com</string></value></param>
                           <param><value><string>password111</string></value></param>
                           <param><value><i4>2</i4></value></param>
                           </params>
@@ -112,7 +112,7 @@ describe "metaweblog api" do
                           <methodName>metaWeblog.getPost</methodName>
                           <params>
                           <param><value><string>#{@second_post.id.to_s}</string></value></param>
-                          <param><value><string>@user.email</string></value></param>
+                          <param><value><string>api@email.com</string></value></param>
                           <param><value><string>password111</string></value></param>
                           <param><value><i4>2</i4></value></param>
                           </params>
@@ -136,7 +136,7 @@ describe "metaweblog api" do
                           <methodName>blogger.getCategories</methodName>
                           <params>
                           <param><value><string>Blog Name</string></value></param>
-                          <param><value><string>@user.email</string></value></param>
+                          <param><value><string>api@email.com</string></value></param>
                           <param><value><string>password111</string></value></param>
                           </params>
                           </methodCall>"

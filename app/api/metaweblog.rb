@@ -31,7 +31,7 @@ module Metaweblog
                     :body => xmlrpc_call[1][3]["description"], 
                     :tags => xmlrpc_call[1][3]["mt_keywords"].nil? ? xmlrpc_call[1][3]["categories"].join(",") : xmlrpc_call[1][3]["mt_keywords"],
                     :categories => xmlrpc_call[1][3]["categories"].join(","), 
-                    :user => find_current_user(xmlrpc_call),
+                    :user => find_current_user(xmlrpc_call[1][1]),
                     :is_active => xmlrpc_call[1][4])
                     
     return raise_xmlrpc_error(post.errors.full_messages.to_s) unless post.valid?
@@ -70,13 +70,13 @@ module Metaweblog
   def get_categories(xmlrpc_call)
     return raise_xmlrpc_error("User credentials supplied are incorrect") unless authenticated?(xmlrpc_call[1][1],xmlrpc_call[1][2])
     categories = []
-    posts = Post.all_active.all(:is_page => false).each{|post| categories << post.categories}
+    posts = Post.all_active_posts.each{|post| categories << post.categories}
     XMLRPC::Marshal.dump_response(categories.flatten.uniq.map{|c| {:description => c, :title => c}}) 
   end
 
   def get_recent_posts(xmlrpc_call)
     return raise_xmlrpc_error("User credentials supplied are incorrect") unless authenticated?(xmlrpc_call[1][1],xmlrpc_call[1][2])
-    posts = Post.all_active.all(:is_page => false, :limit => xmlrpc_call[1][3], :order => [:created_at.desc])
+    posts = Post.all_active_posts.all(:limit => xmlrpc_call[1][3])
     XMLRPC::Marshal.dump_response(posts.map{|p| p.to_metaweblog})
   end
   
@@ -97,7 +97,7 @@ module Metaweblog
   
   def get_user_info(xmlrpc_call)
     return raise_xmlrpc_error("User credentials supplied are incorrect") unless authenticated?(xmlrpc_call[1][1],xmlrpc_call[1][2])
-    user = find_current_user(xmlrpc_call)
+    user = find_current_user(xmlrpc_call[1][1])
     XMLRPC::Marshal.dump_response(user.to_metaweblog)
   end
   
@@ -109,7 +109,7 @@ module Metaweblog
   
   def get_pages(xmlrpc_call)
      return raise_xmlrpc_error("User credentials supplied are incorrect") unless authenticated?(xmlrpc_call[1][1],xmlrpc_call[1][2])
-     pages = Post.all_active.all(:is_page => true, :limit => xmlrpc_call[1][3], :order => [:created_at.desc])
+     pages = Post.all_active_pages.all(:limit => xmlrpc_call[1][3])
      XMLRPC::Marshal.dump_response(pages.map{|p| p.to_wordpress_page})
   end
   
@@ -167,7 +167,7 @@ module Metaweblog
   def get_tags(xmlrpc_call)
     return raise_xmlrpc_error("User credentials supplied are incorrect") unless authenticated?(xmlrpc_call[1][1],xmlrpc_call[1][2])
     tags = []
-    Post.all_active.all(:is_page => false).each{|post| tags << post.tags}
+    Post.all_active_posts.each{|post| tags << post.tags}
     XMLRPC::Marshal.dump_response(tags.flatten.uniq.sort.map{|t| {:name => t}})
   end
 
@@ -182,7 +182,7 @@ module Metaweblog
   end
   
   def find_current_user(email)
-      User.find(:email => email).first
+      User.first(:email => email, :is_active => true)
   end
   
   def raise_xmlrpc_error(message)  

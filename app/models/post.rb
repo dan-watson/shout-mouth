@@ -35,6 +35,14 @@ class Post
         created_at.to_date.strftime("%Y/%m/%d")
     end
     
+    def self.all_active_posts
+      all_active.all(:is_page => false)
+    end
+    
+    def self.all_active_pages
+      all_active.all(:is_page => true)
+    end
+    
     def to_metaweblog
       {
         :postid => id,

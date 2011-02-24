@@ -83,7 +83,7 @@ class ShoutMouth < Sinatra::Base
 
     call = XMLRPC::Marshal.load_call(xml)
     
-    # convert metaWeblog.getPost or blogger.getPost to get_post
+    # convert *.getPost to get_post
     method = call[0].gsub(/(.*)\.(.*)/, '\2').gsub(/([A-Z])/, '_\1').downcase
     response.headers['Content-Type'] = 'text/xml;'
     send(method, call)
