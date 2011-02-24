@@ -1,0 +1,25 @@
+defaults: &defaults
+  site_name: "Your Site Name"
+  url: http://yoursite.com
+  akismet_key: 'YOUR_KEY'
+  amazon_s3_key: 'YOUR_KEY'
+  amazon_s3_secret_key: 'YOUR_KEY'
+  amazon_s3_bucket: 'YOUR_BUCKET'
+  amazon_s3_file_location: 'http://s3.amazonaws.com/'
+  theme: 'default'
+  
+development:
+  <<: *defaults
+
+test: &test
+	site_name: "Test Site"
+	url: http://192.168.1.68:9393
+	akismet_key: '123456789'
+	amazon_s3_key: 'NO'
+	amazon_s3_secret_key: 'NO'
+	amazon_s3_bucket: 'NO'
+	amazon_s3_file_location: 'http://s3.amazonaws.com/'
+	theme: 'default'
+
+production:
+  <<: *defaults
