@@ -21,12 +21,11 @@ namespace :db do
 end
 
 namespace :specs do
-  
   ENV['RACK_ENV'] = 'test'
 
   desc "Run All The Specs"
   task :run_all do |t, args|
-    Rake::Task["db:create"].invoke
+    Rake::Task["db:create"].invoke    
     exec 'rspec -c ' + File.dirname(__FILE__) + '/tests/*.rb'
   end
 end

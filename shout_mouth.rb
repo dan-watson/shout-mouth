@@ -2,6 +2,7 @@ require 'rubygems'
 require 'sinatra'
 require 'haml'
 require 'xmlrpc/marshal'
+require 'aws/s3'
 require Dir.pwd + '/models/base/shout_record'
 require Dir.pwd + '/models/user'
 require Dir.pwd + '/models/post'
@@ -67,7 +68,7 @@ class ShoutMouth < Sinatra::Base
   #---------------------------------------------------------#
   #-------------Metaweblog/Blogger/WordPress API------------#
   #---------------------------------------------------------#
-  post '/xmlrpc/' do
+  post '/xmlrpc/' do 
     xml = @request.body.read
     if xml.empty?
       hash = @request.params
@@ -77,7 +78,7 @@ class ShoutMouth < Sinatra::Base
     return raise_xmlrpc_error("no information has been sent") if xml.empty?
 
     call = XMLRPC::Marshal.load_call(xml)
-    puts xml
+    #puts xml
     # convert metaWeblog.getPost or blogger.getPost to get_post
     method = call[0].gsub(/(.*)\.(.*)/, '\2').gsub(/([A-Z])/, '_\1').downcase
     response.headers['Content-Type'] = 'text/xml;'
@@ -86,7 +87,28 @@ class ShoutMouth < Sinatra::Base
 
   private
   def new_media_object(xmlrpc_call)
-    raise_xmlrpc_error("Not Implemented")
+    return raise_xmlrpc_error("User credentials supplied are incorrect") unless authenticated?(xmlrpc_call[1][1],xmlrpc_call[1][2])
+      
+      data = xmlrpc_call[1][3]
+      
+      
+      name = data["name"].gsub(/\//,'')
+      
+      
+      puts Blog.amazon_s3_key
+      puts Blog.amazon_s3_secret_key
+      
+      AWS::S3::Base.establish_connection!(
+                 :access_key_id     => Blog.amazon_s3_key, 
+                 :secret_access_key => Blog.amazon_s3_secret_key
+               )
+       
+      AWS::S3::S3Object.store(name, data["bits"], Blog.amazon_s3_bucket, :access => :public_read)
+             
+      XMLRPC::Marshal.dump_response({
+            :file => name,
+            :url => "#{Blog.amazon_s3_file_location}/#{Blog.amazon_s3_bucket}/#{name}"
+      })
   end
   
   def new_post(xmlrpc_call)
@@ -109,7 +131,7 @@ class ShoutMouth < Sinatra::Base
   def edit_post(xmlrpc_call)
     return raise_xmlrpc_error("User credentials supplied are incorrect") unless authenticated?(xmlrpc_call[1][1],xmlrpc_call[1][2])
    
-    post = Post.all(:id => xmlrpc_call[1][0]).first
+    post = Post.first(:id => xmlrpc_call[1][0])
     post.title = xmlrpc_call[1][3]["title"]
     post.body = xmlrpc_call[1][3]["description"]
     post.categories = xmlrpc_call[1][3]["categories"].join(",")
@@ -127,14 +149,14 @@ class ShoutMouth < Sinatra::Base
   
   def get_post(xmlrpc_call)
      return raise_xmlrpc_error("User credentials supplied are incorrect") unless authenticated?(xmlrpc_call[1][1],xmlrpc_call[1][2])
-     post = Post.all_active.all(:id => xmlrpc_call[1][0]).first
+     post = Post.first(:id => xmlrpc_call[1][0])
      XMLRPC::Marshal.dump_response(post.to_metaweblog)
   end
   
   def get_categories(xmlrpc_call)
     return raise_xmlrpc_error("User credentials supplied are incorrect") unless authenticated?(xmlrpc_call[1][1],xmlrpc_call[1][2])
     categories = []
-    posts = Post.all_active.find(:is_page => false).each{|post| categories << post.categories}
+    posts = Post.all_active.all(:is_page => false).each{|post| categories << post.categories}
     XMLRPC::Marshal.dump_response(categories.flatten.uniq.map{|c| {:description => c, :title => c}}) 
   end
 
@@ -168,7 +190,7 @@ class ShoutMouth < Sinatra::Base
   #Wordpress API
   
   def get_page_list(xmlrpc_call)
-      
+      return raise_xmlrpc_error("Not Implemented")
   end
   
   def get_pages(xmlrpc_call)
@@ -231,8 +253,8 @@ class ShoutMouth < Sinatra::Base
   def get_tags(xmlrpc_call)
     return raise_xmlrpc_error("User credentials supplied are incorrect") unless authenticated?(xmlrpc_call[1][1],xmlrpc_call[1][2])
     tags = []
-    Post.all_active.find(:is_page => false).each{|post| tags << post.tags}
-    XMLRPC::Marshal.dump_response(tags.flatten.uniq.map{|t| {:name => t}})
+    Post.all_active.all(:is_page => false).each{|post| tags << post.tags}
+    XMLRPC::Marshal.dump_response(tags.flatten.uniq.sort.map{|t| {:name => t}})
   end
 
   #General Methods

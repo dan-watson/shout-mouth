@@ -15,4 +15,20 @@ describe Blog, "configuration" do
   it "should return the correct configuration variable for the site_name key" do
     Blog.site_name.should == "Test Site"
   end
+  
+  it "should return the correct configuration variable for the amazon_s3_key key" do
+    Blog.amazon_s3_key.should == "NO"
+  end
+  
+  it "should return the correct configuration variable for the amazon_s3_bucket key" do
+    Blog.amazon_s3_bucket.should == "NO"
+  end
+  
+  it "should return the correct configuration variable for the amazon_s3_file_location key" do
+    Blog.amazon_s3_file_location.should == "http://s3.amazonaws.com/"
+  end
+  
+  it "should return the correct configuration variable for the amazon_s3_secret_key key" do
+    Blog.amazon_s3_secret_key.should == "NO"
+  end
 end

@@ -4,6 +4,8 @@ gem "sinatra"
 gem "datamapper"
 gem "haml"
 gem "akismetor"
+gem "i18n"
+gem "aws-s3"
 
 group :development do
 	gem "shotgun"

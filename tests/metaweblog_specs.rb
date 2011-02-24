@@ -679,8 +679,8 @@ describe "metaweblog api" do
                        </params>
                       </methodCall>"
 
-    find_value(last_response.body, "name", ["member", "name", "value", "string"], 0).should == "tag1"               
-    find_value(last_response.body, "name", ["member", "name", "value", "string"], 1).should == "tag2"               
+    find_value(last_response.body, "name", ["member", "name", "value", "string"], 0).should == "cat1"               
+    find_value(last_response.body, "name", ["member", "name", "value", "string"], 1).should == "cat2"                
   end
   
   private 

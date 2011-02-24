@@ -10,6 +10,22 @@ class Blog
     configuration['akismet_key']
   end
   
+  def self.amazon_s3_key
+      configuration['amazon_s3_key']
+  end
+  
+  def self.amazon_s3_secret_key
+      configuration['amazon_s3_secret_key']
+  end
+  
+  def self.amazon_s3_bucket
+      configuration['amazon_s3_bucket']
+  end
+  
+  def self.amazon_s3_file_location
+      configuration['amazon_s3_file_location']
+  end
+  
   def self.theme
     configuration['theme']
   end
@@ -26,7 +42,9 @@ class Blog
   
   private 
   def self.configuration
-      YAML.load_file(File.join(Dir.pwd, 'config', 'config.yaml'))["#{settings.environment.to_s}"]
+    configuration_directory = "#{Dir.pwd}/config/"
+    configuration_file = File.exist?("#{configuration_directory}_config.yaml") ? "#{configuration_directory}_config.yaml" : "#{configuration_directory}config.yaml"
+    YAML.load_file(configuration_file)["#{settings.environment.to_s}"]
   end
   
 end
