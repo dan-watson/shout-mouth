@@ -3,12 +3,7 @@ TODO:
 1) See how RC does his code snippets - when importing current blog replace markup.
 2) Wire back to front
 5) Editing a post - need to add a legacy_url if the page title changes
-6) Refactor API methods - encapsulate xmlrpc call to object with strategy pattern due to the variation
-						   in the xml parameter ordering
-						- look at callbacks for the authentication - would be nice to just call :before(:all, authenticate) DRY
-						- encapsulate update and delete logic inside the model classes.
-						
-						
+
 7) Add take task not in the public repo that will pull data from current blog and transform markup and also the
    image url + upload.
 						

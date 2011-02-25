@@ -75,19 +75,45 @@ class ShoutMouth < Sinatra::Base
   #------send: see methods in the metaweblog api module-----#
   #---------------------------------------------------------#
   post '/xmlrpc/' do 
-    xml = @request.body.read
-    if xml.empty?
-      hash = @request.params
-      xml = (hash.keys + hash.values).join
-    end
+    #generate the xml
+    xml =  load_xml_from_request(@request.body.read, @request.params) 
     
-    return raise_xmlrpc_error("no information has been sent") if xml.empty?
-
+    #create xmlrpc request call
     call = XMLRPC::Marshal.load_call(xml)
     
     # convert *.getPost to get_post
     method = call[0].gsub(/(.*)\.(.*)/, '\2').gsub(/([A-Z])/, '_\1').downcase
+    
+    # if the payload is empty raise an error back to the client
+    halt 200, {'Content-Type' => 'text/xml'}, raise_xmlrpc_error("no information has been sent") if xml.empty?
+    
+    # get the autentication details see - metaweblog module method
+    authentication_details = authentication_details_lookup(method, call)
+    
+    #if authentication fails inform the client
+    halt 200, {'Content-Type' => 'text/xml'}, raise_xmlrpc_error("User credentials supplied are incorrect") unless authenticated?(authentication_details)
+    
+    #if everything with the request is fine send the payload onto the method in the metaweblog module
     response.headers['Content-Type'] = 'text/xml;'
     send(method, call)
   end  
+  
+  private 
+  def load_xml_from_request request_body, request_params
+      if request_body.empty?
+        hash = request_params
+        request_body = (hash.keys + hash.values).join
+      end
+      return request_body
+  end
+  
+  def authenticated?(authentication_details)
+    user = User.find_user(authentication_details[:username])
+    if user
+      user.authenticate(authentication_details[:password])
+    else
+      false
+    end
+  end
+  
 end
