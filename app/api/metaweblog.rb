@@ -1,16 +1,12 @@
+require_relative 'amazon_s3'
 module Metaweblog
   
   def new_media_object(xmlrpc_call)
       data = xmlrpc_call[1][3]
       name = data["name"].gsub(/\//,'')
       
-      AWS::S3::Base.establish_connection!(
-                 :access_key_id     => Blog.amazon_s3_key, 
-                 :secret_access_key => Blog.amazon_s3_secret_key
-               )
-       
-      AWS::S3::S3Object.store(name, data["bits"], Blog.amazon_s3_bucket, :access => :public_read)
-             
+      AmazonS3.save_file(name, data["bits"])
+      
       XMLRPC::Marshal.dump_response({
             :file => name,
             :url => "#{Blog.amazon_s3_file_location}/#{Blog.amazon_s3_bucket}/#{name}"
@@ -19,22 +15,14 @@ module Metaweblog
   
   def new_post(xmlrpc_call)
     post = Post.new_post_from_xmlrpc_payload(xmlrpc_call)
-    return raise_xmlrpc_error(post.errors.full_messages.to_s) unless post.valid?
-    
-    post.save
-    post.reload
-
+    return raise_xmlrpc_error(post.errors.full_messages.to_s) unless post.save
     XMLRPC::Marshal.dump_response(post.id)
   end
 
   def edit_post(xmlrpc_call)
     post = Post.edit_post_from_xmlrpc_payload(xmlrpc_call)
-    return raise_xmlrpc_error(post.errors.full_messages.to_s) unless post.valid?
-    
-    post.save
-    post.reload
-
-    XMLRPC::Marshal.dump_response(post.to_metaweblog)
+    return raise_xmlrpc_error(post.errors.full_messages.to_s) unless post.save
+    XMLRPC::Marshal.dump_response(post.reload.to_metaweblog)
   end
   
   def get_post(xmlrpc_call)
@@ -83,10 +71,7 @@ module Metaweblog
   
   def edit_page(xmlrpc_call)
     page = Post.edit_page_from_xmlrpc_payload(xmlrpc_call)
-    return raise_xmlrpc_error(page.errors.full_messages.to_s) unless page.valid?
-    
-    page.save
-    
+    return raise_xmlrpc_error(page.errors.full_messages.to_s) unless page.save    
     XMLRPC::Marshal.dump_response(true)
   end
   
@@ -97,11 +82,7 @@ module Metaweblog
   
   def new_page(xmlrpc_call)
     page = Post.new_page_from_xmlrpc_payload(xmlrpc_call)
-    return raise_xmlrpc_error(page.errors.full_messages.to_s) unless page.valid?
-
-    page.save
-    page.reload
-
+    return raise_xmlrpc_error(page.errors.full_messages.to_s) unless page.save
     XMLRPC::Marshal.dump_response(page.id)
   end
   
@@ -133,7 +114,7 @@ module Metaweblog
     </methodResponse>"
   end
   
-  #OK this api sucks a little - different methods payloads will supply the 
+  #OK the metaweblog / workpress api sucks a little. For some reason only known to hindu cows... Different methods payloads will supply the 
   #username and password in different positions in the xml structure - values are not named and can only be obtained
   #by position - method below could be a seperate factory or even a stratergy to throw at the authenticate method.
   #YAGNI - this will do!

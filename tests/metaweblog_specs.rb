@@ -149,6 +149,7 @@ describe "metaweblog api" do
   it "should update the correct post and give the correct response when the editPost method is called" do
     
     post_to_update_id = Post.first.id
+    old_post_slug = Post.first.slug
     
     post '/xmlrpc/',  "<methodCall>
      <methodName>metaWeblog.editPost</methodName>
@@ -224,6 +225,7 @@ describe "metaweblog api" do
     post = Post.find(:id => post_to_update_id).first
     post.title.should == "New Title"
     post.body.should == "New Body"
+    post.legacy_routes[0].slug.should == old_post_slug
     post.categories.should include("cat4", "cat5")
     
     find_value(last_response.body, "postid", ["member", "name", "value", "i4"]).should == post_to_update_id.to_s
@@ -510,9 +512,9 @@ describe "metaweblog api" do
     page.tags.should include("page")
     page.categories.should include ("page")
     page.body.should == "Update"
+    page.legacy_routes[0].slug.should == "page-test"
     last_response.body.should include("<boolean>1</boolean>")
 
-    
     page.destroy
   end
  

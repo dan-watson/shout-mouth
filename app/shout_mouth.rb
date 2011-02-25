@@ -25,6 +25,7 @@ class ShoutMouth < Sinatra::Base
   end
   
   get '/post/:year/:month/:day/:slug' do
+    #if not found check legacy routes first
     params[:slug]
     haml :post
   end
@@ -35,6 +36,7 @@ class ShoutMouth < Sinatra::Base
   
   get '/page/:slug' do
     params[:slug]
+    #if not found check legacy routes first
   end
   
   get '/category/:category' do
@@ -70,10 +72,10 @@ class ShoutMouth < Sinatra::Base
     redirect '/', 404
   end
   
-  #---------------------------------------------------------#
-  #-------------Metaweblog/Blogger/WordPress API------------#
-  #------send: see methods in the metaweblog api module-----#
-  #---------------------------------------------------------#
+  #----------------------------------------------------------------------------------#
+  #-------------Metaweblog/Blogger/WordPress API-------------------------------------#
+  #------send: see methods in the metaweblog api module------------------------------#
+  #----------------------------------------------------------------------------------#
   post '/xmlrpc/' do 
     #generate the xml
     xml =  load_xml_from_request(@request.body.read, @request.params) 

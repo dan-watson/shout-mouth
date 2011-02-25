@@ -48,6 +48,16 @@ describe Post, "permalink" do
       post = Post.new(:title => "The wheels on my bus don't go round and round!", :body => "bd1")
       post.permalink.should == "http://192.168.1.68:9393/post/#{DateTime.now.to_date.strftime("%Y/%m/%d")}/the-wheels-on-my-bus-dont-go-round-and-round"
   end
+  
+  it "should persist the slug to the database" do
+    #arrange
+    user = User.new(:email => "test@rails.com", :password => "password@1", :firstname => "Test", :lastname => "Rails")
+    user.save
+    post = Post.new(:title => "T1", :body => "bd1", :tags => "tag1, tag2", :categories => "category1, category2", :user => user)
+    post.save
+    #assert
+    post.persisted_slug.should == post.slug
+  end
 end
 
 describe Post, "querying" do
