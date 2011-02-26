@@ -76,6 +76,7 @@ class ShoutMouth < Sinatra::Base
   #-------------Metaweblog/Blogger/WordPress API-------------------------------------#
   #------send: see methods in the metaweblog api module------------------------------#
   #----------------------------------------------------------------------------------#
+  # 
   post '/xmlrpc/' do 
     #generate the xml
     xml =  load_xml_from_request(@request.body.read, @request.params) 
