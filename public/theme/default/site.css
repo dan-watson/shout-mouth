@@ -22,6 +22,25 @@ a {
 a:hover {
 	text-decoration:underline;
 }
+pre {
+	font-size:0.7em;
+	overflow: auto;
+	width:600px;
+	font-family:'Monaco', 'Consolas';
+}
+/* no vertical scrollbars for IE 7 */
+*:first-child+html pre {
+	padding-bottom: 20px;
+	overflow-y: hidden;
+	overflow: visible;
+	overflow-x: auto; 
+	}
+/* no vertical scrollbars for IE 6 */
+* html pre { 
+	padding-bottom: 20px;
+	overflow: visible;
+	overflow-x: auto;
+}
 
 #container{
 	width:880px;
