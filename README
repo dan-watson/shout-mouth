@@ -5,6 +5,12 @@ TODO:
 4) Add take task not in the public repo that will pull data from current blog and transform markup and also the
    image url + upload.
 
+#NICE TO HAVES
+
+1) Fully implement the rest of the word-press API so word-press clients will work with shout mouth
+2) Enable the ability to write plugins for the sidebar
+3) Re-factor the lookup for authentication using the strategy pattern
+
 						
 
 

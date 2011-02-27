@@ -35,6 +35,13 @@ describe "metaweblog api" do
     @second_post.save
   end
     
+  it "should return correct response when the listMethods method is called and not require authentication" do
+    post '/xmlrpc/', "<methodCall><methodName>system.listMethods</methodName><params></params></methodCall>"
+    
+    last_response.should be_ok
+    last_response.body.should include("metaWeblog.newMediaObject")
+    
+  end
   it "should return correct response when the getUserInfo method is called" do
     post '/xmlrpc/',  "<methodCall> 
                           <methodName>blogger.getUserInfo</methodName>

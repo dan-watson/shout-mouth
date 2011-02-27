@@ -1,6 +1,10 @@
 require_relative 'amazon_s3'
 module Metaweblog
   
+  def does_not_need_authentication?(method)
+      ["list_methods"].include?(method)
+  end
+  
   def list_methods(xmlrpc_call) 
       methods = [ "system.listMethods",
         "metaWeblog.newMediaObject",
@@ -141,10 +145,14 @@ module Metaweblog
   #by position - method below could be a seperate factory or even a stratergy to throw at the authenticate method.
   #YAGNI - this will do!
   
+  WORDPRESS = "WORDPRESS"
+  BLOGGER = "BLOGGER"
+  METAWEBLOG = "METAWEBLOG"
+  
   def authentication_details_lookup(method, xmlrpc_call)
     
       #exception to the rule
-      if (client_call(xmlrpc_call) == "WORDPRESS" && method == "get_users_blogs")
+      if (client_call(xmlrpc_call) == WORDPRESS && method == "get_users_blogs")
           return {:username => xmlrpc_call[1][0], :password => xmlrpc_call[1][1]}
       end
       
@@ -159,11 +167,11 @@ module Metaweblog
   def client_call(xmlrpc_call)    
       case xmlrpc_call[0].split(".")[0]
           when "wp"
-              "WORDPRESS"
+              WORDPRESS
           when "blogger"
-              "BLOGGER"
+              BLOGGER
           else "metaWeblog"
-              "METAWEBLOG"
+              METAWEBLOG
       end
   end
   

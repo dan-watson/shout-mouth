@@ -104,7 +104,7 @@ class ShoutMouth < Sinatra::Base
     authentication_details = authentication_details_lookup(method, call)
     
     #if authentication fails inform the client
-    halt 200, {'Content-Type' => 'text/xml'}, raise_xmlrpc_error("User credentials supplied are incorrect") unless authenticated?(authentication_details) || method == "list_methods"
+    halt 200, {'Content-Type' => 'text/xml'}, raise_xmlrpc_error("User credentials supplied are incorrect") unless authenticated?(authentication_details) || does_not_need_authentication?(method)
     
     #if everything with the request is fine send the payload onto the method in the metaweblog module
     response.headers['Content-Type'] = 'text/xml;'
