@@ -59,7 +59,9 @@ class ShoutMouth < Sinatra::Base
   end
   
   get '/sitemap.xml' do
-    
+    content_type 'text/xml'
+    @articles = Post.all_active
+    builder :sitemap, :layout => false
   end
   
   get '/rsd.xml' do
