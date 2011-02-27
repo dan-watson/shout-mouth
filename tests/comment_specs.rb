@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../app/shout_mouth.rb'
 
 require 'rspec'
-require 'akismetor'
+
 
 describe Comment, "validation" do
   it "should not be valid if the email address and comment are not present" do

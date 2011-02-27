@@ -34,6 +34,10 @@ class Blog
     configuration['site_name']
   end
   
+  def self.site_description
+    configuration['site_description']
+  end
+  
   def self.to_metaweblog
     [:url => self.url,
      :blogid => 2000,

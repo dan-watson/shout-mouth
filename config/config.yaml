@@ -1,5 +1,6 @@
 defaults: &defaults
   site_name: "Your Site Name"
+  site_description: "Description"
   url: http://yoursite.com
   akismet_key: 'YOUR_KEY'
   amazon_s3_key: 'YOUR_KEY'
@@ -13,6 +14,7 @@ development:
 
 test: &test
   site_name: "Test Site"
+  site_description: "Description"
   url: http://192.168.1.68:9393
   akismet_key: '123456789'
   amazon_s3_key: 'NO'

@@ -16,6 +16,10 @@ describe Blog, "configuration" do
     Blog.site_name.should == "Test Site"
   end
   
+  it "should return the correct configuration variable for the site_description key" do
+    Blog.site_description.should == "Description"
+  end
+  
   it "should return the correct configuration variable for the amazon_s3_key key" do
     Blog.amazon_s3_key.should == "NO"
   end
