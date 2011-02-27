@@ -27,6 +27,7 @@ pre {
 	overflow: auto;
 	width:600px;
 	font-family:'Monaco', 'Consolas';
+	padding:10px 2px 10px 0px !important;
 }
 /* no vertical scrollbars for IE 7 */
 *:first-child+html pre {

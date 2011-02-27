@@ -132,7 +132,7 @@ window['_pr_isIE6'] = function () {
       "elif except exec finally from global import in is lambda " +
       "nonlocal not or pass print raise try with yield " +
       "False True None ";
-  var RUBY_KEYWORDS = FLOW_CONTROL_KEYWORDS + "alias and begin case class def" +
+  var RUBY_KEYWORDS = FLOW_CONTROL_KEYWORDS + "alias and begin case class def require_relative" +
       " defined elsif end ensure false in module next nil not or redo rescue " +
       "retry self super then true undef unless until when yield BEGIN END ";
   var SH_KEYWORDS = FLOW_CONTROL_KEYWORDS + "case done elif esac eval fi " +
@@ -1150,11 +1150,17 @@ window['_pr_isIE6'] = function () {
         // http://stud3.tuwien.ac.at/~e0226430/innerHtmlQuirk.html
         // and it serves to undo the conversion of <br>s to newlines done in
         // chunkify.
+		var isIE678 = window['_pr_isIE6']();
+		var replacement = '$1';
+		if(isIE678 == 6 || isIE678 == 7){
+			replacement = '$1&#8204;'
+		}
+		 
         var htmlChunk = textToHtml(
             tabExpander(sourceText.substring(outputIdx, sourceIdx)))
             .replace(lastWasSpace
                      ? startOrSpaceRe
-                     : adjacentSpaceRe, '$1&#160;');
+                     : adjacentSpaceRe, replacement); //SMHACK - WAS =>  $1&#160;
         // Keep track of whether we need to escape space at the beginning of the
         // next chunk.
         lastWasSpace = trailingSpaceRe.test(htmlChunk);
