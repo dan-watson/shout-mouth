@@ -26,7 +26,7 @@ class ShoutMouth < Sinatra::Base
   
   get '/post/:year/:month/:day/:slug' do
     #if not found check legacy routes first
-    @code = "<pre class=\"prettyprint\">require_relative 'base/shout_record'\n\nrequire 'akismetor'\n\nclass Comment\n  include Shout::Record\n  \n    property :comment_author, String\n    property :comment_author_email, String\n    property :comment_content, Text\n    property :comment_author_url, String\n    property :user_ip, String\n    property :user_agent, Text\n    property :referrer, String\n    property :is_spam, Boolean\n    \n    validates_presence_of :comment_author, :comment_author_email\n    validates_format_of :email, :as =&gt; :comment_author_email\n  \n    belongs_to :post\n    \n    def spam?       \n        comment_attributes = {\n          :key =&gt; Blog.akismet_key,  #Grab From Config\n          :blog =&gt; Blog.url, #Grab From Config\n          :user_ip =&gt; user_ip,\n          :user_agent =&gt; user_agent, \n          :referrer =&gt; referrer,\n          :permalink =&gt; post.permalink,\n          :comment_type =&gt; 'comment',\n          :comment_author =&gt; comment_author,\n          :comment_author_email =&gt; comment_author_email,\n          :comment_author_url =&gt; comment_author_url,\n          :comment_content =&gt; comment_content\n        }\n        Akismetor.spam?(comment_attributes)\n    end\n   \n    before :save do\n       self.is_spam = spam?\n    end\n    \n    #Scope\n    def self.all_active_and_ham\n        all_active.all(:is_spam =&gt; false)\n    end\nend</pre>"
+    @code = "<pre class=\"prettyprint\">require 'yaml'\n\nclass Blog\n  \n  def self.url\n    configuration['url']\n  end\n  \n  def self.akismet_key\n    configuration['akismet_key']\n  end\n  \n  def self.amazon_s3_key\n      configuration['amazon_s3_key']\n  end\n  \n  def self.amazon_s3_secret_key\n      configuration['amazon_s3_secret_key']\n  end\n  \n  def self.amazon_s3_bucket\n      configuration['amazon_s3_bucket']\n  end\n  \n  def self.amazon_s3_file_location\n      configuration['amazon_s3_file_location']\n  end\n  \n  def self.theme\n    configuration['theme']\n  end\n  \n  def self.site_name\n    configuration['site_name']\n  end\n  \n  def self.to_metaweblog\n    [:url => self.url,\n     :blogid => 2000,\n     :blogName => self.site_name]\n  end\n  \n  private \n  def self.configuration\n    configuration_directory = \"\#{Dir.pwd}/config/\"\n    configuration_file = File.exist?(\"\#{configuration_directory}_config.yaml\") ? \"\#{configuration_directory}_config.yaml\" : \"\#{configuration_directory}config.yaml\"\n    YAML.load_file(configuration_file)[\"\#{settings.environment.to_s}\"]\n  end\n  \nend</pre>"
     params[:slug]
     haml :post
   end
@@ -81,7 +81,7 @@ class ShoutMouth < Sinatra::Base
   post '/xmlrpc/' do 
     #generate the xml
     xml =  load_xml_from_request(@request.body.read, @request.params) 
-    
+
     #create xmlrpc request call
     call = XMLRPC::Marshal.load_call(xml)
     
