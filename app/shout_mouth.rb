@@ -56,6 +56,10 @@ class ShoutMouth < Sinatra::Base
     
   end
   
+  get '/sitemap.xml' do
+    
+  end
+  
   get '/rsd.xml' do
     content_type 'text/xml'
     erb :rsd
@@ -63,6 +67,10 @@ class ShoutMouth < Sinatra::Base
   
   get '/webpreview.html' do
       haml :preview
+  end
+  
+  get %r{/xmlrpc([*.[a-z]/]+)} do 
+      "XML-RPC server accepts POST requests only."
   end
   
   # Catches all routes - Will first check the legacy routes to see if 
@@ -77,11 +85,12 @@ class ShoutMouth < Sinatra::Base
   #-------------Metaweblog/Blogger/WordPress API-------------------------------------#
   #------send: see methods in the metaweblog api module------------------------------#
   #----------------------------------------------------------------------------------#
-  # 
-  post '/xmlrpc/' do 
+  # MATCHES - /xmlrpc/ - /xmlrpc.{anything}
+  
+  post %r{/xmlrpc([*.[a-z]/]+)} do 
     #generate the xml
     xml =  load_xml_from_request(@request.body.read, @request.params) 
-
+    #puts "xmlpassed: #{xml}"
     #create xmlrpc request call
     call = XMLRPC::Marshal.load_call(xml)
     
@@ -95,7 +104,7 @@ class ShoutMouth < Sinatra::Base
     authentication_details = authentication_details_lookup(method, call)
     
     #if authentication fails inform the client
-    halt 200, {'Content-Type' => 'text/xml'}, raise_xmlrpc_error("User credentials supplied are incorrect") unless authenticated?(authentication_details)
+    halt 200, {'Content-Type' => 'text/xml'}, raise_xmlrpc_error("User credentials supplied are incorrect") unless authenticated?(authentication_details) || method == "list_methods"
     
     #if everything with the request is fine send the payload onto the method in the metaweblog module
     response.headers['Content-Type'] = 'text/xml;'

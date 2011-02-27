@@ -68,6 +68,19 @@ describe "metaweblog api" do
     find_value(last_response.body, "blogName", ["member", "name", "value", "string"]).should == "Test Site"
   end
   
+  it "should return correct response when the getUsersBlogs method is called with the wordpress prefix" do
+    post '/xmlrpc/',  "<methodCall>
+                          <methodName>wp.getUsersBlogs</methodName>
+                          <params>
+                          <param><value><string>api@email.com</string></value></param>
+                          <param><value><string>password111</string></value></param>
+                          </params>
+                          </methodCall>"
+                      
+    find_value(last_response.body, "url", ["member", "name", "value", "string"]).should == "http://192.168.1.68:9393"
+    find_value(last_response.body, "blogid", ["member", "name", "value", "i4"]).should == "2000"
+    find_value(last_response.body, "blogName", ["member", "name", "value", "string"]).should == "Test Site"
+  end
   
   it "should return correct response when the getRecentPosts method is called" do
     post '/xmlrpc/',  "<methodCall> 

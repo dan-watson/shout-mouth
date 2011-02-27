@@ -1,6 +1,28 @@
 require_relative 'amazon_s3'
 module Metaweblog
   
+  def list_methods(xmlrpc_call) 
+      methods = [ "system.listMethods",
+        "metaWeblog.newMediaObject",
+        "metaWeblog.newPost",
+        "metaWeblog.editPost",
+        "metaWeblog.getPost",
+        "metaWeblog.getCategories",
+        "metaWeblog.getRecentPosts",
+        "metaWeblog.deletePost",
+        "metaWeblog.getUsersBlogs",
+        "blogger.getUserInfo",
+        "wp.getPageList",
+        "wp.getPages",
+        "wp.getPage",
+        "wp.editPage",
+        "wp.deletePage",
+        "wp.newPage",
+        "wp.getAuthors",
+        "wp.getTags"]
+        XMLRPC::Marshal.dump_response(methods)
+  end
+  
   def new_media_object(xmlrpc_call)
       data = xmlrpc_call[1][3]
       name = data["name"].gsub(/\//,'')
@@ -120,11 +142,28 @@ module Metaweblog
   #YAGNI - this will do!
   
   def authentication_details_lookup(method, xmlrpc_call)
+    
+      #exception to the rule
+      if (client_call(xmlrpc_call) == "WORDPRESS" && method == "get_users_blogs")
+          return {:username => xmlrpc_call[1][0], :password => xmlrpc_call[1][1]}
+      end
+      
       case method
         when "delete_post", "get_page", "edit_page" 
             {:username => xmlrpc_call[1][2], :password => xmlrpc_call[1][3]}
         else  
             {:username => xmlrpc_call[1][1], :password => xmlrpc_call[1][2]}
+      end
+  end
+  
+  def client_call(xmlrpc_call)    
+      case xmlrpc_call[0].split(".")[0]
+          when "wp"
+              "WORDPRESS"
+          when "blogger"
+              "BLOGGER"
+          else "metaWeblog"
+              "METAWEBLOG"
       end
   end
   
