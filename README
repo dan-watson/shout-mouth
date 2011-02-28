@@ -12,8 +12,8 @@ TODO:
 3) Re-factor the lookup for authentication using the strategy pattern
 
 
-#To Get A Demo Up And Running - Runs the site on test data made up from the tests
-
+#To Get A Demo Up And Running - Runs the site on test data made up from the tests (bundler must be installed)
+- bundle install (I would recommend using RVM to manage your gemsets)
 - rake specs:run_all 
 - shotgun --env=test
 - browse to the localhost:9393
@@ -23,6 +23,9 @@ TODO:
 - Windows Live Writer (fully supported)
 - Wordpress Client For Ipad - (ropey at best - need to implement all wp methods)
 - Blogger Client For Ipad - (ropey at best - this is due to the clients interpretation of how the api should work - should work after wp methods implemented)
+
+
+
 
 
 
