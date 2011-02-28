@@ -1,3 +1,5 @@
+require 'aws/s3'
+
 class AmazonS3
   def self.save_file(name, bits)
     AWS::S3::Base.establish_connection!(

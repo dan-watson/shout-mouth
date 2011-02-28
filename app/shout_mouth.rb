@@ -2,7 +2,6 @@ require 'rubygems'
 require 'sinatra'
 require 'haml'
 require 'xmlrpc/marshal'
-require 'aws/s3'
 require Dir.pwd + '/app/models/base/shout_record'
 require Dir.pwd + '/app/models/user'
 require Dir.pwd + '/app/models/post'
@@ -14,8 +13,6 @@ require Dir.pwd + '/app/models/category'
 require Dir.pwd + '/app/api/metaweblog'
 require Dir.pwd + '/app/api/gravatar'
 require Dir.pwd + '/app/lib/fixnum'
-
-
 
 class ShoutMouth < Sinatra::Base
     include Metaweblog
