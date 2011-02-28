@@ -12,6 +12,7 @@ require Dir.pwd + '/app/models/blog'
 require Dir.pwd + '/app/models/tag'
 require Dir.pwd + '/app/models/category'
 require Dir.pwd + '/app/api/metaweblog'
+require Dir.pwd + '/app/lib/fixnum'
 
 class ShoutMouth < Sinatra::Base
     include Metaweblog
@@ -36,8 +37,19 @@ class ShoutMouth < Sinatra::Base
   end
   
   get '/page/:slug' do
-    params[:slug]
-    #if not found check legacy routes first
+    @article = Post.all_active_pages.all(:persisted_slug => params[:slug]).first
+
+    if @article.nil?
+      @article = LegacyRoute.all(:slug => params[:slug]).first.post
+      redirect "/page/#{@article.persisted_slug}", 301 unless @article.nil?
+    end
+    
+    if(@article.nil?)
+       redirect '/404'
+    end
+          
+    haml :page
+    
   end
   
   get '/category/:category' do
@@ -80,13 +92,24 @@ class ShoutMouth < Sinatra::Base
       "XML-RPC server accepts POST requests only."
   end
   
-  # Catches all routes - Will first check the legacy routes to see if 
-  # a redirect is needed else it will render a 404 
+  # Catch All 
+  get '/404' do
+    haml :not_found
+  end
+  
   get '/*' do
     legacy_route = LegacyRoute.first(:slug => params[:splat])
-    redirect "/post/#{legacy_route.post.slug}", 301 unless legacy_route.nil?
-    redirect '/', 404
+    
+    if(!legacy_route.nil?)
+      if(legacy_route.post.is_page?)
+        redirect "/page/#{legacy_route.post.slug}", 301
+      else
+        redirect "/post/#{legacy_route.post.slug}", 301
+      end
+    end
+    redirect '/404'
   end
+  
   
   #----------------------------------------------------------------------------------#
   #-------------Metaweblog/Blogger/WordPress API-------------------------------------#
@@ -136,4 +159,10 @@ class ShoutMouth < Sinatra::Base
     end
   end
   
+  helpers do
+      def partial (template, locals = {})
+        haml(template, :layout => false, :locals => locals)
+      end
+  end
+    
 end

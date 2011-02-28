@@ -1,0 +1,7 @@
+%div.post
+	%h2.post_title=article.title
+	
+	%div.post_body
+		=article.body
+	
+	= partial(:_social, :article => @article) unless @article.is_page?

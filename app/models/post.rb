@@ -19,6 +19,18 @@ class Post
     has n, :comments
     has n, :legacy_routes
     
+    def author
+      user.fullname
+    end
+    
+    def readable_tags
+      tags.join(", ")
+    end
+    
+    def readable_categories
+      categories.join(", ")
+    end
+    
     def slug
       #a slug is a URL-safe string that echoes the title
       #in this method we want to remove any weird punctuation and spaces
@@ -35,6 +47,10 @@ class Post
     
     def url_date
         created_at.to_date.strftime("%Y/%m/%d")
+    end
+    
+    def readable_date
+        created_at.to_date.strftime("%A, #{created_at.day.ordinalize} %B, %Y")
     end
     
     def add_legacy_route legacy_url

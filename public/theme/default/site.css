@@ -85,6 +85,11 @@ pre {
 .post:not(:last-child){
 	border-bottom:solid 1px #EEEEEE;
 }
+.post_body{
+	margin:10px 0px 10px 0px;
+	line-height: 1.6;
+    margin: 0 0 1.5em;
+}
 .post_information{
 	margin-bottom:15px;
 	text-align:left;

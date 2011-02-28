@@ -13,7 +13,13 @@
 					%td
 						%a{:href => post.permalink, :rel => "follow"}
 							=post.title
-					%td=post.tags.join(', ')
-					%td=post.categories.join(', ')
+					%td
+						- post.tags.each do |tag|
+							%a{:href => "/tag/#{tag}", :rel => "follow"}
+								=tag
+					%td
+						- post.categories.each do |category|
+							%a{:href => "/category/#{category}", :rel => "follow"}
+								=category
 					
 				

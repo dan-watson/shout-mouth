@@ -75,3 +75,36 @@ describe Post, "querying" do
     active_posts.should be < all_posts
   end
 end
+
+
+describe Post, "helper methods" do
+  it "should give the correct human readable date" do
+     post = Post.new(:title => "T1", :body => "bd1", :tags => "tag1, tag2", :categories => "category1, category2", :created_at => Date.new(2010,01,01))
+     post.readable_date.should == "Friday, 1st January, 2010"
+  end
+  
+  it "should give the correct author name" do
+     user = User.new(:email => "test@rails.com", :password => "password@1", :firstname => "Test", :lastname => "Rails")
+     user.save
+     post = Post.new(:title => "T1", :body => "bd1", :tags => "tag1, tag2", :categories => "category1, category2", :user => user)
+     post.author.should == "Test Rails"
+  end
+  
+  it "should give the correct human readable tags" do
+     user = User.new(:email => "test@rails.com", :password => "password@1", :firstname => "Test", :lastname => "Rails")
+     user.save
+     post = Post.new(:title => "T1", :body => "bd1", :tags => "tag1, tag2", :categories => "category1, category2", :user => user)
+     post.save
+     post.reload
+     post.readable_tags.should == "tag1, tag2"
+  end
+  
+  it "should give the correct human readable categories" do
+     user = User.new(:email => "test@rails.com", :password => "password@1", :firstname => "Test", :lastname => "Rails")
+     user.save
+     post = Post.new(:title => "T1", :body => "bd1", :tags => "tag1, tag2", :categories => "category1, category2", :user => user)
+     post.save
+     post.reload
+     post.readable_categories.should == "category1, category2"
+  end
+end

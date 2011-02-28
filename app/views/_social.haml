@@ -1,0 +1,5 @@
+%div.post_information #{article.readable_date} By #{article.author} (#{article.readable_tags})
+%div.post_social_links 
+	%a{:href => "http://api.tweetmeme.com/share?url=#{article.permalink}"} Tweet Me
+	|
+	%a{:href => "http://www.facebook.com/share.php?title=#{article.permalink}"} Link To Facebook
