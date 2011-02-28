@@ -19,6 +19,10 @@ TODO:
 - browse to the localhost:9393
 
 						
+#Tested Blogging Clients
+- Windows Live Writer (fully supported)
+- Wordpress Client For Ipad - (ropey at best - need to implement all wp methods)
+- Blogger Client For Ipad - (ropey at best - this is due to the clients interpretation of how the api should work - should work after wp methods implemented)
 
 
 
