@@ -181,16 +181,21 @@ pre {
 }
 .archive table{
 	font-size:0.8em;
+	width:100%;
 }
 .archive th{
 	border-bottom:dashed 1px #DDDDDD;
 	padding-bottom:12px;
+}
+.archive tr{
+
 }
 .archive td{
   padding-bottom:10px;
   padding-left:17px;
   padding-right:17px;
   padding-top:10px;
+  text-align:center;
 }
 #widgets{
 	float:left;

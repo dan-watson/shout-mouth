@@ -7,4 +7,11 @@ class Category
     Post.all_active_posts.each{|post| categories << post.categories}
     categories.flatten.uniq
   end
+  
+  def self.posts_for_category(category)
+    posts = []
+    Post.all_active_posts.each{|post| posts << post if post.categories.include?(category)}
+    posts
+  end
+  
 end

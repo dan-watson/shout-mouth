@@ -41,14 +41,17 @@ class ShoutMouth < Sinatra::Base
   end
   
   get '/category/:category' do
-    params[:category]
+    @posts = Category.posts_for_category(params[:category])
+    haml :archive
   end
   
   get '/tag/:tag' do
-    params[:tag]
+    @posts = Tag.posts_for_tag(params[:tag])
+    haml :archive 
   end 
   
   get '/archive' do
+    @posts = Post.all_active_posts
     haml :archive
   end
   

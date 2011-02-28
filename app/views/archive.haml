@@ -4,19 +4,16 @@
 			%tr
 				%th Date
 				%th Title
+				%th Tags
+				%th Categories
 		%tbody
-			%tr
-				%td 11th March 2010
-				%td Some really, really, really, really, really, really, really, really, really, long title
-			%tr
-				%td 11th March 2010
-				%td Some really, really, really, really, really, really, really, really, really, long title
-			%tr
-				%td 11th March 2010
-				%td Some really, really, really, really, really, really, really, really, really, long title
-			%tr
-				%td 11th March 2010
-				%td Some really, really, really, really, really, really, really, really, really, long title
-
+			- @posts.each do |post|
+				%tr
+					%td=post.url_date 
+					%td
+						%a{:href => post.permalink, :rel => "follow"}
+							=post.title
+					%td=post.tags.join(', ')
+					%td=post.categories.join(', ')
 					
 				
