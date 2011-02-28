@@ -4,7 +4,7 @@ require 'dm-types'
 
 module Shout
   module Record
-    #DataMapper::Logger.new(STDOUT, :debug)
+    DataMapper::Logger.new(STDOUT, :debug)
     DataMapper.setup(:default, "sqlite:///#{File.dirname(__FILE__)}/../../../db/shout_mouth.db")
     
     def self.included(base)

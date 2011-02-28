@@ -37,7 +37,7 @@ class ShoutMouth < Sinatra::Base
     if(@article.nil?)
        redirect '/404'
     end
-          
+    
     haml :post
   end
   
