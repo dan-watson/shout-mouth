@@ -1,9 +1,12 @@
 TODO:
 --------------------------
 2) Wire back to front
+	- Look at JQuery templating  when adding comment to page
+	
 3a) Slugs need to be unique
 4) Add take task not in the public repo that will pull data from current blog and transform markup and also the
    image url + upload.
+
 
 #NICE TO HAVES
 

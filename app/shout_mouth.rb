@@ -60,8 +60,10 @@ class ShoutMouth < Sinatra::Base
        
        if comment.save 
          comment.attributes.to_json
+       elsif comment.is_spam?
+         {:error => "spam"}.to_json
        else
-         comment.errors.map{|error| {:error => error}}.to_json unless comment.save
+         comment.errors.map{|error| {:error => error}}.to_json
        end
         
   end

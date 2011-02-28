@@ -1,5 +1,5 @@
 %div.add_comment
-	%form.add_comment_form{:action => "/post/#{post.slug}/add_comment", :method => "post"}
+	%form.add_comment_form{:id => "commentform", :action => "/post/#{post.slug}/add_comment", :method => "post"}
 		%p
 			%span Name
 			%input{:name => "comment[comment_author]"}
