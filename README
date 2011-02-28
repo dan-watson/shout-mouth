@@ -11,6 +11,13 @@ TODO:
 2) Enable the ability to write plugins for the sidebar - and social bookmarks
 3) Re-factor the lookup for authentication using the strategy pattern
 
+
+#To Get A Demo Up And Running - Runs the site on test data made up from the tests
+
+- rake specs:run_all 
+- shotgun --env=test
+- browse to the localhost:9393
+
 						
 
 

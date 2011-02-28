@@ -2,6 +2,10 @@ require 'yaml'
 
 class Blog
   
+  def self.posts_on_home_page
+    configuration['posts_on_home_page']
+  end
+  
   def self.url
     configuration['url']
   end

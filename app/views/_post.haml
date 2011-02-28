@@ -1,7 +1,9 @@
 %div.post
-	%h2.post_title=article.title
+	%h2.post_title
+		%a{:href => article.permalink, :rel => "follow"}=article.title
 	
 	%div.post_body
 		=article.body
 	
-	= partial(:_social, :article => @article) unless @article.is_page?
+	= partial(:_social, :article => article) unless article.is_page?
+	%div.clear

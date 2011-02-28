@@ -4,6 +4,10 @@ require 'rspec'
 
 
 describe Blog, "configuration" do
+  it "should return the correct configuration variable for the posts_on_home_page" do
+    Blog.posts_on_home_page.should == "3"
+  end
+  
   it "should return the correct configuration variable for the Url" do
     Blog.url.should == "http://192.168.1.68:9393"
   end

@@ -1,23 +1,2 @@
-%div.post
-	%h2.post_title An Interview With Hamlin Davis
-	%p Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer elementum enim non velit eleifend et dapibus nibh iaculis. Maecenas porttitor ipsum vitae nibh imperdiet nec sodales neque placerat. Morbi lorem lectus, malesuada et tincidunt sit amet, aliquam at ante. In hac habitasse platea dictumst. Nullam auctor, sem nec auctor luctus, ligula quam pulvinar sem, et tincidunt elit justo id eros. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. In egestas sodales ante ac mattis. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam ante nisl, congue vel malesuada non, feugiat non nisi. Donec vulputate vulputate sem, at interdum dui facilisis in. Nulla sapien elit, aliquam eget egestas ac, sagittis sed nibh. Donec id tellus dui.
-
-	%p Morbi augue enim, aliquam id lobortis faucibus, volutpat eget lectus. Aliquam accumsan pretium dictum. Suspendisse potenti. Proin erat justo, sollicitudin in bibendum non, imperdiet sit amet nisl. Aliquam a urna a risus sollicitudin tincidunt sit amet vel velit. Maecenas ac sem sit amet massa iaculis facilisis. Nam tempus pellentesque est nec gravida. Sed quis sollicitudin lectus. Mauris vestibulum diam et tortor malesuada ac ultrices ligula sollicitudin. Morbi ut lectus elit. Aenean commodo purus sed diam hendrerit in blandit nulla pharetra. Morbi tincidunt felis eu est pulvinar porta.
-	%div.post_information Wednesday, 11th March, 2010 By Dan Watson (C#, Interview)
-	%div.post_social_links 
-		%a{:href => "#"} Tweet Me
-		|
-		%a{:href => "#"} Link To Facebook
-	%div.clear
-
-%div.post
-	%h2.post_title An Interview With Hamlin Davis
-	%p Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer elementum enim non velit eleifend et dapibus nibh iaculis. Maecenas porttitor ipsum vitae nibh imperdiet nec sodales neque placerat. Morbi lorem lectus, malesuada et tincidunt sit amet, aliquam at ante. In hac habitasse platea dictumst. Nullam auctor, sem nec auctor luctus, ligula quam pulvinar sem, et tincidunt elit justo id eros. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. In egestas sodales ante ac mattis. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam ante nisl, congue vel malesuada non, feugiat non nisi. Donec vulputate vulputate sem, at interdum dui facilisis in. Nulla sapien elit, aliquam eget egestas ac, sagittis sed nibh. Donec id tellus dui.
-
-	%p Morbi augue enim, aliquam id lobortis faucibus, volutpat eget lectus. Aliquam accumsan pretium dictum. Suspendisse potenti. Proin erat justo, sollicitudin in bibendum non, imperdiet sit amet nisl. Aliquam a urna a risus sollicitudin tincidunt sit amet vel velit. Maecenas ac sem sit amet massa iaculis facilisis. Nam tempus pellentesque est nec gravida. Sed quis sollicitudin lectus. Mauris vestibulum diam et tortor malesuada ac ultrices ligula sollicitudin. Morbi ut lectus elit. Aenean commodo purus sed diam hendrerit in blandit nulla pharetra. Morbi tincidunt felis eu est pulvinar porta.
-	%div.post_information Wednesday, 11th March, 2010 By Dan Watson (C#, Interview)
-	%div.post_social_links 
-		%a{:href => "#"} Tweet Me
-		|
-		%a{:href => "#"} Link To Facebook
-	%div.clear
+- @articles.each do |article|
+	= partial(:_post, :article => article)

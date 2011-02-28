@@ -40,6 +40,10 @@ class Comment
        self.is_spam = spam?
     end
     
+    def readable_date
+      created_at.to_date.strftime("%A, #{created_at.day.ordinalize} %B, %Y")
+    end
+    
     #Scope
     def self.all_active_and_ham
         all_active.all(:is_spam => false)
