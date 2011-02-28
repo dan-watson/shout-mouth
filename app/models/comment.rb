@@ -11,7 +11,7 @@ class Comment
     property :comment_author_url, String
     property :user_ip, String
     property :user_agent, Text
-    property :referrer, String
+    property :referrer, Text
     property :is_spam, Boolean
     
     validates_presence_of :comment_author, :comment_author_email, :comment_content, :comment_author_url

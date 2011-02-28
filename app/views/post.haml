@@ -3,7 +3,7 @@
 - @article.comments.all_active_and_ham.each do |comment|
 	= partial(:_comment, :comment => comment)
 
-= partial(:_comment_form)
+= partial(:_comment_form, :post => @article)
 					
 
 				

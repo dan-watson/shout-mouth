@@ -1,17 +1,17 @@
 %div.add_comment
-	%form.add_comment_form
+	%form.add_comment_form{:action => "/post/#{post.slug}/add_comment", :method => "post"}
 		%p
 			%span Name
-			%input
+			%input{:name => "comment[comment_author]"}
 		%p
 			%span Email
-			%input
+			%input{:name => "comment[comment_author_email]"}
 		%p
 			%span Website
-			%input
+			%input{:name => "comment[comment_author_url]"}
 		%p
 			%span Comment
-			%textarea
+			%textarea{:name => "comment[comment_content]"}
 		%p
 			%span &nbsp;
 			%input{:id => "add_comment_submit", :type => "submit", :value => "save"}

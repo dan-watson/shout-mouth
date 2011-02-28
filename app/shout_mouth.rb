@@ -1,6 +1,7 @@
 require 'rubygems'
 require 'sinatra'
 require 'haml'
+require 'json'
 require 'xmlrpc/marshal'
 require Dir.pwd + '/app/models/base/shout_record'
 require Dir.pwd + '/app/models/user'
@@ -42,7 +43,27 @@ class ShoutMouth < Sinatra::Base
   end
   
   post '/post/:slug/add_comment' do
-    
+      content_type :json
+      
+      comment = params[:comment]
+      
+      post = Post.find(:persisted_slug => params[:slug]).first
+      
+      comment = Comment.new(:comment_author => comment['comment_author'], 
+       :comment_author_email => comment['comment_author_email'],
+       :comment_content => comment['comment_content'],
+       :comment_author_url => comment['comment_author_url'],
+       :user_ip => request.ip, 
+       :user_agent => request.user_agent, 
+       :referrer => request.referer,
+       :post => post)
+       
+       if comment.save 
+         comment.attributes.to_json
+       else
+         comment.errors.map{|error| {:error => error}}.to_json unless comment.save
+       end
+        
   end
   
   get '/page/:slug' do
