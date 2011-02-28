@@ -94,7 +94,15 @@ class ShoutMouth < Sinatra::Base
     builder :rsd, :layout => false
   end
   
+  #This method is to allow metaweblog clients to pick up the theme of the blog
+  #Minimal amount of information supplied for the user and post just to get the template to render
   get '/webpreview.html' do
+      @article = Post.new(:title => "{post-title}", 
+                          :body => "{post-body}", 
+                          :is_page => false, 
+                          :created_at => DateTime.now,
+                          :tags => ["tag1", "tag2"],
+                          :user => User.new(:firstname => "Shout", :lastname => "Mouth"))
       haml :preview
   end
   

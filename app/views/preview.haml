@@ -1,13 +1,4 @@
-%div.post
-	%h2.post_title {post-title}
-	%p {post-body}
-	%div.post_information Monday, 25th December, 2084 By The Author (Some, Tags)
-	%div.post_social_links 
-		%a{:href => "#"} Tweet Me
-		|
-		%a{:href => "#"} Link To Facebook
-	%div.clear
-				
+= partial(:_post, :article => @article)
 				
 				
 	
