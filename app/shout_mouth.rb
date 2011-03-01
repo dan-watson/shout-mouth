@@ -26,21 +26,19 @@ class ShoutMouth < Sinatra::Base
     haml :index
   end
   
-  get '/post/:year/:month/:day/:slug' do
-    
-    @article = Post.all_active_posts.all(:persisted_slug => params[:slug]).first
+  #DRY - This route matches for both pages and posts as the program flow is the same
+  ["/page/:slug", "/post/:year/:month/:day/:slug"].each do |path|
+    get path do
+      @article = Post.all_active.all(:persisted_slug => params[:slug]).first
 
-    if @article.nil?
-      legacy_route = LegacyRoute.all(:slug => params[:slug]).first
-      @article =  legacy_route.nil? ? nil : legacy_route.post  
-      redirect "/post/#{@article.url_date}/#{@article.slug}", 301 unless @article.nil?
+      #throw the request to the catch all handler which will sort everything out
+      if @article.nil?
+        redirect "/#{params[:slug]}"
+      end
+
+      prepend_title(@article.title)      
+      haml :page  
     end
-    
-    if(@article.nil?)
-       redirect '/404'
-    end
-    prepend_title(@article.title)
-    haml :post
   end
   
   post '/post/:slug/add_comment' do
@@ -67,24 +65,6 @@ class ShoutMouth < Sinatra::Base
          comment.errors.map{|error| {:error => error}}.to_json
        end
         
-  end
-  
-  get '/page/:slug' do
-    @article = Post.all_active_pages.all(:persisted_slug => params[:slug]).first
-
-    if @article.nil?
-      legacy_route = LegacyRoute.all(:slug => params[:slug]).first
-      @article =  legacy_route.nil? ? nil : legacy_route.post  
-      redirect "/page/#{@article.persisted_slug}", 301 unless @article.nil?
-    end
-    
-    if(@article.nil?)
-       redirect '/404'
-    end
-    
-    prepend_title(@article.title)      
-    haml :page
-    
   end
   
   get '/category/:category' do
@@ -151,14 +131,7 @@ class ShoutMouth < Sinatra::Base
   
   get '/*' do
     legacy_route = LegacyRoute.first(:slug => params[:splat])
-    
-    if(!legacy_route.nil?)
-      if(legacy_route.post.is_page?)
-        redirect "/page/#{legacy_route.post.slug}", 301
-      else
-        redirect "/post/#{legacy_route.post.slug}", 301
-      end
-    end
+    redirect legacy_route.post.permalink, 301 unless legacy_route.nil?
     redirect '/404'
   end
   
@@ -219,19 +192,21 @@ class ShoutMouth < Sinatra::Base
       def title
           @title.nil? ? Blog.site_name : @title
       end
+      
+      def prepend_title title
+        @title = "#{title} - #{Blog.site_name}"
+      end
+
+      def all_tags
+        Tag.all_tags
+      end
+
+      def month_roll
+        Post.month_year_counter
+      end
   end
   
-  def prepend_title title
-    @title = "#{title} - #{Blog.site_name}"
-  end
-  
-  def all_tags
-    Tag.all_tags
-  end
-  
-  def month_roll
-    Post.month_year_counter
-  end
+
   
     
 end

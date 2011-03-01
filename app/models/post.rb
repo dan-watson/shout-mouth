@@ -47,7 +47,8 @@ class Post
     end
     
     def permalink
-         "#{Blog.url}/post/#{url_date}/#{slug}"
+        return "#{Blog.url}/post/#{url_date}/#{slug}" unless is_page?
+        "#{Blog.url}/page/#{slug}"
     end
     
     def url_date
