@@ -71,23 +71,6 @@ describe Post, "permalink" do
   end
 end
 
-describe Post, "querying" do
-  before(:all) do
-   valid_post = Factory(:valid_post)
-   valid_post.save  
-  
-   inactive_post = Factory(:inactive_post)
-   inactive_post.save
-  
-  end
-  it "should not pull back inactive posts" do
-    all_posts = Post.all.count
-    active_posts = Post.all_active.count
-    active_posts.should be < all_posts
-  end
-end
-
-
 describe Post, "helper methods" do
   it "should give the correct human readable date" do
      post = Post.new(:title => "T1", :body => "bd1", :tags => "tag1, tag2", :categories => "category1, category2", :created_at => Date.new(2010,01,01))

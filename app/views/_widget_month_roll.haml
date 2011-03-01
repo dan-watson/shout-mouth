@@ -3,4 +3,4 @@
 	%ul
 		- posts.keys.each do |post| 
 			%li
-				%a{:href => "/post/date/#{post}"}="#{post} (#{posts[post].count})"
+				%a{:href => "/posts/date/#{post}", :rel => "follow"}="#{post} (#{posts[post].count})"

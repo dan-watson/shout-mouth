@@ -246,6 +246,8 @@ describe "metaweblog api" do
     post.title.should == "New Title"
     post.body.should == "New Body"
     post.legacy_routes[0].slug.should == old_post_slug
+    post.month.should == "February"
+    post.year.should == 2011
     post.categories.should include("cat4", "cat5")
     
     find_value(last_response.body, "postid", ["member", "name", "value", "i4"]).should == post_to_update_id.to_s
@@ -331,6 +333,8 @@ describe "metaweblog api" do
     post.title.should == "New Post From Metaweblog Client"
     post.body.should == "<p>Some Body</p>"
     post.categories.should include("cat1", "cat2", "cat4")
+    post.month.should == DateTime.now.strftime("%B")
+    post.year.should == DateTime.now.year
     post.is_active.should be_true
     
     last_response.body.should include("<i4>#{post.id}</i4>")
@@ -533,6 +537,7 @@ describe "metaweblog api" do
     page.categories.should include ("page")
     page.body.should == "Update"
     page.legacy_routes[0].slug.should == "page-test"
+    page.year.nil?.should be_false
     last_response.body.should include("<boolean>1</boolean>")
 
     page.destroy
@@ -572,6 +577,7 @@ describe "metaweblog api" do
 
     page.reload
     page.is_active.should be_false
+    page.year.nil?.should be_false
     last_response.body.should include("<boolean>1</boolean>")
 
     
@@ -638,6 +644,7 @@ describe "metaweblog api" do
     page.tags.should include("page")
     page.categories.should include("page")
     page.is_active.should be_true
+    page.year.nil?.should be_false
     last_response.body.should include("<i4>#{page.id.to_s}</i4>")
 
     

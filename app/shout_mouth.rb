@@ -99,6 +99,12 @@ class ShoutMouth < Sinatra::Base
     haml :archive 
   end 
   
+  get '/posts/date/:year-:month' do
+    prepend_title("Posts for #{params[:month]}-#{params[:year]}")
+    @posts = Post.all_active_posts.all(:year => params[:year], :month => params[:month])
+    haml :archive
+  end
+  
   get '/archive' do
     prepend_title("Archive")
     @posts = Post.all_active_posts
