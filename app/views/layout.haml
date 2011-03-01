@@ -1,82 +1,25 @@
 !!!
 %html{:xmlns => "http://www.w3.org/1999/xhtml"}
 	%head
-		%title "Site Of The Year"
-		%link{:rel => "stylesheet", :href => "/theme/#{Blog.theme}/site.css", :type => "text/css", :media => "screen"}
-		
-		
-		%script{:type => "text/javascript", :src => "/scripts/jquery-1.5.min.js"}
-		%script{:type => "text/javascript", :src => "/scripts/jquery.tmpl.js"}
-		%script{:type => "text/javascript", :src => "/scripts/add.comment.js"}
-
-				
-		%link{:rel => "edituri", :href => "/rsd.xml", :type => "application/rsd+xml", :title => "RSD"}
-		%link{:rel => "alternate", :type => "application/rss+xml", :title => "RSS",  :href => "/rss"}
-		
-		%link{:rel => "stylesheet", :href => "/prettyforms/pretty.forms.css", :type => "text/css", :media => "screen"}
-		%script{:type => "text/javascript", :src => "/prettyforms/pretty.forms.js"}
-		%script{:type => "text/javascript", :src => "/prettyforms/pretty.forms.setup.js"}
-		
-		%link{:rel => "stylesheet", :href => "/prettify/prettify.css", :type => "text/css"}
-		%script{:type => "text/javascript", :src => "/prettify/prettify.js"}
-		%script{:type => "text/javascript", :src => "/prettify/prettify.load.js"}
+		%title=title
+		= partial(:_css)
+		= partial(:_scripts)
+		= partial(:_discovery)
 	%body
 		#container
 			#header
-				%h1 
-					%img{:src => "/theme/default/images/logo.jpg", :alt => "logo"}
-					%a{:href => "/", :rel => "home"} Dan Watson's Coding Zen
+				= partial(:_header)
 			#menu
-				%ul
-					%li 
-						%a{:href => "#"} Home
-					%li 
-						%a{:href => "#"} Archive
-					%li 
-						%a{:href => "#"} RSS
-					%li 
-						%a{:href => "#"} About
-					%li
-						%a{:href => "#"} Hire Me
+				= partial(:_menu)
 			#separator
 			#contents
 				= yield
 			#widgets
-				%div.widget.twitter 
-					%h4 Social
-					%a{:href => "#"} Follow Me On Twitter
-				%div.widget.month_list
-					%h4 Month List
-					%ul
-						%li 
-							2010
-							%ul
-								%li 
-									%a{:href => "#"} January
-								%li 
-									%a{:href => "#"} February
-								%li 
-									%a{:href => "#"} March
-						%li	
-							2009
-							%ul
-								%li 
-									%a{:href => "#"} April
-								%li
-									%a{:href => "#"} May
-								%li	
-									%a{:href => "#"} June
-				%div.widget.tag_cloud
-					%h4 Tag Cloud
-					%ul
-						%li
-							%a{:href => "#"} C#
-						%li
-							%a{:href => "#"} Ruby
-						%li
-							%a{:href => "#"} Linux
+				= partial(:_widget_twitter)
+				= partial(:_widget_month_roll)
+				= partial(:_widget_tag_cloud)
 				
-			#footer== &copy; #{DateTime.now.year} Dan Watson
+			#footer== &copy; #{DateTime.now.year} #{Blog.name}
 		
 		
 		

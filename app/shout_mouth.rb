@@ -12,7 +12,6 @@ require Dir.pwd + '/app/models/blog'
 require Dir.pwd + '/app/models/tag'
 require Dir.pwd + '/app/models/category'
 require Dir.pwd + '/app/api/metaweblog'
-require Dir.pwd + '/app/api/gravatar'
 require Dir.pwd + '/app/lib/fixnum'
 
 class ShoutMouth < Sinatra::Base
@@ -22,11 +21,13 @@ class ShoutMouth < Sinatra::Base
   set :views, File.dirname(__FILE__) + '/views'
   
   get '/' do
+    prepend_title("Home")
     @articles = Post.all_active_posts.all(:limit => Blog.posts_on_home_page.to_i)
     haml :index
   end
   
   get '/post/:year/:month/:day/:slug' do
+    
     @article = Post.all_active_posts.all(:persisted_slug => params[:slug]).first
 
     if @article.nil?
@@ -38,7 +39,7 @@ class ShoutMouth < Sinatra::Base
     if(@article.nil?)
        redirect '/404'
     end
-    
+    prepend_title(@article.title)
     haml :post
   end
   
@@ -80,22 +81,26 @@ class ShoutMouth < Sinatra::Base
     if(@article.nil?)
        redirect '/404'
     end
-          
+    
+    prepend_title(@article.title)      
     haml :page
     
   end
   
   get '/category/:category' do
+    prepend_title(params[:category])
     @posts = Category.posts_for_category(params[:category])
     haml :archive
   end
   
   get '/tag/:tag' do
+    prepend_title(params[:tag])
     @posts = Tag.posts_for_tag(params[:tag])
     haml :archive 
   end 
   
   get '/archive' do
+    prepend_title("Archive")
     @posts = Post.all_active_posts
     haml :archive
   end
@@ -204,6 +209,14 @@ class ShoutMouth < Sinatra::Base
       def partial (template, locals = {})
         haml(template, :layout => false, :locals => locals)
       end
+      
+      def title
+          @title.nil? ? Blog.site_name : @title
+      end
+  end
+  
+  def prepend_title title
+    @title = "#{title} - #{Blog.site_name}"
   end
     
 end

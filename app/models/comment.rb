@@ -1,6 +1,7 @@
 require_relative 'base/shout_record'
 
 require 'akismetor'
+require 'digest/md5'
 
 class Comment
   include Shout::Record
@@ -42,8 +43,12 @@ class Comment
         	:comment_author => comment_author,
         	:readable_date => readable_date,
         	:comment_content => comment_content,
-        	:avatar => Gravatar.url(comment_author_email)
+        	:avatar => avatar
         }
+    end
+    
+    def avatar
+          "http://www.gravatar.com/avatar/#{Digest::MD5.hexdigest(comment_author_email.downcase)}"
     end
    
     before :save do
