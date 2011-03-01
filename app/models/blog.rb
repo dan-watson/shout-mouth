@@ -42,6 +42,10 @@ class Blog
     configuration['site_description']
   end
   
+  def self.twitter_account
+    configuration['twitter_account']
+  end
+  
   def self.to_metaweblog
     [:url => self.url,
      :blogid => 2000,

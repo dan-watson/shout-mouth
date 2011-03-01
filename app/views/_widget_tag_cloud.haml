@@ -1,9 +1,6 @@
 %div.widget.tag_cloud
 	%h4 Tag Cloud
 	%ul
-		%li
-			%a{:href => "#"} C#
-		%li
-			%a{:href => "#"} Ruby
-		%li
-			%a{:href => "#"} Linux
+		-tags.each do |tag|
+			%li
+				%a{:href => "/tag/#{tag}", :rel => "follow"}=tag

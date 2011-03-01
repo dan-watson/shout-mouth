@@ -12,6 +12,11 @@ class Post
     property :tags, CommaSeparatedList
     property :categories, CommaSeparatedList
     
+    #adding these properties as it will be easier to group by them.
+    
+    property :month, String
+    property :year, Integer
+    
     validates_presence_of :title, :body, :tags, :categories
     #validates_uniqueness_of :persisted_slug
   
@@ -87,6 +92,12 @@ class Post
     
     before :save do
         self.persisted_slug = self.slug
+        self.month = created_at.strftime("%B")
+        self.year = created_at.year
+    end
+    
+    def self.month_year_counter
+      all_active_posts.group_by{|post| "#{post.year}-#{post.month}"}
     end
     
     def self.all_active_posts

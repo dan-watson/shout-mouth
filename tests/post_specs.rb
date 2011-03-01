@@ -34,6 +34,17 @@ describe Post, "defaults" do
     post = Post.new(:title => "T1", :body => "bd1")
     post.is_page.should be_false
   end
+  
+  it "should have the month and year property set after saving" do
+    #arrange
+    user = User.new(:email => "test@rails.com", :password => "password@1", :firstname => "Test", :lastname => "Rails")
+    user.save
+    post = Post.new(:title => "T1", :body => "bd1", :tags => "tag1, tag2", :categories => "category1, category2", :user => user)
+    post.save
+    #assert
+    post.year.should == DateTime.now.year
+    post.month.should == DateTime.now.strftime("%B")
+  end
 end
 
 describe Post, "slug" do

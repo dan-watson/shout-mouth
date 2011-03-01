@@ -16,8 +16,8 @@
 				= yield
 			#widgets
 				= partial(:_widget_twitter)
-				= partial(:_widget_month_roll)
-				= partial(:_widget_tag_cloud)
+				= partial(:_widget_month_roll, :posts => month_roll)
+				= partial(:_widget_tag_cloud, :tags => all_tags)
 				
 			#footer== &copy; #{DateTime.now.year} #{Blog.name}
 		

@@ -218,5 +218,14 @@ class ShoutMouth < Sinatra::Base
   def prepend_title title
     @title = "#{title} - #{Blog.site_name}"
   end
+  
+  def all_tags
+    Tag.all_tags
+  end
+  
+  def month_roll
+    Post.month_year_counter
+  end
+  
     
 end

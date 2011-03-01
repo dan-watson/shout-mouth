@@ -39,4 +39,8 @@ describe Blog, "configuration" do
   it "should return the correct configuration variable for the amazon_s3_secret_key key" do
     Blog.amazon_s3_secret_key.should == "NO"
   end
+  
+  it "should return the correct configuration variable for the twitter_account key" do
+    Blog.twitter_account.should == "@twitter"
+  end
 end
