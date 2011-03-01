@@ -15,3 +15,21 @@
 		%p
 			%span &nbsp;
 			%input{:id => "add_comment_submit", :type => "submit", :value => "save"}
+			
+%script{:id => "errorTemplate", :type => "text/x-jquery-tmpl"}
+	{{each error}}
+	<p class="error">${$value}</p>
+	{{/each}}
+	
+%script{:id => "commentTemplate", :type => "text/x-jquery-tmpl"}
+	<div class="comment">
+	<div class="comment_name">
+	<a href="${comment_author_url}" rel="nofollow">${comment_author}</a>
+	</div>
+	<div class="comment_time">${readable_date}</div>
+	<div class="comment_avatar">
+	<img alt="gravatar" class="photo" src="${avatar}"/>
+	</div>
+	<div class="comment_body">${comment_content}</div>
+	<div class="clear"/>
+	</div>

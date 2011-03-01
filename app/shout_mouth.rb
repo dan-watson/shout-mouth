@@ -59,10 +59,10 @@ class ShoutMouth < Sinatra::Base
        :post => post)
        
        if comment.save 
-         comment.attributes.to_json
-       elsif comment.is_spam?
-         {:error => "spam"}.to_json
+         comment.to_simple_comment.to_json
        else
+         #even if the comment is marked as spam send it back so it will show on the page to satisfy the spammer / bot has
+         #done its job correctly
          comment.errors.map{|error| {:error => error}}.to_json
        end
         

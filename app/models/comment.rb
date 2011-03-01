@@ -35,6 +35,16 @@ class Comment
         }
         Akismetor.spam?(comment_attributes)
     end
+    
+    def to_simple_comment
+        {
+        	:comment_author_url => comment_author_url,
+        	:comment_author => comment_author,
+        	:readable_date => readable_date,
+        	:comment_content => comment_content,
+        	:avatar => Gravatar.url(comment_author_email)
+        }
+    end
    
     before :save do
        self.is_spam = spam?
