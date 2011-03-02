@@ -1,12 +1,11 @@
 TODO:
 --------------------------
-3a) Slugs need to be unique
-4) Create an S3 importer file onto of the current metaweblog import
-5) Spam checker enabled in config
-
+1a) Slugs need to be unique
+2) Create an S3 importer file onto of the current metaweblog import
+3) Split out tags and categories into own tables rather than hanging them as arrays of of the pos class (kind of was a good idea for
+speed in the beginning but now we are sorting and filtering posts by them it sucks!!!) 
 
 #NICE TO HAVES
-
 1) Fully implement the rest of the word-press API so word-press clients will work with shout mouth - look at variations and support
 	-update rsd generation to inform blogging clients that other api's are available
 	
