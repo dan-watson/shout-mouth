@@ -90,6 +90,23 @@ pre {
 	line-height: 1.6;
     margin: 0 0 1.5em;
 }
+.post_body br{
+	line-height:10px;
+}
+.post_body p{
+	margin:0 0 10px 0;
+	white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+ 	white-space: -pre-wrap;   &nbsp;  /* Opera 4-6 */
+ 	white-space: -o-pre-wrap;    /* Opera 7 */
+ 	white-space: pre-wrap;   &nbsp;   /* css-3 */
+ 	word-wrap: break-word;   &nbsp;   /* Internet Explorer&nbsp;5.5+ */
+}
+.post_body li{
+	color:#222222;
+}
+.post_body blockquote{
+	margin:0;
+}
 .post_information{
 	margin-bottom:15px;
 	text-align:left;

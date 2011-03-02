@@ -2,6 +2,7 @@ TODO:
 --------------------------
 3a) Slugs need to be unique
 4) Create an S3 importer file onto of the current metaweblog import
+5) Spam checker enabled in config
 
 
 #NICE TO HAVES

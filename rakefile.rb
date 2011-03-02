@@ -59,6 +59,7 @@ namespace :import do
           new_post.add_legacy_route "post.aspx?id=#{post['postid']}"
           new_post.add_legacy_route URI.parse(post['link']).path.split("/").last
         end
+        
         new_post.save
       }
 
