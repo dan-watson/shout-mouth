@@ -43,4 +43,8 @@ describe Blog, "configuration" do
   it "should return the correct configuration variable for the twitter_account key" do
     Blog.twitter_account.should == "@twitter"
   end
+  
+  it "should return the correct configuration variable for the check_spam key" do
+    Blog.check_spam.should == false
+  end
 end

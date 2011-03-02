@@ -52,6 +52,9 @@ class Blog
      :blogName => self.site_name]
   end
   
+  def self.check_spam
+    configuration['check_spam']
+  end
   private 
   def self.configuration
     configuration_directory = "#{Dir.pwd}/config/"

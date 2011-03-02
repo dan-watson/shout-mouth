@@ -52,7 +52,10 @@ class Comment
   end
 
   before :save do
-    self.is_spam = spam?
+    #Only check for spam if the configuration variable is set...
+    #good for testing
+    puts "SPAM:" + Blog.check_spam.to_s
+    Blog.check_spam ? self.is_spam = spam? : self.is_spam = false
   end
 
   def readable_date

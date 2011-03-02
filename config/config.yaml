@@ -10,6 +10,7 @@ defaults: &defaults
   amazon_s3_file_location: 'http://s3.amazonaws.com/'
   theme: 'default'
   twitter_account: '@twitter'
+  check_spam: true
   
 development:
   <<: *defaults
@@ -26,6 +27,7 @@ test: &test
   amazon_s3_file_location: 'http://s3.amazonaws.com/'
   theme: 'default'
   twitter_account: '@twitter'
+  check_spam: false
 
 production:
   <<: *defaults
