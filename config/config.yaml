@@ -11,7 +11,9 @@ defaults: &defaults
   theme: 'default'
   twitter_account: '@twitter'
   check_spam: true
-  
+  # 0 is forever
+  comments_open_for_days:"14" 
+      
 development:
   <<: *defaults
 
@@ -28,6 +30,6 @@ test: &test
   theme: 'default'
   twitter_account: '@twitter'
   check_spam: false
-
+  comments_open_for_days: "14" 
 production:
   <<: *defaults

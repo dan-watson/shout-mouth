@@ -101,4 +101,18 @@ describe Post, "helper methods" do
      post.reload
      post.readable_categories.should == "category1, category2"
   end
+  
+  it "should not allow comments if the post is over 14 days old" do
+     post = Post.new(:title => "T1", :body => "bd1", :tags => "tag1, tag2", :categories => "category1, category2", :created_at => (DateTime.now - 15))
+
+     post.allow_comments?.should be_false
+  end
+  
+  it "should allow comments if the post is under 14 days old" do
+     post = Post.new(:title => "T1", :body => "bd1", :tags => "tag1, tag2", :categories => "category1, category2", :created_at => (DateTime.now - 13))
+
+     post.allow_comments?.should be_true
+  end
+  
+  
 end

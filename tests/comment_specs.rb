@@ -42,13 +42,27 @@ describe Comment, "spam checker" do
       user.save
       @post = Post.new(:title => "T1", :body => "bd1", :tags => "tag1, tag2", :categories => "category1, category2", :user => user)
       @post.save
+      
+      class Blog
+         def self.check_spam
+           true
+         end
+       end
+       
     end
     
-    it "should return spam if the author name is viagra-test-123" do
-      
+    after(:all) do
+      class Blog
+         def self.check_spam
+           configuration['check_spam']
+         end
+       end
+    end
+    
+    it "should return spam if the author name is viagra-test-123" do     
       #arrange
       Akismetor.should_receive(:spam?).and_return(true)
-
+      
       comment = Comment.new(:comment_author_email => "test@rails.com", :comment_content => "This is a test.", 
                             :comment_author => "viagra-test-123", :comment_author_url => "http://myblog.com",
                             :user_ip => "127.0.0.1", :user_agent => "Mozilla/5.0 (Macintosh; U; PPC Mac OS X 10.5; en-US; rv:1.9.0.3) Gecko/2008092414 Firefox/3.0.3",

@@ -55,6 +55,11 @@ class Blog
   def self.check_spam
     configuration['check_spam']
   end
+  
+  def self.comments_open_for_days
+    configuration['comments_open_for_days'].to_i
+  end
+    
   private 
   def self.configuration
     configuration_directory = "#{Dir.pwd}/config/"

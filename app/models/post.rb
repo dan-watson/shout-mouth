@@ -59,6 +59,10 @@ class Post
         "#{Blog.url}/page/#{slug}"
     end
   
+    def allow_comments?
+      (created_at.midnight + Blog.comments_open_for_days) > DateTime.now.midnight
+    end
+    
     def add_legacy_route legacy_url
         legacy_routes << LegacyRoute.new(:slug => legacy_url)
     end

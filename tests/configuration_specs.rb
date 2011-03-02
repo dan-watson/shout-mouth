@@ -47,4 +47,8 @@ describe Blog, "configuration" do
   it "should return the correct configuration variable for the check_spam key" do
     Blog.check_spam.should == false
   end
+  
+  it "should return the correct configuration variable for the comments_open_for_days key" do
+    Blog.comments_open_for_days.should == 14
+  end
 end
