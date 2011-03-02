@@ -1,4 +1,4 @@
-require_relative 'post'
+require Dir.pwd + '/app/models/post'
 
 class Category
 

@@ -34,6 +34,7 @@ end
 namespace :import do
   require File.dirname(__FILE__) + '/app/api/metaweblog_client.rb'
   require 'uri'
+  require 'nokogiri'
 
   desc "Import Blog - import url=http://yourblog.com user=username password=password posts=number_of_posts current_user_email=email from_blog_engine={{your_engine}}"
   task :posts do |t, args|
@@ -62,7 +63,7 @@ namespace :import do
           new_post.add_legacy_route "post.aspx?id=#{post['postid']}"
           new_post.add_legacy_route URI.parse(post['link']).path.split("/").last
         when "wordpress"
-          #who ever read this - you will need to write your own legacy route setter
+          #who ever reads this - you will need to write your own legacy route setter
           #if your current blog does not support /post/{integer}/{integer}/{interger}/slug
           #then do not just add the slug part to the legacy route - add the requests.path ie :- /posty/july/mypost
           puts "not implemented"
@@ -125,6 +126,25 @@ namespace :import do
 
     end
 
+    desc "Remove image tags height and width - I have found that my current blog client adds height and width to image tags
+    and I do not want them there as it is screwing my new layout - rake task removes height='?' width='?' from all posts image tags"
+    task :remove_height_and_width_from_images do |t, args|
+      int = 0
+      Post.all.each{|post|
+        
+        body = post.body
+        doc = Nokogiri::HTML(body)
+        doc.xpath("//img").each{|image| 
+          image.remove_attribute "height"
+          image.remove_attribute "width"
+        }
+        post.body = doc.to_s
+        post.save
+        puts doc.to_s
+      }
+    end
+    
+    private 
     def upload_file(url, upload)
       uri = URI.parse(url)
       name = url.split('/').last.gsub(/(.*=)/, "").downcase 

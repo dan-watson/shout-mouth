@@ -1,5 +1,5 @@
 require 'digest/sha1'
-require_relative 'base/shout_record'
+require Dir.pwd + '/app/models/base/shout_record'
 
 class User
   include Shout::Record

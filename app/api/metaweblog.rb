@@ -1,4 +1,4 @@
-require_relative 'amazon_s3'
+require Dir.pwd + '/app/api/amazon_s3'
 module Metaweblog
 
   def does_not_need_authentication?(method)

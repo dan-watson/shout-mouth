@@ -1,4 +1,4 @@
-require_relative 'base/shout_record'
+require Dir.pwd + '/app/models/base/shout_record'
 
 require 'factory_girl'
 

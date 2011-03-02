@@ -1,7 +1,6 @@
 TODO:
 --------------------------
 1a) Slugs need to be unique
-2) Create an S3 importer file onto of the current metaweblog import
 3) Split out tags and categories into own tables rather than hanging them as arrays of of the pos class (kind of was a good idea for
 speed in the beginning but now we are sorting and filtering posts by them it sucks!!!) 
 
