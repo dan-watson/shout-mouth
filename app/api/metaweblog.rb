@@ -35,7 +35,7 @@ module Metaweblog
 
     XMLRPC::Marshal.dump_response({
       :file => name,
-      :url => "#{Blog.amazon_s3_file_location}/#{Blog.amazon_s3_bucket}/#{name}"
+      :url => "#{Blog.amazon_s3_file_location}#{Blog.amazon_s3_bucket}/#{name}"
     })
   end
 

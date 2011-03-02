@@ -33,6 +33,8 @@ end
 
 namespace :import do
   require File.dirname(__FILE__) + '/app/api/metaweblog_client.rb'
+  require 'uri'
+
   desc "Import Blog - import url=http://yourblog.com user=username password=password posts=number_of_posts current_user_email=email from_blog_engine={{your_engine}}"
   task :posts do |t, args|
     Comment.destroy
@@ -60,25 +62,92 @@ namespace :import do
           new_post.add_legacy_route "post.aspx?id=#{post['postid']}"
           new_post.add_legacy_route URI.parse(post['link']).path.split("/").last
         when "wordpress"
+          #who ever read this - you will need to write your own legacy route setter
+          #if your current blog does not support /post/{integer}/{integer}/{interger}/slug
+          #then do not just add the slug part to the legacy route - add the requests.path ie :- /posty/july/mypost
           puts "not implemented"
         end
 
         new_post.save
+        
       }
+      puts "import complete"
     end
   end
 
-  desc "Scrape current posts looking for images and downloads which will then be uploaded to the file store"
-  task :repoint_images do |t, args|
-    Post.each{|post|
-        puts post.title
-    }
-  end
-end
+  desc "Scrape current posts looking for images and downloads which will then be uploaded to the file store -
+    currently looks for images types jpg, gif, png
+    currently looks for download types zip, rar
+    will match filename in urls as so - http://url.com/file.png or http://url.com/image?name=file.png (will look for the last =)
+    if this does not suit then you will need to write your own regex to pick filenames from urls
+    EXAMPLE: rake import:repoint_images upload=1
+    --if upload=0 it will repoint the urls saved in the db but not upload the images to amazon s3 - will use s3 production settings"
 
-namespace :users do
-  desc "Create a use - create email=email password=password firstname=firstname lastname=lastname"
-  task :create do |t, args|
-    User.new(:email => args.email, :password => args.password, :firstname => args.firstname, :lastname => args.lastname).save
+    task :repoint_images do |t, args|
+      ENV['RACK_ENV'] = 'production'
+
+      #Get all the images and downloads
+      Post.each{|post|
+        images = []
+        downloads = []
+
+        uri_collection = URI.extract post.body
+
+        uri_collection.each{|uri|
+          images << uri if uri.downcase =~ /.(?:jpg|gif|png)$/
+          downloads << uri if uri.downcase =~ /.(?:zip|rar)$/
+        }
+
+        #Remove duplicates
+        images.uniq!
+        downloads.uniq!
+
+        #going to upload files to s3 and replace references in the html
+        body = post.body
+        upload = false
+        upload = true if (args.upload == "1")
+        
+        images.each{|old_url|
+            new_url = upload_file(old_url, upload)
+            body = replace_references(body, old_url, new_url)
+        }
+        downloads.each{|old_url| 
+          new_url = upload_file(old_url, upload)
+          body = replace_references(body, old_url, new_url)
+        }
+        #saving all the paths that were http://yourblog.com/images/pic.jpg that will now be http://s3.amazon.com/bucket/pic.jpg 
+        post.body = body
+        post.save
+
+        puts "Total Link Files For #{post.title}: #{downloads.count}"
+        puts "Total Image Files For #{post.title}: #{images.count}"
+      }
+
+    end
+
+    def upload_file(url, upload)
+      uri = URI.parse(url)
+      name = url.split('/').last.gsub(/(.*=)/, "").downcase 
+            
+      if(upload)
+        Net::HTTP.start(uri.host) { |http|
+          resp = http.get(uri.request_uri)
+          AmazonS3.save_file(name, resp.body)
+        }
+      end
+      puts "-----------------CHANGE: #{url} > #{Blog.amazon_s3_file_location}#{Blog.amazon_s3_bucket}/#{name}"
+      return "#{Blog.amazon_s3_file_location}#{Blog.amazon_s3_bucket}/#{name}"
+    end
+
+    def replace_references(body, old_url, new_url)
+      body.gsub(old_url, new_url)
+    end
+
   end
-end
+
+  namespace :users do
+    desc "Create a use - create email=email password=password firstname=firstname lastname=lastname"
+    task :create do |t, args|
+      User.new(:email => args.email, :password => args.password, :firstname => args.firstname, :lastname => args.lastname).save
+    end
+  end
