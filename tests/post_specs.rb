@@ -114,5 +114,13 @@ describe Post, "helper methods" do
      post.allow_comments?.should be_true
   end
   
+  it "should allow comments if the configuration is set to 0" do
+     
+     Blog.stub!(:comments_open_for_days).and_return(0)
+     post = Post.new(:title => "T1", :body => "bd1", :tags => "tag1, tag2", :categories => "category1, category2", :created_at => (DateTime.now - 4000))
+
+     post.allow_comments?.should be_true
+  end
+  
   
 end

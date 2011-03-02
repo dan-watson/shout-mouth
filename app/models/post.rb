@@ -60,6 +60,7 @@ class Post
     end
   
     def allow_comments?
+      return true if Blog.comments_open_for_days == 0
       (created_at.midnight + Blog.comments_open_for_days) > DateTime.now.midnight
     end
     
