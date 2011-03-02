@@ -55,16 +55,24 @@ namespace :import do
         :created_at => post['dateCreated'].to_date,
         :user => user)
 
-        if(args.from_blog_engine == "blogengine.net")
+        case args.from_blog_engine
+        when "blogengine.net"
           new_post.add_legacy_route "post.aspx?id=#{post['postid']}"
           new_post.add_legacy_route URI.parse(post['link']).path.split("/").last
+        when "wordpress"
+          puts "not implemented"
         end
-        
+
         new_post.save
       }
-
     end
+  end
 
+  desc "Scrape current posts looking for images and downloads which will then be uploaded to the file store"
+  task :repoint_images do |t, args|
+    Post.each{|post|
+        puts post.title
+    }
   end
 end
 
