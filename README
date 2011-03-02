@@ -1,9 +1,7 @@
 TODO:
 --------------------------
-2) Clean up left to right code in the main shout_mouth class	
 3a) Slugs need to be unique
-4) Add take task not in the public repo that will pull data from current blog and transform markup and also the
-   image url + upload.
+4) Create an S3 importer file onto of the current metaweblog import
 
 
 #NICE TO HAVES

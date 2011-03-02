@@ -1,3 +1,4 @@
+#Shamelessly lifted from the Rails framework
 class Fixnum
   def ordinalize
     if (11..13).include?(self % 100)

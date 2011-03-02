@@ -5,8 +5,8 @@ require 'factory_girl'
 class Post
   include Shout::Record
     
-    property :title, String
-    property :persisted_slug, String
+    property :title, String, :length => 1000
+    property :persisted_slug, String, :length => 1000
     property :body, Text
     property :is_page, Boolean, :default => false
     property :tags, CommaSeparatedList
@@ -36,6 +36,14 @@ class Post
       categories.join(", ")
     end
     
+    def readable_date
+        created_at.to_date.strftime("%A, #{created_at.day.ordinalize} %B, %Y")
+    end
+    
+    def url_date
+        created_at.to_date.strftime("%Y/%m/%d")
+    end
+        
     def slug
       #a slug is a URL-safe string that echoes the title
       #in this method we want to remove any weird punctuation and spaces
@@ -50,15 +58,7 @@ class Post
         return "#{Blog.url}/post/#{url_date}/#{slug}" unless is_page?
         "#{Blog.url}/page/#{slug}"
     end
-    
-    def url_date
-        created_at.to_date.strftime("%Y/%m/%d")
-    end
-    
-    def readable_date
-        created_at.to_date.strftime("%A, #{created_at.day.ordinalize} %B, %Y")
-    end
-    
+  
     def add_legacy_route legacy_url
         legacy_routes << LegacyRoute.new(:slug => legacy_url)
     end
@@ -133,13 +133,7 @@ class Post
       post.created_at = xmlrpc_call[1][3]["dateCreated"].to_time  unless xmlrpc_call[1][3]["dateCreated"].nil?
       post
     end
-  
-    def self.mark_as_inactive post_id
-       post = Post.get(post_id)
-       post.is_active = false
-       post.save
-    end
-    
+      
     def self.new_page_from_xmlrpc_payload xmlrpc_call
       Post.new(:title => xmlrpc_call[1][3]["title"], 
                       :body => xmlrpc_call[1][3]["description"], 
@@ -161,6 +155,12 @@ class Post
       page.body = xmlrpc_call[1][4]["description"]
       page.is_active = xmlrpc_call[1][5]
       page
-    end    
+    end   
+    
+    def self.mark_as_inactive post_id
+       post = Post.get(post_id)
+       post.is_active = false
+       post.save
+    end 
 end
 

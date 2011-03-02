@@ -120,6 +120,7 @@ class ShoutMouth < Sinatra::Base
   end
 
   get '/*' do
+    puts params[:splat]
     legacy_route = LegacyRoute.first(:slug => params[:splat])
     redirect legacy_route.post.permalink, 301 unless legacy_route.nil?
     redirect '/404'
