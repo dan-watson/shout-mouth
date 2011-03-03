@@ -11,7 +11,7 @@ class Post
   property :year, Integer
 
   validates_presence_of :title, :body, :tags, :categories
-  #validates_uniqueness_of :persisted_slug
+  validates_uniqueness_of :title
 
   belongs_to  :user
   has n, :comments

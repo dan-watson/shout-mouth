@@ -51,6 +51,8 @@ namespace :import do
   task :posts do |t, args|
     Comment.destroy
     Post.destroy
+    Tag.destroy
+    Category.destroy
     LegacyRoute.destroy
 
     user = User.find(:email => args.current_user).first
@@ -151,7 +153,6 @@ namespace :import do
         }
         post.body = doc.to_s
         post.save
-        puts doc.to_s
       }
     end
     

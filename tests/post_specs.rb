@@ -10,6 +10,13 @@ describe Post, "validation" do
     TestDataHelper.valid_post.should be_valid
   end
   
+  it "should not be valid when trying to add a second post with the same title" do
+    cloned_post = TestDataHelper.valid_post.attributes.keep_if{|attribute| attribute != :id}
+    post = Post.new(cloned_post)
+    post.valid?.should be_false
+    post.errors.full_messages.should include ("Title is already taken")
+  end
+  
 end
 
 describe Post, "defaults" do
