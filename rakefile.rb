@@ -64,8 +64,8 @@ namespace :import do
       posts.each{|post|
         new_post = Post.new(:title => post['title'],
         :body => post['description'],
-        :tags => post['mt_keywords'],
-        :categories => post['categories'].join(", "),
+        :tags => Tag.tags_from_array(post['mt_keywords'].split(",")),
+        :categories => Category.categories_from_array(post['categories']),
         :created_at => post['dateCreated'].to_date,
         :user => user)
 
