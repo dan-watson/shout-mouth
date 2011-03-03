@@ -3,4 +3,4 @@
 	%ul
 		-tags.each do |tag|
 			%li
-				%a{:href => "/tag/#{tag}", :rel => "follow"}=tag
+				%a{:href => "/tag/#{tag.tag}", :rel => "follow"}=tag.tag

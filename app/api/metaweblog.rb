@@ -57,7 +57,7 @@ module Metaweblog
   end
 
   def get_categories(xmlrpc_call)
-    XMLRPC::Marshal.dump_response(Category.all_categories.map{|c| {:description => c, :title => c}})
+    XMLRPC::Marshal.dump_response(Category.usable_active_categories.map{|category| {:description => category.category, :title => category.category}})
   end
 
   def get_recent_posts(xmlrpc_call)
@@ -118,7 +118,7 @@ module Metaweblog
   end
 
   def get_tags(xmlrpc_call)
-    XMLRPC::Marshal.dump_response(Tag.all_tags.map{|t| {:name => t}})
+    XMLRPC::Marshal.dump_response(Tag.usable_active_tags.map{|tag| {:name => tag.tag}})
   end
 
   def raise_xmlrpc_error(message)

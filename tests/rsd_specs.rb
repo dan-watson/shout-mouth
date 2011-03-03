@@ -1,6 +1,4 @@
-require File.dirname(__FILE__) + '/../app/shout_mouth.rb'
-require 'rspec'
-require 'rack/test'
+require File.dirname(__FILE__) + '/test_data/test_data_helper.rb'
 
 describe "rsd information" do
   include Rack::Test::Methods
@@ -16,8 +14,11 @@ describe "rsd information" do
   
   it "should contain the blog details" do
     get '/rsd.xml'
+    last_response.body.should include(Blog.url)   
+    last_response.body.should include("https://github.com/dotnetguyuk/Shout-Mouth")
+    last_response.body.should include("Shout Mouth")
     
-    last_response.body.should include(Blog.url)    
+    last_response.body.should include("MetaWeblog") 
   end
 
 end

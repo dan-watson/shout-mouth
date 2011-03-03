@@ -16,7 +16,7 @@ class Comment
   property :is_spam, Boolean
 
   validates_presence_of :comment_author, :comment_author_email, :comment_content, :comment_author_url
-  validates_format_of :email, :as => :comment_author_email
+  validates_format_of :comment_author_email, :as => :email_address
 
   belongs_to :post
 

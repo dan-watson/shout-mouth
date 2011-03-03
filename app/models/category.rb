@@ -1,17 +1,18 @@
-require Dir.pwd + '/app/models/post'
+require Dir.pwd + '/app/models/base/shout_record'
 
 class Category
-
-  def self.all_categories
-    categories = []
-    Post.all_active_posts.each{|post| categories << post.categories}
-    categories.flatten.uniq
-  end
-
-  def self.posts_for_category(category)
-    posts = []
-    Post.all_active_posts.each{|post| posts << post if post.categories.include?(category)}
-    posts
-  end
-
+  include Shout::Record
+    
+    property :category, String, :length => 1000
+    has n,   :posts, :through => Resource, :is_active => true
+    
+    def self.categories_from_array(array)
+        categories = []
+        array.each{|category| categories << Category.first_or_create({:category => category}, {:category => category})}
+        categories
+    end
+    
+    def self.usable_active_categories
+      all_active.all(:category.not => "page")
+    end
 end

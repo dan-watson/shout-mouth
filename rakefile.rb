@@ -3,7 +3,7 @@ namespace :db do
   require 'dm-core'
   require 'dm-migrations'
   require File.dirname(__FILE__) + '/app/shout_mouth.rb'
-
+  require File.dirname(__FILE__) + '/tests/test_data/test_data_helper'
   desc "Create The Database"
   task :create do |t, args|
     DataMapper.auto_migrate!
@@ -17,6 +17,17 @@ namespace :db do
   desc "Delete Database File"
   task :delete do |t, args|
     FileUtils.rm_rf(File.dirname(__FILE__) + "/db/shout_mouth.db")
+  end
+  
+  desc "Seed Demo Data"
+  task :demo_data do |t, args|
+      Rake::Task["db:create"].invoke
+      TestDataHelper.wipe_database
+      TestDataHelper.valid_post
+      TestDataHelper.valid_post1
+      TestDataHelper.valid_post2
+      TestDataHelper.valid_comment
+      TestDataHelper.legacy_route
   end
 end
 
@@ -36,7 +47,7 @@ namespace :import do
   require 'uri'
   require 'nokogiri'
 
-  desc "Import Blog - import url=http://yourblog.com user=username password=password posts=number_of_posts current_user_email=email from_blog_engine={{your_engine}}"
+  desc "Import Posts - import url=http://yourblog.com user=username password=password posts=number_of_posts current_user_email=email from_blog_engine={{your_engine}}"
   task :posts do |t, args|
     Comment.destroy
     Post.destroy

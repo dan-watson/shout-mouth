@@ -1,8 +1,8 @@
 TODO:
 --------------------------
 1a) Slugs need to be unique
-3) Split out tags and categories into own tables rather than hanging them as arrays of of the pos class (kind of was a good idea for
-speed in the beginning but now we are sorting and filtering posts by them it sucks!!!) 
+2) MAKE SURE ONLY ACTIVE POSTS ARE PULLED BACK FROM TAGS AND CATS
+3) DATA-MAPPER IS SUCKING A BIT - LOTS OF SELECT N+1 ISSUES - TRY TO RECTIFY - STOP LAZY LOADING CHILDREN ALL THE TIME
 
 #NICE TO HAVES
 1) Fully implement the rest of the word-press API so word-press clients will work with shout mouth - look at variations and support
@@ -10,19 +10,29 @@ speed in the beginning but now we are sorting and filtering posts by them it suc
 	
 2) Enable the ability to write plugins for the sidebar - and social bookmarks
 3) Re-factor the lookup for authentication using the strategy pattern
+4) Hierarchal Pages - then supported by the word-press API
+5) Data driven menu for pages 
 
+--------------------------------DEMO INFORMATION--------------------------------------------------------------------
 
-#To Get A Demo Up And Running - Runs the site on test data made up from the tests (bundler must be installed)
+To Get A Demo Up And Running - Runs the site on test data made up from the tests (bundler must be installed)
+
 - bundle install (I would recommend using RVM to manage your gemsets)
-- rake specs:run_all 
+- rake db:demo_data
 - shotgun --env=test
-- browse to the localhost:9393
+- browse to the http://localhost:9393
+- connect your blogging client to http://localhost:9393/xmlrpc or http://localhost:9393/xmlrpc.php (default wordpress)
+  with 
+	username: dan@shout_mouth.com
+	password: password123
+--------------------------------------------------------------------------------------------------------------------
 
 						
-#Tested Blogging Clients
+--------------------------------Tested Blogging Clients-------------------------------------------------------------
 - Windows Live Writer (fully supported)
 - Wordpress Client For Ipad - (ropey at best - need to implement all wp methods)
 - Blogger Client For Ipad - (ropey at best - this is due to the clients interpretation of how the api should work - should work after wp methods implemented)
+--------------------------------------------------------------------------------------------------------------------
 
 
 

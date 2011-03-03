@@ -59,13 +59,13 @@ class ShoutMouth < Sinatra::Base
 
   get '/category/:category' do
     prepend_title(params[:category])
-    @posts = Category.posts_for_category(params[:category])
+    @posts = Category.all(:category => params[:category]).posts
     haml :archive
   end
 
   get '/tag/:tag' do
     prepend_title(params[:tag])
-    @posts = Tag.posts_for_tag(params[:tag])
+    @posts = Tag.all(:tag => params[:tag]).posts
     haml :archive
   end
 
@@ -138,7 +138,6 @@ class ShoutMouth < Sinatra::Base
     #puts "xmlpassed: #{xml}"
     #create xmlrpc request call
     call = XMLRPC::Marshal.load_call(xml)
-
     # convert *.getPost to get_post
     method = call[0].gsub(/(.*)\.(.*)/, '\2').gsub(/([A-Z])/, '_\1').downcase
 
@@ -188,7 +187,7 @@ class ShoutMouth < Sinatra::Base
     end
 
     def all_tags
-      Tag.all_tags
+      Tag.all_active.all(:order => [:tag.asc])
     end
 
     def month_roll
