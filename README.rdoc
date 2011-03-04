@@ -31,11 +31,11 @@ Runs the site on test data (bundler must be installed)
 	Before running this rake task you should run rake users:create and then set the current_user_email parameter to the freshly created users email 
 
 
-	rake import:remove_height_and_width_from_images (Remove image tags height and width attributes from all posts - I have found that some blog clients add height and width attributes to image tags)
+	rake import:remove_height_and_width_from_images (Remove all image tags height and width attributes from all posts - I have found that some blog clients add height and width attributes to image tags)
     
 
 	rake import:repoint_images upload=1 
-	(Updates all images path to Amazon S3 account - if upload is set to 0 then s3 upload will not occur but all image tags stored in each post will be repointed to your amazon s3 account - rake task uses the amazon s3 settings inside config/config.yaml)
+	(Updates all images paths to point to your Amazon S3 account - if upload is set to 0 then the s3 upload will not occur but all image tags stored in each post will be repointed to your amazon s3 account - rake task uses the amazon s3 production settings located inside config/config.yaml)
 
 	rake specs:run_all - (Run All The Specs)
 
