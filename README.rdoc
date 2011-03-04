@@ -31,23 +31,15 @@ To Get A Demo Up And Running - Runs the site on test data made up from the tests
 	Before running this rake task you should run rake users:create and then set the current_user_email parameter to the freshly created users email 
 
 
-	rake import:remove_height_and_width_from_images
-    Remove image tags height and width attributes from all posts - I have found that some blog clients add height and width attributes to image tags
+	rake import:remove_height_and_width_from_images (Remove image tags height and width attributes from all posts - I have found that some blog clients add height and width attributes to image tags)
     
 
-	rake import:repoint_images
-    Scrape current posts looking for images and downloads which will then be uploaded to the file store (AMAZON S3) -
-    Currently looks for images types jpg, gif, png
-    Currently looks for download types zip, rar
-    Will match filename in urls as so - http://url.com/file.png or http://url.com/image?name=file.png (will look for the last =)
-    EXAMPLE: rake import:repoint_images upload=1
-    If upload=0 it will repoint the urls saved in the db but not upload the images to amazon s3 - will use s3 production settings
+	rake import:repoint_images upload=1 
+	(Updates all images path to Amazon S3 account - if upload is set to 0 then s3 upload will not occur but all image tags stored in each post will be repointed to your amazon s3 account - rake task uses the amazon s3 settings inside config/config.yaml)
 
-	rake specs:run_all
-    Run All The Specs
+	rake specs:run_all - (Run All The Specs)
 
-	rake users:create
-    Create a use - create email=email password=password firstname=firstname lastname=lastname
+	rake users:create  create email=email password=password firstname=firstname lastname=lastname (Create a user)  
 
 
 ===Tests
