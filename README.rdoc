@@ -21,7 +21,7 @@ To Get A Demo Up And Running - Runs the site on test data made up from the tests
 	password: password123
 
 
----RAKE TASKS
+===RAKE TASKS
 rake db:create
     Create The Database
 
