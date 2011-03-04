@@ -1,15 +1,12 @@
-TODO:
---------------------------
+==-ToDo
 
-#NICE TO HAVES
 1) Fully implement the rest of the word-press API so word-press clients will work with shout mouth - look at variations and support
 	-update rsd generation to inform blogging clients that other api's are available
 	
-2) Enable the ability to write plugins for the sidebar - and social bookmarks
-3) Hierarchal Pages - then supported by the word-press API
+2) Hierarchal Pages - then supported by the word-press API
 
 
---------------------------------DEMO INFORMATION--------------------------------------------------------------------
+---DEMO INFORMATION
 
 To Get A Demo Up And Running - Runs the site on test data made up from the tests (bundler must be installed)
 
@@ -21,38 +18,35 @@ To Get A Demo Up And Running - Runs the site on test data made up from the tests
   with 
 	username: dan@shout_mouth.com
 	password: password123
---------------------------------------------------------------------------------------------------------------------
 
 
-
---------------------------------RAKE TASKS--------------------------------------------------------------------------
+---RAKE TASKS
 rake db:create
     Create The Database
-----------------------
+
 
 rake db:delete
     Delete Database File
-----------------------
+
 
 rake db:demo_data
     Seed Demo Data
-----------------------
+
 
 rake db:update
     Upgrade The Database
-----------------------
+
 
 rake import:posts
     Import Posts - import url=http://yourblog.com user=username password=password posts=number_of_posts current_user_email=email from_blog_engine={{your_engine}}
-	
 	Currently only supports blogengine.net for from_blog_engine - just used to set legacy redirects
 	Before running this you should run rake users:create and then set the current_user_email parameter to the freshly created user 
-----------------------
+
 
 rake import:remove_height_and_width_from_images
     Remove image tags height and width - I have found that some blog clients add height and width attributes to image tags
         it may skew your layout so here is a rake task to remove those attributes from all posts
-----------------------
+
 
 rake import:repoint_images
     Scrape current posts looking for images and downloads which will then be uploaded to the file store (AMAZON S3) -
@@ -65,24 +59,62 @@ rake import:repoint_images
 
 rake specs:run_all
     Run All The Specs
-----------------------
+
 
 rake users:create
     Create a use - create email=email password=password firstname=firstname lastname=lastname
 
---------------------------------------------------------------------------------------------------------------------
 
 
----------------------------------------------TESTS------------------------------------------------------------------
+
+--Tests
 To run all the tests - rake specs:run_all
---------------------------------------------------------------------------------------------------------------------
 
 
---------------------------------Tested Blogging Clients-------------------------------------------------------------
+
+--Tested Blogging Clients
 - Windows Live Writer (fully supported)
 - Wordpress Client For Ipad - (ropey at best - need to implement all wp methods)
 - Blogger Client For Ipad - (ropey at best - this is due to the clients interpretation of how the api should work - should work after wp methods implemented)
---------------------------------------------------------------------------------------------------------------------
+
+
+--Writing Plugins For Shout Mouth<
+
+1) Create a directory structure inside the app/plugins folder as shown below (CONVENTION MATTERS)
+	
+	-app
+	----plugins
+	-----------easy_rider
+	---------------easy_rider_plugin.rb
+	-----------view
+	-------------easy_rider_plugin.haml
+	
+2) NAMING MATERS - information below is based on writing a new plugin called "easy rider"
+	1) easy_rider plugin should contain a class file named easy_rider_plugin.rb whose class name should be EasyRiderPlugin
+	2)  easy_rider_plugin.rb file needs to reside in a folder called easy_rider under the plugins directory
+	3) EasyRiderPlugin class should inherit from Plugin (class EasyRiderPlugin < Plugin)
+	4) EasyRiderPlugin class should implement one method only from the base class which is data
+		
+		class EasyRiderPlugin < Plugin
+			def data
+				Post.all_active #or any other data from the model api
+			end
+		end
+		
+		
+	5) All classes that inherit from Plugin have access to all of the applications model classes and data
+	6) EasyRiderPlugin classes data methods can return any object and will be passed down to the view
+	7) A haml layout file should be included in the view folder called easy_rider_plugin.haml. The view folder should reside under the easy rider directory
+	8) By convention the variable name containing the returned data inside the view will be called easy_rider
+	
+		-easy_rider.each do |easy_rider|
+			%li
+				%a{:href => "/bikes/#{easy_rider.bike}", :rel => "follow"}=easy_rider.bike
+
+
+
+
+
 
 
 

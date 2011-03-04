@@ -13,12 +13,14 @@ require Dir.pwd + '/app/models/tag'
 require Dir.pwd + '/app/models/category'
 require Dir.pwd + '/app/api/metaweblog/metaweblog'
 require Dir.pwd + '/app/lib/fixnum'
+require Dir.pwd + '/app/api/plugin/plugin_factory'
 
 class ShoutMouth < Sinatra::Base
   include Metaweblog
 
   set :public, File.dirname(__FILE__) + '/../public'
   set :views, File.dirname(__FILE__) + '/views'
+  set :root, File.dirname(__FILE__)
 
   get '/' do
     prepend_title("Home")
@@ -178,6 +180,11 @@ class ShoutMouth < Sinatra::Base
     def partial (template, locals = {})
       haml(template, :layout => false, :locals => locals)
     end
+    
+    def plugin(plugin_object, data = nil)
+      view_data = data.nil? ? {:"#{plugin_object.plugin_name}" => plugin_object.data} : data
+      haml(:"#{plugin_object.view_name}", {:layout => false, :views => plugin_object.view_directory}, view_data)
+    end
 
     def title
       @title.nil? ? Blog.site_name : @title
@@ -187,14 +194,6 @@ class ShoutMouth < Sinatra::Base
       @title = "#{title} - #{Blog.site_name}"
     end
 
-    def all_tags
-      Tag.usable_active_tags
-    end
-
-    def month_roll
-      Post.month_year_counter
-    end
-    
     def pages
       Post.all_active_pages
     end

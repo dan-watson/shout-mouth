@@ -15,9 +15,10 @@
 			#contents
 				= yield
 			#widgets
-				= partial(:'shared/_widget_twitter')
-				= partial(:'shared/_widget_month_roll', :posts => month_roll)
-				= partial(:'shared/_widget_tag_cloud', :tags => all_tags)
+				= plugin(PluginFactory.instance.get_plugin(:twitter))
+				= plugin(PluginFactory.instance.get_plugin(:posts_by_month))
+				= plugin(PluginFactory.instance.get_plugin(:tag_cloud))
+				
 				
 			#footer== &copy; #{DateTime.now.year} #{Blog.name}
 		

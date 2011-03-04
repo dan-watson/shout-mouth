@@ -5,5 +5,5 @@
 	%div.post_body
 		=article.body
 	
-	= partial(:'shared/_social', :article => article) unless article.is_page?
+	= plugin(PluginFactory.instance.get_plugin(:social_links), :article => article) unless article.is_page?
 	%div.clear

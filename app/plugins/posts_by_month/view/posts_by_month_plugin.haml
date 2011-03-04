@@ -1,0 +1,6 @@
+%div.widget.month_list
+	%h4 Month List
+	%ul
+		- posts_by_month.keys.each do |post| 
+			%li
+				%a{:href => "/posts/date/#{post}", :rel => "follow"}="#{post} (#{posts_by_month[post].count})"
