@@ -7,11 +7,8 @@ require Dir.pwd + '/app/models/blog'
 require Dir.pwd + '/app/models/tag'
 require Dir.pwd + '/app/models/category'
 require Dir.pwd + '/app/lib/fixnum'
-require 'sinatra'
 
-class Plugin
-  Sinatra::Templates::ContentTyped
-  
+class Plugin  
   def data
     nil
   end
