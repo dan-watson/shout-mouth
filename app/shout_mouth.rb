@@ -105,7 +105,7 @@ class ShoutMouth < Sinatra::Base
     :body => "{post-body}",
     :is_page => false,
     :created_at => DateTime.now,
-    :tags => ["tag1", "tag2"],
+    :tags => [Tag.new(:tag => "Tag1"), Tag.new(:tag => "Tag2")],
     :user => User.new(:firstname => "Shout", :lastname => "Mouth"))
     haml :preview
   end
