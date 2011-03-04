@@ -89,5 +89,6 @@ To run all the tests
 				
 				
 3) To place a plugin on one of your pages just call the following code (example is for easy rider).
+- please note you may need to restart your application for your plugin to register
 
 		= plugin(PluginFactory.instance.get_plugin(:easy_rider))
