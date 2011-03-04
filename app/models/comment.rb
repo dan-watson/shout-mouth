@@ -8,11 +8,11 @@ class Comment
 
   property :comment_author, String
   property :comment_author_email, String
-  property :comment_content, Text
+  property :comment_content, Text, :lazy => false
   property :comment_author_url, String
   property :user_ip, String
-  property :user_agent, Text
-  property :referrer, Text
+  property :user_agent, Text, :lazy => false
+  property :referrer, Text, :lazy => false
   property :is_spam, Boolean
 
   validates_presence_of :comment_author, :comment_author_email, :comment_content, :comment_author_url

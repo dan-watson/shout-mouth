@@ -5,7 +5,7 @@ class Post
 
   property :title, String, :length => 1000
   property :persisted_slug, String, :length => 1000
-  property :body, Text
+  property :body, Text, :lazy => false
   property :is_page, Boolean, :default => false
   property :month, String
   property :year, Integer
@@ -16,8 +16,8 @@ class Post
   belongs_to  :user
   has n, :comments
   has n, :legacy_routes
-  has n, :tags, :through => Resource
-  has n, :categories, :through => Resource
+  has n, :tags, :through => Resource, :is_active => true
+  has n, :categories, :through => Resource, :is_active => true
 
   def author
     user.fullname

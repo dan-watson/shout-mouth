@@ -1,7 +1,5 @@
 TODO:
 --------------------------
-2) MAKE SURE ONLY ACTIVE POSTS ARE PULLED BACK FROM TAGS AND CATS
-3) DATA-MAPPER IS SUCKING A BIT - LOTS OF SELECT N+1 ISSUES - TRY TO RECTIFY - STOP LAZY LOADING CHILDREN ALL THE TIME
 
 #NICE TO HAVES
 1) Fully implement the rest of the word-press API so word-press clients will work with shout mouth - look at variations and support
