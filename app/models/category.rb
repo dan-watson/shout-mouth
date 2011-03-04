@@ -7,9 +7,7 @@ class Category
     has n,   :posts, :through => Resource, :is_active => true, :order => [ :created_at.desc ]
     
     def self.categories_from_array(array)
-        categories = []
-        array.each{|category| categories << Category.first_or_create({:category => category}, {:category => category})}
-        categories
+        array.map{|category| Category.first_or_create({:category => category}, {:category => category})}
     end
     
     def self.usable_active_categories

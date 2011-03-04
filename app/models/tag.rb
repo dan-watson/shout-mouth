@@ -9,9 +9,7 @@ class Tag
   validates_uniqueness_of :tag
   
   def self.tags_from_array(array)
-    tags = []
-    array.each{|tag| tags << Tag.first_or_create({:tag => tag.strip}, {:tag => tag.strip})}
-    tags
+    array.map{|tag| Tag.first_or_create({:tag => tag.strip}, {:tag => tag.strip})}
   end
   
   def self.usable_active_tags
