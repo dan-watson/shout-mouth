@@ -23,7 +23,61 @@ To Get A Demo Up And Running - Runs the site on test data made up from the tests
 	password: password123
 --------------------------------------------------------------------------------------------------------------------
 
-						
+
+
+--------------------------------RAKE TASKS--------------------------------------------------------------------------
+rake db:create
+    Create The Database
+----------------------
+
+rake db:delete
+    Delete Database File
+----------------------
+
+rake db:demo_data
+    Seed Demo Data
+----------------------
+
+rake db:update
+    Upgrade The Database
+----------------------
+
+rake import:posts
+    Import Posts - import url=http://yourblog.com user=username password=password posts=number_of_posts current_user_email=email from_blog_engine={{your_engine}}
+	
+	Currently only supports blogengine.net for from_blog_engine - just used to set legacy redirects
+	Before running this you should run rake users:create and then set the current_user_email parameter to the freshly created user 
+----------------------
+
+rake import:remove_height_and_width_from_images
+    Remove image tags height and width - I have found that some blog clients add height and width attributes to image tags
+        it may skew your layout so here is a rake task to remove those attributes from all posts
+----------------------
+
+rake import:repoint_images
+    Scrape current posts looking for images and downloads which will then be uploaded to the file store (AMAZON S3) -
+        currently looks for images types jpg, gif, png
+        currently looks for download types zip, rar
+        will match filename in urls as so - http://url.com/file.png or http://url.com/image?name=file.png (will look for the last =)
+        if this does not suit then you will need to write your own regex to pick filenames from urls
+        EXAMPLE: rake import:repoint_images upload=1
+        --if upload=0 it will repoint the urls saved in the db but not upload the images to amazon s3 - will use s3 production settings
+
+rake specs:run_all
+    Run All The Specs
+----------------------
+
+rake users:create
+    Create a use - create email=email password=password firstname=firstname lastname=lastname
+
+--------------------------------------------------------------------------------------------------------------------
+
+
+---------------------------------------------TESTS------------------------------------------------------------------
+To run all the tests - rake specs:run_all
+--------------------------------------------------------------------------------------------------------------------
+
+
 --------------------------------Tested Blogging Clients-------------------------------------------------------------
 - Windows Live Writer (fully supported)
 - Wordpress Client For Ipad - (ropey at best - need to implement all wp methods)
