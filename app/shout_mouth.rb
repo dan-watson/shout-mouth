@@ -193,5 +193,9 @@ class ShoutMouth < Sinatra::Base
     def month_roll
       Post.month_year_counter
     end
+    
+    def pages
+      Post.all_active_pages
+    end
   end
 end

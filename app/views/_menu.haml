@@ -5,7 +5,8 @@
 		%a{:href => "/archive"} Archive
 	%li 
 		%a{:href => "/rss"} RSS
-	%li 
-		%a{:href => "#"} About
-	%li
-		%a{:href => "#"} Hire Me
+	
+	-pages.each do |page|
+		%li
+			%a{:href => "#{page.permalink}", :rel => "follow"}=page.title
+	
