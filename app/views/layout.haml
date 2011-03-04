@@ -2,22 +2,22 @@
 %html{:xmlns => "http://www.w3.org/1999/xhtml"}
 	%head
 		%title=title
-		= partial(:'partials/_css')
-		= partial(:'partials/_scripts')
-		= partial(:'partials/_discovery')
+		= partial(:'shared/_css')
+		= partial(:'shared/_scripts')
+		= partial(:'shared/_discovery')
 	%body
 		#container
 			#header
-				= partial(:'partials/_header')
+				= partial(:'shared/_header')
 			#menu
-				= partial(:'partials/_menu')
+				= partial(:'shared/_menu')
 			#separator
 			#contents
 				= yield
 			#widgets
-				= partial(:'partials/_widget_twitter')
-				= partial(:'partials/_widget_month_roll', :posts => month_roll)
-				= partial(:'partials/_widget_tag_cloud', :tags => all_tags)
+				= partial(:'shared/_widget_twitter')
+				= partial(:'shared/_widget_month_roll', :posts => month_roll)
+				= partial(:'shared/_widget_tag_cloud', :tags => all_tags)
 				
 			#footer== &copy; #{DateTime.now.year} #{Blog.name}
 		

@@ -5,5 +5,5 @@
 	%div.post_body
 		=article.body
 	
-	= partial(:'partials/_social', :article => article) unless article.is_page?
+	= partial(:'shared/_social', :article => article) unless article.is_page?
 	%div.clear

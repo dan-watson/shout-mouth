@@ -1,11 +1,11 @@
-= partial(:'partials/_post', :article => @article)
+= partial(:'shared/_post', :article => @article)
 
 %div.comments
 	- @article.comments.all_active_and_ham.each do |comment|
-		= partial(:'partials/_comment', :comment => comment)
+		= partial(:'shared/_comment', :comment => comment)
 
 -if @article.allow_comments?
-	= partial(:'partials/_comment_form', :post => @article)
+	= partial(:'shared/_comment_form', :post => @article)
 					
 
 				
