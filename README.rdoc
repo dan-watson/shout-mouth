@@ -54,8 +54,9 @@ To run all the tests
 
 ===Writing Plugins For Shout Mouth
 
-1) Create a directory structure inside the app/plugins folder as shown below (CONVENTION MATTERS)
-	
+1) Create a directory structure inside the app/plugins folder as shown below.
+- Convention matters	
+
 	-app
 	----plugins
 	-----------easy_rider
@@ -63,12 +64,12 @@ To run all the tests
 	-----------view
 	-------------easy_rider_plugin.haml
 	
-2) NAMING MATERS - information below is based on writing a new plugin called "easy rider"
+2) The information below is based on writing a new plugin called "easy rider"
 
-- easy_rider plugin should contain a class file named easy_rider_plugin.rb whose class name should be EasyRiderPlugin
-- easy_rider_plugin.rb file needs to reside in a folder called easy_rider under the plugins directory
-- EasyRiderPlugin class should inherit Plugin (see below)
-- EasyRiderPlugin class should implement one method only from the base class which is data
+- our easy_rider plugin should contain a class file named easy_rider_plugin.rb whose class name should be EasyRiderPlugin
+- our easy_rider_plugin.rb file needs to reside in a folder called easy_rider under the plugins directory (see above)
+- EasyRiderPlugin class should inherit the base class Plugin (see below)
+- EasyRiderPlugin class should implement one method from the base class which is data (see below)
 		
 		class EasyRiderPlugin < Plugin
 			def data
@@ -77,11 +78,16 @@ To run all the tests
 		end
 		
 		
-- All classes that inherit from Plugin have access to all of the applications model classes and data
-- EasyRiderPlugin classes data methods can return any object and will be passed down to the view
-- A HAML layout file should be included in the view folder called easy_rider_plugin.haml. The view folder should reside under the easy rider directory
-- By convention the variable name containing the returned data inside the view will be called easy_rider
+- All classes that inherit from Plugin have access to all of shout mouths model classes and data
+- our EasyRiderPlugin classes data method can return any object and will be passed down to the view
+- a HAML layout file should be included in the view folder called easy_rider_plugin.haml. The view folder should reside under the easy rider directory
+- by convention the variable name containing the returned data inside the view will be called easy_rider
 	
 		-easy_rider.each do |easy_rider|
 			%li
 				%a{:href => "/bikes/#{easy_rider.bike}", :rel => "follow"}=easy_rider.bike
+				
+				
+3) To place a plugin on one of your pages just call the following code (example is for easy rider).
+
+		= plugin(PluginFactory.instance.get_plugin(:easy_rider))
