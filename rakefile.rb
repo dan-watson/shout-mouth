@@ -55,7 +55,7 @@ namespace :import do
     Category.destroy
     LegacyRoute.destroy
 
-    user = User.find(:email => args.current_user).first
+    user = User.all(:email => args.current_user_email).first
     client = MetaweblogClient.new(args.url, "1000", args.user, args.password)
 
     if(user)

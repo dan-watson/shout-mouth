@@ -143,13 +143,15 @@ class Post
     if(post.title != xmlrpc_call[1][3]["title"])
       post.add_legacy_route post.slug
     end
-
+    
     post.title = xmlrpc_call[1][3]["title"]
     post.body = xmlrpc_call[1][3]["description"]
     
+    post.categories
     post.category_posts.destroy
     post.add_categories(Category.categories_from_array(xmlrpc_call[1][3]["categories"]))
     
+    post.tags
     post.post_tags.destroy
     xmlrpc_call[1][3]["mt_keywords"].nil? ? post.add_tags(Tag.tags_from_array(xmlrpc_call[1][3]["categories"])) : post.add_tags(Tag.tags_from_array(xmlrpc_call[1][3]["mt_keywords"].split(",")))
     

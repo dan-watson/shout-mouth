@@ -187,7 +187,7 @@ class ShoutMouth < Sinatra::Base
     end
 
     def all_tags
-      Tag.all_active.all(:order => [:tag.asc])
+      Tag.usable_active_tags
     end
 
     def month_roll
