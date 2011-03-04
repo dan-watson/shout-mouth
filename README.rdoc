@@ -11,14 +11,11 @@
 
 To Get A Demo Up And Running - Runs the site on test data made up from the tests (bundler must be installed)
 
-- bundle install (I would recommend using RVM to manage your gemsets)
-- rake db:demo_data
-- shotgun --env=test
-- browse to the http://localhost:9393
-- connect your blogging client to http://localhost:9393/xmlrpc or http://localhost:9393/xmlrpc.php (default wordpress)
-  with 
-	username: dan@shout_mouth.com
-	password: password123
+	bundle install (I would recommend using RVM to manage your gemsets)
+	rake db:demo_data
+	shotgun --env=test
+	browse to the http://localhost:9393
+	connect your blogging client to http://localhost:9393/xmlrpc or http://localhost:9393/xmlrpc.php (default wordpress) with username: dan@shout_mouth.com 		password: password123
 
 
 ===RAKE TASKS
