@@ -28,7 +28,7 @@ Runs the site on test data (bundler must be installed)
 	
 	rake import:posts url=http://yourblog.com user=username password=password posts=number_of_posts current_user_email=email from_blog_engine={{your_engine}}
 	Currently only supports blogengine.net for the from_blog_engine argument - this is just used to set legacy redirects
-	Before running this rake task you should run rake users:create and then set the current_user_email parameter to the freshly created users email 
+	Before running this rake task you should run rake users:create and then set the current_user_email argument to the freshly created users email 
 
 
 	rake import:remove_height_and_width_from_images (Remove all image tags height and width attributes from all posts - I have found that some blog clients add height and width attributes to image tags)
