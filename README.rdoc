@@ -24,8 +24,8 @@ To Get A Demo Up And Running - Runs the site on test data made up from the tests
 	rake db:delete  (Delete Database)
 	rake db:demo_data  (Seed Demo Data)
 	rake db:update    (Upgrade The Database To The Latest Schema Version)
-	rake import:posts url=http://yourblog.com user=username password=password posts=number_of_posts current_user_email=email 								             from_blog_engine={{your_engine}}
-
+	
+	rake import:posts url=http://yourblog.com user=username password=password posts=number_of_posts current_user_email=email from_blog_engine={{your_engine}}
 	Currently only supports blogengine.net for from_blog_engine - just used to set legacy redirects
 	Before running this you should run rake users:create and then set the current_user_email parameter to the freshly created user 
 
