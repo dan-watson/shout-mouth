@@ -1,15 +1,15 @@
 ===ToDo
 
-- Fully implement the rest of the word-press API so word-press clients will work with shout mouth - look at variations and support.
-- Update RSD generation to inform blogging clients that other api's are available
-- Hierarchal Pages - then supported by the word-press API
+- Fully implement the rest of the Word-press API so Wordpress blogging clients will work with shout mouth.
+- Update RSD generation to inform blogging clients that other API's are available once Wordpress API is implemented
+- Implement Hierarchal Pages - Correct data driven menu for hierarchal pages.
 
 
 ===Demo Information
 
-To Get A Demo Up And Running - Runs the site on test data made up from the tests (bundler must be installed)
+Runs the site on test data (bundler must be installed)
 
-	bundle install (I would recommend using RVM to manage your gemsets - ruby 1.9.2) 
+	bundle install (I would recommend using RVM to manage your GEMSETS - ruby 1.9.2) 
 	rake db:demo_data
 	shotgun --env=test
 	browse to the http://localhost:9393
@@ -48,8 +48,8 @@ To run all the tests
 
 ===Tested Blogging Clients
 - Windows Live Writer (fully supported)
-- Wordpress Client For Ipad - (ropey at best - need to implement all wp methods)
-- Blogger Client For Ipad - (ropey at best - this is due to the clients interpretation of how the api should work - should work after wp methods implemented)
+- Wordpress Client For Ipad - (ropey at best - will be fully functional once the full wordpress API is implemented)
+- Blogger Client For Ipad - (ropey at best - this is due to the clients interpretation of how the API should work - - will be fully functional once the full wordpress API is implemented)
 
 
 ===Writing Plugins For Shout Mouth
