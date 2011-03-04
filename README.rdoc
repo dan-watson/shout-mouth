@@ -1,10 +1,8 @@
 ===ToDo
 
-1) Fully implement the rest of the word-press API so word-press clients will work with shout mouth - look at variations and support.
-
-2) Update RSD generation to inform blogging clients that other api's are available
-
-3) Hierarchal Pages - then supported by the word-press API
+-Fully implement the rest of the word-press API so word-press clients will work with shout mouth - look at variations and support.
+-Update RSD generation to inform blogging clients that other api's are available
+-Hierarchal Pages - then supported by the word-press API
 
 
 ===Demo Information
@@ -75,13 +73,10 @@ To run all the tests
 	
 2) NAMING MATERS - information below is based on writing a new plugin called "easy rider"
 
-a) easy_rider plugin should contain a class file named easy_rider_plugin.rb whose class name should be EasyRiderPlugin
-
-b)  easy_rider_plugin.rb file needs to reside in a folder called easy_rider under the plugins directory
-
-c) EasyRiderPlugin class should inherit from Plugin (class EasyRiderPlugin < Plugin)
-
-d) EasyRiderPlugin class should implement one method only from the base class which is data
+- easy_rider plugin should contain a class file named easy_rider_plugin.rb whose class name should be EasyRiderPlugin
+- easy_rider_plugin.rb file needs to reside in a folder called easy_rider under the plugins directory
+- EasyRiderPlugin class should inherit from Plugin (class EasyRiderPlugin < Plugin)
+- EasyRiderPlugin class should implement one method only from the base class which is data
 		
 		class EasyRiderPlugin < Plugin
 			def data
@@ -90,13 +85,10 @@ d) EasyRiderPlugin class should implement one method only from the base class wh
 		end
 		
 		
-e) All classes that inherit from Plugin have access to all of the applications model classes and data
-
-f) EasyRiderPlugin classes data methods can return any object and will be passed down to the view
-
-g) A HAML layout file should be included in the view folder called easy_rider_plugin.haml. The view folder should reside under the easy rider directory
-
-h) By convention the variable name containing the returned data inside the view will be called easy_rider
+- All classes that inherit from Plugin have access to all of the applications model classes and data
+- EasyRiderPlugin classes data methods can return any object and will be passed down to the view
+- A HAML layout file should be included in the view folder called easy_rider_plugin.haml. The view folder should reside under the easy rider directory
+- By convention the variable name containing the returned data inside the view will be called easy_rider
 	
 		-easy_rider.each do |easy_rider|
 			%li
