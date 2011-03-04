@@ -82,7 +82,7 @@ class ShoutMouth < Sinatra::Base
   end
 
   get '/rss' do
-    content_type 'text/xml'
+    content_type 'application/rss+xml'
     @posts = Post.all_active_posts
     builder :rss, :layout => false
   end
