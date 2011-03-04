@@ -67,7 +67,7 @@ To run all the tests
 
 - easy_rider plugin should contain a class file named easy_rider_plugin.rb whose class name should be EasyRiderPlugin
 - easy_rider_plugin.rb file needs to reside in a folder called easy_rider under the plugins directory
-- EasyRiderPlugin class should inherit from Plugin (class EasyRiderPlugin < Plugin)
+- EasyRiderPlugin class should inherit Plugin (see below)
 - EasyRiderPlugin class should implement one method only from the base class which is data
 		
 		class EasyRiderPlugin < Plugin
