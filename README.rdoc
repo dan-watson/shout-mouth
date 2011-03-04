@@ -17,7 +17,7 @@ Runs the site on test data (bundler must be installed)
 	with username: dan@shout_mouth.com password: password123
 
 
-===RAKE TASKS
+===Rake Tasks
 	rake db:create  (Create The Database)
 	
 	rake db:delete  (Delete Database)
