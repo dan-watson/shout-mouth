@@ -27,7 +27,7 @@ Runs the site on test data (bundler must be installed)
 	rake db:update    (Upgrade The Database To The Latest Schema Version)
 	
 	rake import:posts url=http://yourblog.com user=username password=password posts=number_of_posts current_user_email=email from_blog_engine={{your_engine}}
-	Currently only supports blogengine.net for from_blog_engine - this is just used to set legacy redirects
+	Currently only supports blogengine.net for the from_blog_engine argument - this is just used to set legacy redirects
 	Before running this rake task you should run rake users:create and then set the current_user_email parameter to the freshly created users email 
 
 
