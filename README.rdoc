@@ -1,8 +1,8 @@
 ===ToDo
 
--Fully implement the rest of the word-press API so word-press clients will work with shout mouth - look at variations and support.
--Update RSD generation to inform blogging clients that other api's are available
--Hierarchal Pages - then supported by the word-press API
+- Fully implement the rest of the word-press API so word-press clients will work with shout mouth - look at variations and support.
+- Update RSD generation to inform blogging clients that other api's are available
+- Hierarchal Pages - then supported by the word-press API
 
 
 ===Demo Information
