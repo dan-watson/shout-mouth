@@ -43,30 +43,26 @@ To Get A Demo Up And Running - Runs the site on test data made up from the tests
     Currently looks for download types zip, rar
     Will match filename in urls as so - http://url.com/file.png or http://url.com/image?name=file.png (will look for the last =)
     EXAMPLE: rake import:repoint_images upload=1
-     If upload=0 it will repoint the urls saved in the db but not upload the images to amazon s3 - will use s3 production settings
+    If upload=0 it will repoint the urls saved in the db but not upload the images to amazon s3 - will use s3 production settings
 
-rake specs:run_all
+	rake specs:run_all
     Run All The Specs
 
-
-rake users:create
+	rake users:create
     Create a use - create email=email password=password firstname=firstname lastname=lastname
 
 
+===Tests
+To run all the tests
+	rake specs:run_all
 
-
---Tests
-To run all the tests - rake specs:run_all
-
-
-
---Tested Blogging Clients
+===Tested Blogging Clients
 - Windows Live Writer (fully supported)
 - Wordpress Client For Ipad - (ropey at best - need to implement all wp methods)
 - Blogger Client For Ipad - (ropey at best - this is due to the clients interpretation of how the api should work - should work after wp methods implemented)
 
 
---Writing Plugins For Shout Mouth<
+===Writing Plugins For Shout Mouth
 
 1) Create a directory structure inside the app/plugins folder as shown below (CONVENTION MATTERS)
 	
@@ -78,10 +74,10 @@ To run all the tests - rake specs:run_all
 	-------------easy_rider_plugin.haml
 	
 2) NAMING MATERS - information below is based on writing a new plugin called "easy rider"
-	1) easy_rider plugin should contain a class file named easy_rider_plugin.rb whose class name should be EasyRiderPlugin
-	2)  easy_rider_plugin.rb file needs to reside in a folder called easy_rider under the plugins directory
-	3) EasyRiderPlugin class should inherit from Plugin (class EasyRiderPlugin < Plugin)
-	4) EasyRiderPlugin class should implement one method only from the base class which is data
+a) easy_rider plugin should contain a class file named easy_rider_plugin.rb whose class name should be EasyRiderPlugin
+b)  easy_rider_plugin.rb file needs to reside in a folder called easy_rider under the plugins directory
+c) EasyRiderPlugin class should inherit from Plugin (class EasyRiderPlugin < Plugin)
+d) EasyRiderPlugin class should implement one method only from the base class which is data
 		
 		class EasyRiderPlugin < Plugin
 			def data
@@ -90,25 +86,11 @@ To run all the tests - rake specs:run_all
 		end
 		
 		
-	5) All classes that inherit from Plugin have access to all of the applications model classes and data
-	6) EasyRiderPlugin classes data methods can return any object and will be passed down to the view
-	7) A haml layout file should be included in the view folder called easy_rider_plugin.haml. The view folder should reside under the easy rider directory
-	8) By convention the variable name containing the returned data inside the view will be called easy_rider
+e) All classes that inherit from Plugin have access to all of the applications model classes and data
+f) EasyRiderPlugin classes data methods can return any object and will be passed down to the view
+g) A HAML layout file should be included in the view folder called easy_rider_plugin.haml. The view folder should reside under the easy rider directory
+h) By convention the variable name containing the returned data inside the view will be called easy_rider
 	
 		-easy_rider.each do |easy_rider|
 			%li
 				%a{:href => "/bikes/#{easy_rider.bike}", :rel => "follow"}=easy_rider.bike
-
-
-
-
-
-
-
-
-
-
-
-		
-
-
