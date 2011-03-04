@@ -23,7 +23,8 @@ class ShoutMouth < Sinatra::Base
   get '/' do
     prepend_title("Home")
     @articles = Post.all_active_posts.all(:limit => Blog.posts_on_home_page.to_i)
-    haml :index
+    halt haml :index unless @articles.none?
+    haml :nodata
   end
 
   #DRY - This route matches for both pages and posts as the program flow is the same
