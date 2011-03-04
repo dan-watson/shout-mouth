@@ -1,31 +1,7 @@
-require Dir.pwd + '/app/api/amazon_s3'
+require Dir.pwd + '/app/api/amazon_s3/amazon_s3'
+require Dir.pwd + '/app/api/metaweblog/strategies/authentication_details'
+
 module Metaweblog
-
-  def does_not_need_authentication?(method)
-    ["list_methods"].include?(method)
-  end
-
-  def list_methods(xmlrpc_call)
-    methods = [ "system.listMethods",
-      "metaWeblog.newMediaObject",
-      "metaWeblog.newPost",
-      "metaWeblog.editPost",
-      "metaWeblog.getPost",
-      "metaWeblog.getCategories",
-      "metaWeblog.getRecentPosts",
-      "metaWeblog.deletePost",
-      "metaWeblog.getUsersBlogs",
-      "blogger.getUserInfo",
-      "wp.getPageList",
-      "wp.getPages",
-      "wp.getPage",
-      "wp.editPage",
-      "wp.deletePage",
-      "wp.newPage",
-      "wp.getAuthors",
-    "wp.getTags"]
-    XMLRPC::Marshal.dump_response(methods)
-  end
 
   def new_media_object(xmlrpc_call)
     data = xmlrpc_call[1][3]
@@ -139,40 +115,57 @@ module Metaweblog
     </fault>
     </methodResponse>"
   end
+  
+  def does_not_need_authentication?(method)
+    ["list_methods"].include?(method)
+  end
+
+  def list_methods(xmlrpc_call)
+    methods = [ "system.listMethods",
+      "metaWeblog.newMediaObject",
+      "metaWeblog.newPost",
+      "metaWeblog.editPost",
+      "metaWeblog.getPost",
+      "metaWeblog.getCategories",
+      "metaWeblog.getRecentPosts",
+      "metaWeblog.deletePost",
+      "metaWeblog.getUsersBlogs",
+      "blogger.getUserInfo",
+      "wp.getPageList",
+      "wp.getPages",
+      "wp.getPage",
+      "wp.editPage",
+      "wp.deletePage",
+      "wp.newPage",
+      "wp.getAuthors",
+    "wp.getTags"]
+    XMLRPC::Marshal.dump_response(methods)
+  end
 
   #OK the metaweblog / workpress api sucks a little. For some reason only known to hindu cows... Different methods payloads will supply the
   #username and password in different positions in the xml structure - values are not named and can only be obtained
-  #by position - method below could be a seperate factory or even a stratergy to throw at the authenticate method.
-  #YAGNI - this will do!
+  #by position - needed to pull in different stratergy's for different clients
 
-  WORDPRESS = "WORDPRESS"
-  BLOGGER = "BLOGGER"
-  METAWEBLOG = "METAWEBLOG"
-
-  def authentication_details_lookup(method, xmlrpc_call)
-
-    #exception to the rule
-    if (client_call(xmlrpc_call) == WORDPRESS && method == "get_users_blogs")
-      return {:username => xmlrpc_call[1][0], :password => xmlrpc_call[1][1]}
-    end
-
-    case method
-    when "delete_post", "get_page", "edit_page"
-      {:username => xmlrpc_call[1][2], :password => xmlrpc_call[1][3]}
-    else
-      {:username => xmlrpc_call[1][1], :password => xmlrpc_call[1][2]}
-    end
+      
+  
+  
+  def authentication_details_from(method, xmlrpc_call)
+      Class.class_eval("#{client_from(xmlrpc_call)}Strategy").new.authentication_details_from(method, xmlrpc_call)
   end
-
-  def client_call(xmlrpc_call)
-    case xmlrpc_call[0].split(".")[0]
-    when "wp"
-      WORDPRESS
-    when "blogger"
-      BLOGGER
-    else "metaWeblog"
-      METAWEBLOG
-    end
-  end
+  
+  WORDPRESS = "Wordpress"
+  BLOGGER = "Blogger"
+  METAWEBLOG = "Metaweblog"
+  
+  def client_from(xmlrpc_call)
+     case xmlrpc_call[0].split(".")[0]
+     when "wp"
+       WORDPRESS
+     when "blogger"
+       BLOGGER
+     else "metaWeblog"
+       METAWEBLOG
+     end
+   end
 
 end

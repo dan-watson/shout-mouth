@@ -43,7 +43,7 @@ end
 
 
 namespace :import do
-  require File.dirname(__FILE__) + '/app/api/metaweblog_client.rb'
+  require File.dirname(__FILE__) + '/app/api/metaweblog/metaweblog_client.rb'
   require 'uri'
   require 'nokogiri'
 

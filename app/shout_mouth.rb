@@ -11,7 +11,7 @@ require Dir.pwd + '/app/models/legacy_route'
 require Dir.pwd + '/app/models/blog'
 require Dir.pwd + '/app/models/tag'
 require Dir.pwd + '/app/models/category'
-require Dir.pwd + '/app/api/metaweblog'
+require Dir.pwd + '/app/api/metaweblog/metaweblog'
 require Dir.pwd + '/app/lib/fixnum'
 
 class ShoutMouth < Sinatra::Base
@@ -145,7 +145,7 @@ class ShoutMouth < Sinatra::Base
     halt 200, {'Content-Type' => 'text/xml'}, raise_xmlrpc_error("no information has been sent") if xml.empty?
 
     # get the autentication details see - metaweblog module method
-    authentication_details = authentication_details_lookup(method, call)
+    authentication_details = authentication_details_from(method, call)
 
     #if authentication fails inform the client
     halt 200, {'Content-Type' => 'text/xml'}, raise_xmlrpc_error("User credentials supplied are incorrect") unless authenticated?(authentication_details) || does_not_need_authentication?(method)

@@ -6,8 +6,7 @@ TODO:
 	-update rsd generation to inform blogging clients that other api's are available
 	
 2) Enable the ability to write plugins for the sidebar - and social bookmarks
-3) Re-factor the lookup for authentication using the strategy pattern
-4) Hierarchal Pages - then supported by the word-press API
+3) Hierarchal Pages - then supported by the word-press API
 
 
 --------------------------------DEMO INFORMATION--------------------------------------------------------------------
