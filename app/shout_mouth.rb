@@ -37,7 +37,7 @@ class ShoutMouth < Sinatra::Base
       end
 
       prepend_title(@article.title)
-      haml :page if @article.is_page?
+      halt haml :page if @article.is_page?
       haml :post
     end
   end
