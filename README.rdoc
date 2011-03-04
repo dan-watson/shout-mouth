@@ -1,4 +1,4 @@
-====ToDo
+===TODO
 
 1) Fully implement the rest of the word-press API so word-press clients will work with shout mouth - look at variations and support.
 
@@ -7,7 +7,7 @@
 3) Hierarchal Pages - then supported by the word-press API
 
 
-====DEMO INFORMATION
+===DEMO INFORMATION
 
 To Get A Demo Up And Running - Runs the site on test data made up from the tests (bundler must be installed)
 
