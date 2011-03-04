@@ -1,7 +1,9 @@
 ---ToDo
 
 1) Fully implement the rest of the word-press API so word-press clients will work with shout mouth - look at variations and support.
+
 2) Update RSD generation to inform blogging clients that other api's are available
+
 3) Hierarchal Pages - then supported by the word-press API
 
 
