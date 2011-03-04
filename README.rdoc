@@ -74,9 +74,13 @@ To run all the tests
 	-------------easy_rider_plugin.haml
 	
 2) NAMING MATERS - information below is based on writing a new plugin called "easy rider"
+
 a) easy_rider plugin should contain a class file named easy_rider_plugin.rb whose class name should be EasyRiderPlugin
+
 b)  easy_rider_plugin.rb file needs to reside in a folder called easy_rider under the plugins directory
+
 c) EasyRiderPlugin class should inherit from Plugin (class EasyRiderPlugin < Plugin)
+
 d) EasyRiderPlugin class should implement one method only from the base class which is data
 		
 		class EasyRiderPlugin < Plugin
@@ -87,8 +91,11 @@ d) EasyRiderPlugin class should implement one method only from the base class wh
 		
 		
 e) All classes that inherit from Plugin have access to all of the applications model classes and data
+
 f) EasyRiderPlugin classes data methods can return any object and will be passed down to the view
+
 g) A HAML layout file should be included in the view folder called easy_rider_plugin.haml. The view folder should reside under the easy rider directory
+
 h) By convention the variable name containing the returned data inside the view will be called easy_rider
 	
 		-easy_rider.each do |easy_rider|
