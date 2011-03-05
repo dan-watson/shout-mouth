@@ -106,6 +106,16 @@ class Post
       :page_parent_id => 0
     }
   end
+  
+  def to_minimal_wordpress_page
+    {
+      :page_id => id,
+      :page_title => title,
+      :page_parent_id => 0,
+      :dateCreated => created_at,
+      :date_created_gmt => created_at
+    }
+  end
 
   before :save do
     self.persisted_slug = self.slug

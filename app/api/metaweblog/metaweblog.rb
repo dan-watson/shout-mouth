@@ -17,13 +17,13 @@ module Metaweblog
 
   def new_post(xmlrpc_call)
     post = Post.new_post_from_xmlrpc_payload(xmlrpc_call)
-    return raise_xmlrpc_error(post.errors.full_messages.to_s) unless post.save
+    return raise_xmlrpc_error(4003, post.errors.full_messages.to_s) unless post.save
     XMLRPC::Marshal.dump_response(post.id)
   end
 
   def edit_post(xmlrpc_call)
     post = Post.edit_post_from_xmlrpc_payload(xmlrpc_call)
-    return raise_xmlrpc_error(post.errors.full_messages.to_s) unless post.save
+    return raise_xmlrpc_error(4003, post.errors.full_messages.to_s) unless post.save
     XMLRPC::Marshal.dump_response(post.reload.to_metaweblog)
   end
 
@@ -33,7 +33,7 @@ module Metaweblog
   end
 
   def get_categories(xmlrpc_call)
-    XMLRPC::Marshal.dump_response(Category.usable_active_categories.map{|category| {:description => category.category, :title => category.category}})
+    XMLRPC::Marshal.dump_response(Category.usable_active_categories.map{|category| category.to_metaweblog})
   end
 
   def get_recent_posts(xmlrpc_call)
@@ -58,7 +58,8 @@ module Metaweblog
   #Wordpress API
 
   def get_page_list(xmlrpc_call)
-    return raise_xmlrpc_error("Not Implemented")
+    pages = Post.all_active_pages.all
+    XMLRPC::Marshal.dump_response(pages.map{|p| p.to_minimal_wordpress_page})
   end
 
   def get_pages(xmlrpc_call)
@@ -73,7 +74,7 @@ module Metaweblog
 
   def edit_page(xmlrpc_call)
     page = Post.edit_page_from_xmlrpc_payload(xmlrpc_call)
-    return raise_xmlrpc_error(page.errors.full_messages.to_s) unless page.save
+    return raise_xmlrpc_error(4003, page.errors.full_messages.to_s) unless page.save
     XMLRPC::Marshal.dump_response(true)
   end
 
@@ -84,7 +85,7 @@ module Metaweblog
 
   def new_page(xmlrpc_call)
     page = Post.new_page_from_xmlrpc_payload(xmlrpc_call)
-    return raise_xmlrpc_error(page.errors.full_messages.to_s) unless page.save
+    return raise_xmlrpc_error(4003, page.errors.full_messages.to_s) unless page.save
     XMLRPC::Marshal.dump_response(page.id)
   end
 
@@ -94,17 +95,30 @@ module Metaweblog
   end
 
   def get_tags(xmlrpc_call)
-    XMLRPC::Marshal.dump_response(Tag.usable_active_tags.map{|tag| {:name => tag.tag}})
+    XMLRPC::Marshal.dump_response(Tag.usable_active_tags.map{|tag| tag.to_metaweblog})
+  end
+  
+  #OK SERIOUSLY - This is not part of any api spec but seems to be part of wordpress
+  #Some clients use this method to check the system is responding - not testing this method.
+  def say_hello(xmlrpc_call)
+    XMLRPC::Marshal.dump_response("Hello!")
+  end
+  
+  #OK SERIOUSLY - This is not part of any api spec but seems to be part of wordpress
+  #Some clients use this method to check the system is responding - not testing this method.
+  def add_two_numbers(xmlrpc_call)
+    total = xmlrpc_call[1][0].to_i + xmlrpc_call[1][1].to_i
+    XMLRPC::Marshal.dump_response(total)
   end
 
-  def raise_xmlrpc_error(message)
+  def raise_xmlrpc_error(code, message)
     "<methodResponse>
     <fault>
     <value>
     <struct>
     <member>
     <name>faultCode</name>
-    <value><int>40003</int></value>
+    <value><int>#{code.to_s}</int></value>
     </member>
     <member>
     <name>faultString</name>
@@ -117,11 +131,14 @@ module Metaweblog
   end
   
   def does_not_need_authentication?(method)
-    ["list_methods"].include?(method)
+    ["list_methods", "say_hello", "add_two_numbers"].include?(method)
   end
 
   def list_methods(xmlrpc_call)
-    methods = [ "system.listMethods",
+    methods = [ 
+      "demo.sayHello",
+      "demo.addTwoNumbers",
+      "system.listMethods",
       "metaWeblog.newMediaObject",
       "metaWeblog.newPost",
       "metaWeblog.editPost",
@@ -137,8 +154,85 @@ module Metaweblog
       "wp.editPage",
       "wp.deletePage",
       "wp.newPage",
+      "wp.getCategories",
       "wp.getAuthors",
-    "wp.getTags"]
+      "wp.getTags"]
+    # LIST OF ALL API METHODS - LONG ARGGGHHHH!! LETS GO
+    # system.multicall
+    # system.listMethods
+    # system.getCapabilities
+    # wpcom.getUsersSubs
+    # wpcom.getFeatures
+    # wpcom.get_user_blogids
+    # wpStats.flush_posts
+    # wpStats.ping_blog
+    # wpStats.update_postinfo
+    # wpStats.update_bloginfo
+    # wpStats.get_site_id
+    # wpStats.get_blog_id
+    # wpStats.check_key
+    # wpStats.get_key
+    # demo.addTwoNumbers - IMPLEMENTED
+    # demo.sayHello - IMPLEMENTED
+    # pingback.extensions.getPingbacks
+    # pingback.ping
+    # mt.publishPost
+    # mt.getTrackbackPings
+    # mt.supportedTextFilters
+    # mt.supportedMethods
+    # mt.setPostCategories
+    # mt.getPostCategories
+    # mt.getRecentPostTitles
+    # mt.getCategoryList
+    # metaWeblog.getUsersBlogs - IMPLEMENTED
+    # metaWeblog.setTemplate
+    # metaWeblog.getTemplate
+    # metaWeblog.deletePost - IMPLEMENTED
+    # metaWeblog.newMediaObject - IMPLEMENTED
+    # metaWeblog.getCategories - IMPLEMENTED
+    # metaWeblog.getRecentPosts - IMPLEMENTED
+    # metaWeblog.getPost - IMPLEMENTED
+    # metaWeblog.editPost - IMPLEMENTED
+    # metaWeblog.newPost - IMPLEMENTED
+    # blogger.deletePost
+    # blogger.editPost
+    # blogger.newPost
+    # blogger.setTemplate
+    # blogger.getTemplate
+    # blogger.getRecentPosts
+    # blogger.getPost
+    # blogger.getUserInfo - IMPLEMENTED
+    # blogger.getUsersBlogs
+    # wp.getPostFormats
+    # wp.getMediaLibrary
+    # wp.getMediaItem
+    # wp.getCommentStatusList
+    # wp.newComment
+    # wp.editComment
+    # wp.deleteComment
+    # wp.getComments
+    # wp.getComment
+    # wp.setOptions
+    # wp.getOptions
+    # wp.getPageTemplates
+    # wp.getPageStatusList
+    # wp.getPostStatusList
+    # wp.getCommentCount
+    # wp.uploadFile
+    # wp.suggestCategories
+    # wp.deleteCategory
+    # wp.newCategory
+    # wp.getTags - IMPLEMENTED
+    # wp.getCategories - IMPLEMENTED
+    # wp.getAuthors - IMPLEMENTED
+    # wp.getPageList - IMPLEMENTED
+    # wp.editPage - IMPLEMENTED
+    # wp.deletePage - IMPLEMENTED
+    # wp.newPage - IMPLEMENTED
+    # wp.getPages - IMPLEMENTED
+    # wp.getPage -IMPLEMENTED
+    # wp.getUsersBlogs - IMPLEMENTED
+    
     XMLRPC::Marshal.dump_response(methods)
   end
 

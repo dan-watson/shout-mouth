@@ -14,4 +14,21 @@ class Category
       all.posts #need to force dynamic creation of the category posts class - this does not fire a query
       all_active.all(:category.not => "page", :category_posts => { :post => { :is_active => true }})
     end
+    
+    def permalink
+      "#{Blog.url}/category/#{category}" 
+    end
+    
+    def to_metaweblog
+      {
+        :categoryId => id,
+        :parentId => 0,
+        :description => category,
+        :categoryDescription => "",
+        :categoryName => category,
+        :htmlUrl => permalink,
+        :rssUrl => "",
+        :title => category #do we need this? not part of the wordpress api but is part of wordpress
+      }
+    end
 end

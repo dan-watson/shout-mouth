@@ -145,13 +145,13 @@ class ShoutMouth < Sinatra::Base
     method = call[0].gsub(/(.*)\.(.*)/, '\2').gsub(/([A-Z])/, '_\1').downcase
 
     # if the payload is empty raise an error back to the client
-    halt 200, {'Content-Type' => 'text/xml'}, raise_xmlrpc_error("no information has been sent") if xml.empty?
+    halt 200, {'Content-Type' => 'text/xml'}, raise_xmlrpc_error(-32700, "parse error. not well formed") if xml.empty?
 
     # get the autentication details see - metaweblog module method
     authentication_details = authentication_details_from(method, call)
 
     #if authentication fails inform the client
-    halt 200, {'Content-Type' => 'text/xml'}, raise_xmlrpc_error("User credentials supplied are incorrect") unless authenticated?(authentication_details) || does_not_need_authentication?(method)
+    halt 200, {'Content-Type' => 'text/xml'}, raise_xmlrpc_error(403, "Bad login/pass combination.") unless authenticated?(authentication_details) || does_not_need_authentication?(method)
 
     #if everything with the request is fine send the payload onto the method in the metaweblog module
     response.headers['Content-Type'] = 'text/xml;'

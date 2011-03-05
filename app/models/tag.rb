@@ -16,4 +16,20 @@ class Tag
     all.posts #need to force dynamic creation of the tag_posts class - this does not fire a query
     all_active.all(:tag.not => "page", :post_tags => {:post => { :is_active => true }}, :order => [:tag.asc])
   end
+  
+  def permalink
+     "#{Blog.url}/tag/#{tag}" 
+  end
+  
+  def to_metaweblog
+    {
+      :tag_id => id,
+      :name => tag,
+      :count => posts.count,
+      :slug => tag,
+      :html_url => permalink,
+      :rss_url => ""
+    }
+  end
+  
 end
