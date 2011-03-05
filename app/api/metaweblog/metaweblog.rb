@@ -158,20 +158,7 @@ module Metaweblog
       "wp.getAuthors",
       "wp.getTags"]
     # LIST OF ALL API METHODS - LONG ARGGGHHHH!! LETS GO
-    # system.multicall
-    # system.listMethods
-    # system.getCapabilities
-    # wpcom.getUsersSubs
-    # wpcom.getFeatures
-    # wpcom.get_user_blogids
-    # wpStats.flush_posts
-    # wpStats.ping_blog
-    # wpStats.update_postinfo
-    # wpStats.update_bloginfo
-    # wpStats.get_site_id
-    # wpStats.get_blog_id
-    # wpStats.check_key
-    # wpStats.get_key
+    # system.listMethods - IMPLEMENTED
     # demo.addTwoNumbers - IMPLEMENTED
     # demo.sayHello - IMPLEMENTED
     # pingback.extensions.getPingbacks

@@ -3,4 +3,4 @@
 	%ul
 		-tag_cloud.each do |tag|
 			%li
-				%a{:href => "/tag/#{tag.tag}", :rel => "follow"}=tag.tag
+				%a{:href => "#{tag.permalink}", :rel => "follow"}=tag.tag
