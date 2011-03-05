@@ -1,3 +1,4 @@
 .rvmrc
 db/shout_mouth.db
 config/_config.yaml
+logs/

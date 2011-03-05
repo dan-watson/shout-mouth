@@ -97,3 +97,6 @@ racksh - when in the application root
 - please note you may need to restart your application for your plugin to register
 
 		= plugin(PluginFactory.instance.get_plugin(:easy_rider))
+
+
+
