@@ -177,7 +177,7 @@ namespace :import do
 
   end
 
-  namespace :users do
+  namespace :user do
     desc "Create a use - create email=email password=password firstname=firstname lastname=lastname"
     task :create do |t, args|
       User.new(:email => args.email, :password => args.password, :firstname => args.firstname, :lastname => args.lastname).save
