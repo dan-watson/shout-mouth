@@ -45,6 +45,9 @@ Runs the site on test data (bundler must be installed)
 ===Tests
 To run all the tests
 	rake specs:run_all
+	
+===Rails Style Console
+racksh - when in the application root
 
 ===Tested Blogging Clients
 - Windows Live Writer (fully supported)
