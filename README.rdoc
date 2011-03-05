@@ -39,8 +39,10 @@ Runs the site on test data (bundler must be installed)
 
 	rake specs:run_all - (Run All The Specs)
 
-	rake users:create  create email=email password=password firstname=firstname lastname=lastname (Create a user)  
+	rake user:create  create email=email password=password firstname=firstname lastname=lastname (Create a user)  
 
+===Rails Style Console
+ 	type racksh inside the console when in the shout_mouth directory - (supports reload!)
 
 ===Tests
 To run all the tests

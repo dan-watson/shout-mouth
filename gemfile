@@ -10,6 +10,7 @@ gem "aws-s3"
 group :development do
 	gem "shotgun"
 	gem "dm-sqlite-adapter"
+	gem "racksh"
 end
 
 group :test do
