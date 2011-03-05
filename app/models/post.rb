@@ -56,7 +56,7 @@ class Post
 
   def allow_comments?
     return true if Blog.comments_open_for_days == 0
-    (created_at.midnight + Blog.comments_open_for_days) > DateTime.now.midnight
+    (created_at.to_date.to_datetime + Blog.comments_open_for_days) > DateTime.now.to_date.to_datetime
   end
 
   def add_legacy_route legacy_url
