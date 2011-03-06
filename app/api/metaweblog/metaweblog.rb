@@ -136,6 +136,12 @@ module Metaweblog
     XMLRPC::Marshal.dump_response({:publish => "Published"})
   end
   
+  def get_page_templates(xmlrpc_call)
+    #Shout Mouth does not support per page templating as wordpress does just return the default preview for a post
+    # Method will not have a test as it really does not need it!
+    XMLRPC::Marshal.dump_response({:WebPreview => "webpreview.html"})
+  end
+  
   #OK SERIOUSLY - This is not part of any api spec but seems to be part of wordpress
   #Some clients use this method to check the system is responding - not testing this method.
   def say_hello(xmlrpc_call)
@@ -186,6 +192,7 @@ module Metaweblog
       "metaWeblog.deletePost",
       "metaWeblog.getUsersBlogs",
       "blogger.getUserInfo",
+      "wp.getPageTemplates",
       "wp.getPageStatusList",
       "wp.getPostStatusList",
       "wp.getCommentCount",
@@ -246,7 +253,7 @@ module Metaweblog
     # wp.getComment
     # wp.setOptions
     # wp.getOptions
-    # wp.getPageTemplates
+    # wp.getPageTemplates - IMPLEMENTED
     # wp.getPageStatusList - IMPLEMENTED
     # wp.getPostStatusList - IMPLEMENTED
     # wp.getCommentCount - IMPLEMENTED
