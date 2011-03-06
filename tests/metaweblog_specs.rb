@@ -790,9 +790,113 @@ describe "metaweblog api" do
        category.category.should ==  "Category - Metaweblog"
        last_response.body.should include("<i4>#{category.id.to_s}</i4>")
 
-       category.destroy
      end
   
+     it "should mark a record as inactive when the deleteCategory method is called" do
+       category = Category.first(:category => "Category - Metaweblog")
+
+       post '/xmlrpc/',  "<methodCall>
+        <methodName>wp.deleteCategory</methodName>
+        <params>
+         <param>
+          <value>
+           <string>2000</string>
+          </value>
+         </param>
+         <param>
+          <value>
+           <string>#{@user.email}</string>
+          </value>
+         </param>
+         <param>
+          <value>
+           <string>password123</string>
+          </value>
+         </param>
+         <param>
+          <value>
+           <string>#{category.id.to_s}</string>
+          </value>
+         </param>
+        </params>
+       </methodCall>"
+
+       category.reload
+       category.is_active.should ==  false
+       last_response.body.should include("<boolean>1</boolean>")
+       category.destroy
+     end
+     
+     it "should not mark a record as inactive when the deleteCategory method is called and the category has posts" do
+       
+       post '/xmlrpc/',  "<methodCall>
+        <methodName>wp.deleteCategory</methodName>
+        <params>
+         <param>
+          <value>
+           <string>2000</string>
+          </value>
+         </param>
+         <param>
+          <value>
+           <string>#{@user.email}</string>
+          </value>
+         </param>
+         <param>
+          <value>
+           <string>password123</string>
+          </value>
+         </param>
+         <param>
+          <value>
+           <string>#{TestDataHelper.category1.id.to_s}</string>
+          </value>
+         </param>
+        </params>
+       </methodCall>"
+
+       TestDataHelper.category1.is_active.should ==  true
+       last_response.body.should include("<boolean>0</boolean>")
+
+     end
+     
+     it "should return the correct caregories when the suggestCategories method is called" do
+       
+       post '/xmlrpc/',  "<methodCall>
+               <methodName>wp.suggestCategories</methodName>
+               <params>
+                <param>
+                 <value>
+                  <string>2000</string>
+                 </value>
+                </param>
+                <param>
+                 <value>
+                  <string>#{@user.email}</string>
+                 </value>
+                </param>
+                <param>
+                 <value>
+                  <string>password123</string>
+                 </value>
+                </param>
+                <param>
+                 <value>
+                  <string>cat</string>
+                 </value>
+                </param>
+                <param>
+                 <value>
+                  <i4>2</i4>
+                 </value>
+                </param>
+               </params>
+              </methodCall>"
+
+       find_value(last_response.body, "category_name", ["member", "name", "value", "string"], 0).should == "category10"
+       find_value(last_response.body, "category_name", ["member", "name", "value", "string"], 1).should == "category11"
+
+     end
   
   private 
   def find_value(xml, find, hierarchy = [], nth = nil)

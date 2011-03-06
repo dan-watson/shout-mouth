@@ -19,6 +19,13 @@ class Category
       Category.first_or_create({:category => xmlrpc_call[1][3]['name']}, {:category => xmlrpc_call[1][3]['name']})
     end
     
+    def self.mark_as_inactive_from_xmlrpc_payload(xmlrpc_call)
+      category = Category.first({:id => xmlrpc_call[1][3]})
+      category.is_active = false unless category.posts.any?
+      category.save
+      !category.is_active
+    end
+    
     def permalink
       "#{Blog.url}/category/#{category}" 
     end
@@ -33,6 +40,13 @@ class Category
         :htmlUrl => permalink,
         :rssUrl => "",
         :title => category #do we need this? not part of the wordpress api but is part of wordpress
+      }
+    end
+    
+    def to_minimal_metaweblog
+      {
+        :category_id => id,
+        :category_name => category
       }
     end
 end

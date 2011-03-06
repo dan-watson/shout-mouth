@@ -3,6 +3,11 @@ require Dir.pwd + '/app/api/metaweblog/strategies/authentication_details'
 
 module Metaweblog
 
+  #alias method for wordpress
+  def upload_file(xmlrpc_call)
+    new_media_object(xmlrpc_call)
+  end
+
   def new_media_object(xmlrpc_call)
     data = xmlrpc_call[1][3]
     name = data["name"].gsub(/\//,'')
@@ -102,6 +107,16 @@ module Metaweblog
     category = Category.new_category_from_xmlrpc_payload(xmlrpc_call)
     XMLRPC::Marshal.dump_response(category.id)
   end
+  
+  def delete_category(xmlrpc_call)
+    success = Category.mark_as_inactive_from_xmlrpc_payload(xmlrpc_call)
+    XMLRPC::Marshal.dump_response(success)
+  end
+  
+  def suggest_categories(xmlrpc_call)
+    XMLRPC::Marshal.dump_response(Category.usable_active_categories.all(:category.like => "%#{xmlrpc_call[1][3]}%", :limit => xmlrpc_call[1][4]).map{|category| category.to_minimal_metaweblog})
+  end
+  
   #OK SERIOUSLY - This is not part of any api spec but seems to be part of wordpress
   #Some clients use this method to check the system is responding - not testing this method.
   def say_hello(xmlrpc_call)
@@ -152,6 +167,10 @@ module Metaweblog
       "metaWeblog.deletePost",
       "metaWeblog.getUsersBlogs",
       "blogger.getUserInfo",
+      "wp.uploadFile",
+      "wp.suggestCategories",
+      "wp.deleteCategory",
+      "wp.newCategory",
       "wp.getPageList",
       "wp.getPages",
       "wp.getPage",
@@ -209,9 +228,9 @@ module Metaweblog
     # wp.getPageStatusList
     # wp.getPostStatusList
     # wp.getCommentCount
-    # wp.uploadFile
-    # wp.suggestCategories
-    # wp.deleteCategory
+    # wp.uploadFile - IMPLEMENTED
+    # wp.suggestCategories - IMPLEMENTED
+    # wp.deleteCategory - IMPLEMENTED
     # wp.newCategory - IMPLEMENTED
     # wp.getTags - IMPLEMENTED
     # wp.getCategories - IMPLEMENTED
