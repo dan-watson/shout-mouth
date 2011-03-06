@@ -117,6 +117,11 @@ module Metaweblog
     XMLRPC::Marshal.dump_response(Category.usable_active_categories.all(:category.like => "%#{xmlrpc_call[1][3]}%", :limit => xmlrpc_call[1][4]).map{|category| category.to_minimal_metaweblog})
   end
   
+  def get_comment_count(xmlrpc_call)
+     post = Post.first(:id => xmlrpc_call[1][3].to_i)
+     XMLRPC::Marshal.dump_response(post.to_wordpress_comment_count)
+  end
+  
   #OK SERIOUSLY - This is not part of any api spec but seems to be part of wordpress
   #Some clients use this method to check the system is responding - not testing this method.
   def say_hello(xmlrpc_call)
@@ -167,6 +172,7 @@ module Metaweblog
       "metaWeblog.deletePost",
       "metaWeblog.getUsersBlogs",
       "blogger.getUserInfo",
+      "wp.getCommentCount",
       "wp.uploadFile",
       "wp.suggestCategories",
       "wp.deleteCategory",
@@ -227,7 +233,7 @@ module Metaweblog
     # wp.getPageTemplates
     # wp.getPageStatusList
     # wp.getPostStatusList
-    # wp.getCommentCount
+    # wp.getCommentCount - IMPLEMENTED
     # wp.uploadFile - IMPLEMENTED
     # wp.suggestCategories - IMPLEMENTED
     # wp.deleteCategory - IMPLEMENTED

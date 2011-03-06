@@ -897,6 +897,42 @@ describe "metaweblog api" do
        find_value(last_response.body, "category_name", ["member", "name", "value", "string"], 1).should == "category11"
 
      end
+     
+     it "should return the correct comment count for a post when the getCommentCount method is called" do
+       TestDataHelper.load_all_comments
+       post = TestDataHelper.valid_post
+       
+       post '/xmlrpc/',  "<methodCall>
+               <methodName>wp.getCommentCount</methodName>
+               <params>
+                <param>
+                 <value>
+                  <string>2000</string>
+                 </value>
+                </param>
+                <param>
+                 <value>
+                  <string>#{@user.email}</string>
+                 </value>
+                </param>
+                <param>
+                 <value>
+                  <string>password123</string>
+                 </value>
+                </param>
+                <param>
+                 <value>
+                  <string>#{post.id}</string>
+                 </value>
+                </param>
+                </params>
+              </methodCall>"
+
+       find_value(last_response.body, "approved", ["member", "name", "value", "i4"]).should == "1"
+       find_value(last_response.body, "awaiting_moderation", ["member", "name", "value", "i4"]).should == "0"
+       find_value(last_response.body, "spam", ["member", "name", "value", "i4"]).should == "1"
+       find_value(last_response.body, "total_comments", ["member", "name", "value", "i4"]).should == "2"
+     end
   
   private 
   def find_value(xml, find, hierarchy = [], nth = nil)

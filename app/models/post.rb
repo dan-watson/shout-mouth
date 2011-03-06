@@ -116,6 +116,15 @@ class Post
       :date_created_gmt => created_at
     }
   end
+  
+  def to_wordpress_comment_count
+    {
+      :approved => comments.all_active_and_ham.count,
+      :awaiting_moderation => 0, #comments are auto-moderated with askimet
+      :spam => comments.all_active_and_spam.count,
+      :total_comments => comments.all_active.count
+    }
+  end
 
   before :save do
     self.persisted_slug = self.slug

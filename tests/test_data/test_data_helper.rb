@@ -131,6 +131,12 @@ class TestDataHelper
     Comment.first_or_create({:comment_content => comment}, comment.attributes.merge({:post => TestDataHelper.valid_post}))
   end
   
+  def self.load_all_comments
+    valid_comment
+    spam_comment
+    inactive_comment
+  end
+  
   #Legacy Routes
   
   def self.legacy_route

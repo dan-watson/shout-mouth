@@ -65,4 +65,8 @@ class Comment
   def self.all_active_and_ham
     all_active.all(:is_spam => false)
   end
+  
+  def self.all_active_and_spam
+    all_active.all(:is_spam => true)
+  end
 end
