@@ -186,7 +186,7 @@ module Metaweblog
       "metaWeblog.deletePost",
       "metaWeblog.getUsersBlogs",
       "blogger.getUserInfo",
-      "wp.getPageStatusList"
+      "wp.getPageStatusList",
       "wp.getPostStatusList",
       "wp.getCommentCount",
       "wp.uploadFile",
