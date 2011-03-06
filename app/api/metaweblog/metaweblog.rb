@@ -146,6 +146,24 @@ module Metaweblog
     XMLRPC::Marshal.dump_response(Blog.to_wordpress_options)
   end
   
+  def set_options(xmlrpc_call)
+    #INPUT
+    # int blog_id
+    # string username
+    # string password
+    #   array
+    #     struct
+    #       string name
+    #       string value
+    #OUTPUT
+    # array
+    #   struct
+    #     string option
+    #     string value
+    # WILL IMPLEMENT IN NEXT VERSION - WILL USE A KEY/VALUE STORE FOR OPTIONS 
+    return raise_xmlrpc_error(4003, "Options cannot be set for Shout Mouth blogs via the client api. Please update your /config/config.yaml file.")
+  end
+  
   #OK SERIOUSLY - This is not part of any api spec but seems to be part of wordpress
   #Some clients use this method to check the system is responding - not testing this method.
   def say_hello(xmlrpc_call)
@@ -196,6 +214,7 @@ module Metaweblog
       "metaWeblog.deletePost",
       "metaWeblog.getUsersBlogs",
       "blogger.getUserInfo",
+      "wp.setOptions", #NOT IMPLEMENTED IN THIS VERSION - NEXT VERSION WILL SUPPORT DYNAMIC SITE CONFIGURATION
       "wp.getOptions",
       "wp.getPageTemplates",
       "wp.getPageStatusList",
@@ -256,7 +275,7 @@ module Metaweblog
     # wp.deleteComment
     # wp.getComments
     # wp.getComment
-    # wp.setOptions
+    # wp.setOptions - NOT GOING TO IMPLEMENT AT THIS TIME
     # wp.getOptions - IMPLEMENTED
     # wp.getPageTemplates - IMPLEMENTED
     # wp.getPageStatusList - IMPLEMENTED
