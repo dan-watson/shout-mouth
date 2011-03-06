@@ -122,6 +122,13 @@ module Metaweblog
      XMLRPC::Marshal.dump_response(post.to_wordpress_comment_count)
   end
   
+  def get_post_status_list(xmlrpc_call)
+    #OK - Wordpress returns a list of draft, pending, private, publish
+    #We will return just publish at the moment as there is currently no functionality for the other constants
+    # Method will not have a test as it really does not need it!
+    XMLRPC::Marshal.dump_response({:publish => "Publish"})
+  end
+  
   #OK SERIOUSLY - This is not part of any api spec but seems to be part of wordpress
   #Some clients use this method to check the system is responding - not testing this method.
   def say_hello(xmlrpc_call)
@@ -172,6 +179,7 @@ module Metaweblog
       "metaWeblog.deletePost",
       "metaWeblog.getUsersBlogs",
       "blogger.getUserInfo",
+      "wp.getPostStatusList",
       "wp.getCommentCount",
       "wp.uploadFile",
       "wp.suggestCategories",
@@ -232,7 +240,7 @@ module Metaweblog
     # wp.getOptions
     # wp.getPageTemplates
     # wp.getPageStatusList
-    # wp.getPostStatusList
+    # wp.getPostStatusList - IMPLEMENTED
     # wp.getCommentCount - IMPLEMENTED
     # wp.uploadFile - IMPLEMENTED
     # wp.suggestCategories - IMPLEMENTED
