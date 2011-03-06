@@ -42,12 +42,12 @@ class User
 
   def to_metaweblog
     {
+      :nickname => fullname,
       :userid => id,
+      :url => Blog.url,
       :firstname => firstname,
       :lastname => lastname,
-      :url => Blog.url,
-      :email => email,
-      :nickname => fullname
+      :email => email
     }
   end
 

@@ -15,6 +15,10 @@ class Category
       all_active.all(:category.not => "page", :category_posts => { :post => { :is_active => true }})
     end
     
+    def self.new_category_from_xmlrpc_payload(xmlrpc_call)
+      Category.first_or_create({:category => xmlrpc_call[1][3]['name']}, {:category => xmlrpc_call[1][3]['name']})
+    end
+    
     def permalink
       "#{Blog.url}/category/#{category}" 
     end

@@ -66,9 +66,11 @@ describe "metaweblog api" do
                            </params>
                            </methodCall>"
                        
+                           find_value(last_response.body, "isAdmin", ["member", "name", "value", "i4"]).should == 1.to_s
                            find_value(last_response.body, "url", ["member", "name", "value", "string"]).should == Blog.url
                            find_value(last_response.body, "blogid", ["member", "name", "value", "i4"]).should == "2000"
                            find_value(last_response.body, "blogName", ["member", "name", "value", "string"]).should == Blog.site_name
+                           find_value(last_response.body, "xmlrpc", ["member", "name", "value", "string"]).should == "#{Blog.url}/xmlrpc.php"
    end
    
    it "should return correct response when the getRecentPosts method is called" do
@@ -730,7 +732,68 @@ describe "metaweblog api" do
        find_value(last_response.body, "rss_url", ["member", "name", "value", "string"], 1).should == ""           
      end
      
-    
+  
+     it "should return create a new record when the newCategory method is called" do
+
+       post '/xmlrpc/',  "<methodCall>
+        <methodName>wp.newCategory</methodName>
+        <params>
+         <param>
+          <value>
+           <string>2000</string>
+          </value>
+         </param>
+         <param>
+          <value>
+           <string>#{@user.email}</string>
+          </value>
+         </param>
+         <param>
+          <value>
+           <string>password123</string>
+          </value>
+         </param>
+         <param>
+          <value>
+           <struct>
+            <member>
+             <name>name</name>
+             <value>
+              <string>Category - Metaweblog</string>
+             </value>
+            </member>
+            <member>
+             <name>slug</name>
+             <value>
+              <string>not relevent</string>
+             </value>
+            </member>
+            <member>
+             <name>parent_id</name>
+             <value>
+              <string>0</string>
+             </value>
+            </member>
+            <member>
+             <name>description</name>
+             <value>
+              <string>Category - Metaweblog</string>
+             </value>
+            </member>
+           </struct>
+          </value>
+         </param>
+        </params>
+       </methodCall>"
+
+       category = Category.first(:category => "Category - Metaweblog")
+       category.category.should ==  "Category - Metaweblog"
+       last_response.body.should include("<i4>#{category.id.to_s}</i4>")
+
+       category.destroy
+     end
+  
+  
   private 
   def find_value(xml, find, hierarchy = [], nth = nil)
     return Nokogiri::XML(xml).xpath("//#{hierarchy[0]}/#{hierarchy[1]}[text()='#{find}']")[nth.nil? ? 0 : nth].parent.xpath("#{hierarchy[2]}/#{hierarchy[3]}").text

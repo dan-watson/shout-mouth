@@ -98,6 +98,10 @@ module Metaweblog
     XMLRPC::Marshal.dump_response(Tag.usable_active_tags.map{|tag| tag.to_metaweblog})
   end
   
+  def new_category(xmlrpc_call)
+    category = Category.new_category_from_xmlrpc_payload(xmlrpc_call)
+    XMLRPC::Marshal.dump_response(category.id)
+  end
   #OK SERIOUSLY - This is not part of any api spec but seems to be part of wordpress
   #Some clients use this method to check the system is responding - not testing this method.
   def say_hello(xmlrpc_call)
@@ -189,7 +193,7 @@ module Metaweblog
     # blogger.getRecentPosts
     # blogger.getPost
     # blogger.getUserInfo - IMPLEMENTED
-    # blogger.getUsersBlogs
+    # blogger.getUsersBlogs - IMPLEMENTED
     # wp.getPostFormats
     # wp.getMediaLibrary
     # wp.getMediaItem
@@ -208,7 +212,7 @@ module Metaweblog
     # wp.uploadFile
     # wp.suggestCategories
     # wp.deleteCategory
-    # wp.newCategory
+    # wp.newCategory - IMPLEMENTED
     # wp.getTags - IMPLEMENTED
     # wp.getCategories - IMPLEMENTED
     # wp.getAuthors - IMPLEMENTED
@@ -227,13 +231,11 @@ module Metaweblog
   #username and password in different positions in the xml structure - values are not named and can only be obtained
   #by position - needed to pull in different stratergy's for different clients
 
-      
-  
-  
   def authentication_details_from(method, xmlrpc_call)
       Class.class_eval("#{client_from(xmlrpc_call)}Strategy").new.authentication_details_from(method, xmlrpc_call)
   end
   
+
   WORDPRESS = "Wordpress"
   BLOGGER = "Blogger"
   METAWEBLOG = "Metaweblog"
