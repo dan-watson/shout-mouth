@@ -42,7 +42,9 @@ module Metaweblog
   end
 
   def get_recent_posts(xmlrpc_call)
-    posts = Post.all_active_posts.all(:limit => xmlrpc_call[1][3])
+    limit = xmlrpc_call[1][3] 
+    #Some clients pass limit as 0 for all posts
+    limit == 0 ? posts = Post.all_active_posts : posts = Post.all_active_posts.all(:limit => limit)
     XMLRPC::Marshal.dump_response(posts.map{|p| p.to_metaweblog})
   end
 
