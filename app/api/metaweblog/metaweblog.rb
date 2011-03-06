@@ -142,6 +142,10 @@ module Metaweblog
     XMLRPC::Marshal.dump_response({:WebPreview => "webpreview.html"})
   end
   
+  def get_options(xmlrpc_call)
+    XMLRPC::Marshal.dump_response(Blog.to_wordpress_options)
+  end
+  
   #OK SERIOUSLY - This is not part of any api spec but seems to be part of wordpress
   #Some clients use this method to check the system is responding - not testing this method.
   def say_hello(xmlrpc_call)
@@ -192,6 +196,7 @@ module Metaweblog
       "metaWeblog.deletePost",
       "metaWeblog.getUsersBlogs",
       "blogger.getUserInfo",
+      "wp.getOptions",
       "wp.getPageTemplates",
       "wp.getPageStatusList",
       "wp.getPostStatusList",
@@ -252,7 +257,7 @@ module Metaweblog
     # wp.getComments
     # wp.getComment
     # wp.setOptions
-    # wp.getOptions
+    # wp.getOptions - IMPLEMENTED
     # wp.getPageTemplates - IMPLEMENTED
     # wp.getPageStatusList - IMPLEMENTED
     # wp.getPostStatusList - IMPLEMENTED

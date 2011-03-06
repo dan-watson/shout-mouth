@@ -5,8 +5,10 @@ require 'rspec'
 require 'rack/test'
 require 'nokogiri'
 
+ENV['RACK_ENV'] = 'test'
+
 class TestDataHelper
-  
+    
   def self.wipe_database
     Comment.destroy
     User.destroy

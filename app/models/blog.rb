@@ -55,6 +55,27 @@ class Blog
       :xmlrpc => "#{self.url}/xmlrpc.php"
     ]
   end
+  
+  def self.to_wordpress_options
+    {
+      :software_name => {:desc => "Software Name", :readonly => true, :value => "ShoutMouth"},
+      :software_version => {:desc => "Software Version", :readonly => true, :value => "MU"},
+      :blog_url => {:desc => "Site URL", :readonly => true, :value => self.url},
+      :time_zone => {:desc => "Time Zone", :readonly => true, :value => 0}, #wordpress readonly is false
+      :blog_title => {:desc => "Site Title", :readonly => true, :value => self.site_name}, #wordpress readonly is false
+      :blog_tagline => {:desc => "Site Tagline", :readonly => true, :value => self.site_description}, #wordpress readonly is false
+      :date_format => {:desc => "Date Format", :readonly => true, :value => "F j, Y"}, #wordpress readonly is false - wtf? F j y????
+      :time_format => {:desc => "Time Format", :readonly => true, :value => "g:i a"}, #wordpress readonly is false - wtf? g:i a????
+      :users_can_register => {:desc => "Allow new users to sign up", :readonly => true, :value => false}, #wordpress readonly is false
+      :thumbnail_size_w => {:desc => "Thumbnail Width", :readonly => true, :value => 150}, #wordpress readonly is false
+      :thumbnail_size_h => {:desc => "Thumbnail Height", :readonly => true, :value => 150}, #wordpress readonly is false
+      :thumbnail_crop => {:desc => "Crop thumbnail to exact dimensions", :readonly => true, :value => 0}, #wordpress readonly is false
+      :medium_size_w => {:desc => "Medium size image width", :readonly => true, :value => 300}, #wordpress readonly is false
+      :medium_size_h => {:desc => "Medium size image height", :readonly => true, :value => 300}, #wordpress readonly is false
+      :large_size_w => {:desc => "Large size image width", :readonly => true, :value => 1024}, #wordpress readonly is false
+      :large_size_h => {:desc => "Large size image height", :readonly => true, :value => 1024} #wordpress readonly is false
+    }
+  end
 
   def self.check_spam
     configuration['check_spam']

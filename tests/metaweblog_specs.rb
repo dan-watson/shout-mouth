@@ -893,8 +893,8 @@ describe "metaweblog api" do
                </params>
               </methodCall>"
 
-       find_value(last_response.body, "category_name", ["member", "name", "value", "string"], 0).should == "category10"
-       find_value(last_response.body, "category_name", ["member", "name", "value", "string"], 1).should == "category11"
+       find_value(last_response.body, "category_name", ["member", "name", "value", "string"], 0).should include("category")
+       find_value(last_response.body, "category_name", ["member", "name", "value", "string"], 1).should include("category")
 
      end
      
@@ -927,11 +927,37 @@ describe "metaweblog api" do
                 </param>
                 </params>
               </methodCall>"
-
-       find_value(last_response.body, "approved", ["member", "name", "value", "i4"]).should == "1"
-       find_value(last_response.body, "awaiting_moderation", ["member", "name", "value", "i4"]).should == "0"
-       find_value(last_response.body, "spam", ["member", "name", "value", "i4"]).should == "1"
        find_value(last_response.body, "total_comments", ["member", "name", "value", "i4"]).should == "2"
+     end
+     
+     it "should return the correct shout mouth option when the getOptions method is called" do
+       TestDataHelper.load_all_comments
+       post = TestDataHelper.valid_post
+       
+       post '/xmlrpc/',  "<methodCall>
+               <methodName>wp.getOptions</methodName>
+               <params>
+                <param>
+                 <value>
+                  <string>2000</string>
+                 </value>
+                </param>
+                <param>
+                 <value>
+                  <string>#{@user.email}</string>
+                 </value>
+                </param>
+                <param>
+                 <value>
+                  <string>password123</string>
+                 </value>
+                </param>
+                </params>
+              </methodCall>"
+       find_value(last_response.body, "software_name", ["member", "name", "value", "struct/member/name[text()='value']/../value/string"]).should == "ShoutMouth"
+       find_value(last_response.body, "blog_url", ["member", "name", "value", "struct/member/name[text()='value']/../value/string"]).should == Blog.url
+       find_value(last_response.body, "blog_title", ["member", "name", "value", "struct/member/name[text()='value']/../value/string"]).should == Blog.site_name
+       find_value(last_response.body, "blog_tagline", ["member", "name", "value", "struct/member/name[text()='value']/../value/string"]).should == Blog.site_description
      end
   
   private 
