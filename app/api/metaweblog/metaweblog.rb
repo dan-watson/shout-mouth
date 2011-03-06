@@ -126,7 +126,14 @@ module Metaweblog
     #OK - Wordpress returns a list of draft, pending, private, publish
     #We will return just publish at the moment as there is currently no functionality for the other constants
     # Method will not have a test as it really does not need it!
-    XMLRPC::Marshal.dump_response({:publish => "Publish"})
+    XMLRPC::Marshal.dump_response({:publish => "Published"})
+  end
+  
+  def get_page_status_list(xmlrpc_call)
+    #OK - Wordpress returns a list of draft, private, publish
+    #We will return just publish at the moment as there is currently no functionality for the other constants
+    # Method will not have a test as it really does not need it!
+    XMLRPC::Marshal.dump_response({:publish => "Published"})
   end
   
   #OK SERIOUSLY - This is not part of any api spec but seems to be part of wordpress
@@ -179,6 +186,7 @@ module Metaweblog
       "metaWeblog.deletePost",
       "metaWeblog.getUsersBlogs",
       "blogger.getUserInfo",
+      "wp.getPageStatusList"
       "wp.getPostStatusList",
       "wp.getCommentCount",
       "wp.uploadFile",
@@ -239,7 +247,7 @@ module Metaweblog
     # wp.setOptions
     # wp.getOptions
     # wp.getPageTemplates
-    # wp.getPageStatusList
+    # wp.getPageStatusList - IMPLEMENTED
     # wp.getPostStatusList - IMPLEMENTED
     # wp.getCommentCount - IMPLEMENTED
     # wp.uploadFile - IMPLEMENTED
