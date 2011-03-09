@@ -13,6 +13,7 @@ require Dir.pwd + '/app/models/tag'
 require Dir.pwd + '/app/models/category'
 require Dir.pwd + '/app/api/metaweblog/metaweblog'
 require Dir.pwd + '/app/lib/fixnum'
+require Dir.pwd + '/app/lib/string'
 require Dir.pwd + '/app/api/plugin/plugin_factory'
 
 class ShoutMouth < Sinatra::Base
@@ -138,9 +139,9 @@ class ShoutMouth < Sinatra::Base
   post %r{/xmlrpc([*.[a-z]/]+)} do
     #generate the xml
     xml =  load_xml_from_request(@request.body.read, @request.params)
-    #puts "xmlpassed: #{xml}"
+    puts "xmlpassed: #{xml}"
     #create xmlrpc request call
-    call = XMLRPC::Marshal.load_call(xml)
+    call = XMLRPC::Marshal.load_call(xml.to_valid_xmlrpc_request)
     # convert *.getPost to get_post
     method = call[0].gsub(/(.*)\.(.*)/, '\2').gsub(/([A-Z])/, '_\1').downcase
 
@@ -166,7 +167,7 @@ class ShoutMouth < Sinatra::Base
     end
     return request_body
   end
-
+  
   def authenticated?(authentication_details)
     user = User.find_user(authentication_details[:username])
     if user
