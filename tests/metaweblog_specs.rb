@@ -959,6 +959,52 @@ describe "metaweblog api" do
        find_value(last_response.body, "blog_title", ["member", "name", "value", "struct/member/name[text()='value']/../value/string"]).should == Blog.site_name
        find_value(last_response.body, "blog_tagline", ["member", "name", "value", "struct/member/name[text()='value']/../value/string"]).should == Blog.site_description
      end
+     
+     it "should return the correct comment when the getComment method is called" do
+       comment = TestDataHelper.valid_comment
+       
+       
+       post '/xmlrpc/',  "<methodCall>
+               <methodName>wp.getComment</methodName>
+               <params>
+                <param>
+                 <value>
+                  <string>2000</string>
+                 </value>
+                </param>
+                <param>
+                 <value>
+                  <string>#{@user.email}</string>
+                 </value>
+                </param>
+                <param>
+                 <value>
+                  <string>password123</string>
+                 </value>
+                </param>
+                <param>
+                 <value>
+                  <i4>#{comment.id}</i4>
+                 </value>
+                </param>
+                </params>
+              </methodCall>"
+                     
+       find_value(last_response.body, "date_created_gmt", ["member", "name", "value", "dateTime.iso8601"]).should == comment.created_at_iso8601
+       find_value(last_response.body, "user_id", ["member", "name", "value", "string"]).should == comment.comment_author_email
+       find_value(last_response.body, "comment_id", ["member", "name", "value", "i4"]).should == comment.id.to_s
+       find_value(last_response.body, "parent", ["member", "name", "value", "i4"]).should == "0"
+       find_value(last_response.body, "parent", ["member", "name", "value", "i4"]).should == "0"
+       find_value(last_response.body, "status", ["member", "name", "value", "string"]).should == "spam"
+       find_value(last_response.body, "link", ["member", "name", "value", "string"]).should == comment.post.permalink
+       find_value(last_response.body, "post_id", ["member", "name", "value", "i4"]).should == comment.post.id.to_s
+       find_value(last_response.body, "post_title", ["member", "name", "value", "string"]).should == comment.post.title
+       find_value(last_response.body, "author", ["member", "name", "value", "string"]).should == comment.comment_author
+       find_value(last_response.body, "author_url", ["member", "name", "value", "string"]).should == comment.comment_author_url
+       find_value(last_response.body, "author_email", ["member", "name", "value", "string"]).should == comment.comment_author_email
+       find_value(last_response.body, "author_ip", ["member", "name", "value", "string"]).should == comment.user_ip
+      
+     end
   
   private 
   def find_value(xml, find, hierarchy = [], nth = nil)

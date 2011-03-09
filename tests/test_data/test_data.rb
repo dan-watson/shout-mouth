@@ -57,6 +57,7 @@ Factory.define :valid_comment, :class => Comment do |f|
   f.comment_content 'This is something that needs more discussion!'
   f.is_spam false
   f.is_active true
+  f.user_ip "192.168.1.68"
 end
 
 Factory.define :invalid_comment_invalid_email, :class => Comment do |f|
@@ -64,6 +65,7 @@ Factory.define :invalid_comment_invalid_email, :class => Comment do |f|
   f.comment_author_email 'ha**cd/??//m'
   f.comment_author_url 'http://myblog.com'
   f.comment_content 'This is something that needs more discussion! Bad Email'
+  f.user_ip "192.168.1.68"
 end
 
 Factory.define :inactive_comment, :class => Comment do |f|
@@ -73,6 +75,7 @@ Factory.define :inactive_comment, :class => Comment do |f|
   f.comment_content 'This is something that needs more discussion! Inactive'
   f.is_active false
   f.is_spam true
+  f.user_ip "192.168.1.68"
 end
 
 Factory.define :spam_comment, :class => Comment do |f|
@@ -82,6 +85,7 @@ Factory.define :spam_comment, :class => Comment do |f|
   f.comment_content 'This is something that needs more discussion! Spammer'
   f.is_spam true
   f.is_active true
+  f.user_ip "192.168.1.68"
 end
 
 

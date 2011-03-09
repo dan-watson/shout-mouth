@@ -166,6 +166,11 @@ module Metaweblog
     return raise_xmlrpc_error(4003, "Options cannot be set for Shout Mouth blogs via the client api. Please update your /config/config.yaml file.")
   end
   
+  def get_comment(xmlrpc_call)
+    comment = Comment.first(:id => xmlrpc_call[1][3])
+    XMLRPC::Marshal.dump_response(comment.to_wordpress_comment)
+  end
+  
   #OK SERIOUSLY - This is not part of any api spec but seems to be part of wordpress
   #Some clients use this method to check the system is responding - not testing this method.
   def say_hello(xmlrpc_call)

@@ -46,6 +46,24 @@ class Comment
       :avatar => avatar
     }
   end
+  
+  def to_wordpress_comment
+    {
+      :date_created_gmt => created_at,
+      :user_id => comment_author_email,
+      :comment_id => id,
+      :parent => 0,
+      :status => is_spam? ? "spam" : "approve",
+      :content => comment_content,
+      :link => post.permalink,
+      :post_id => post.id,
+      :post_title => post.title,
+      :author => comment_author,
+      :author_url => comment_author_url,
+      :author_email => comment_author_email,
+      :author_ip => user_ip
+    }
+  end
 
   def avatar
     "http://www.gravatar.com/avatar/#{Digest::MD5.hexdigest(comment_author_email.downcase)}"
