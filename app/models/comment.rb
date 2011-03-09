@@ -91,6 +91,24 @@ class Comment
     comments
   end
   
+  def self.edit_comment_from_xmlrpc_payload xmlrpc_call
+    comment = Comment.get(xmlrpc_call[1][3])
+    data = xmlrpc_call[1][4]
+    
+    comment.comment_content = data["content"]
+    comment.comment_author = data["author"]
+    comment.comment_author_url = data["author_url"]
+    comment.comment_author_email = data["author_email"]
+    
+    case 
+      when data["status"] == "approve"
+        comment.is_active = true
+      else
+        comment.is_active = false
+    end
+    comment
+  end
+  
   def self.mark_comment_as_inactive comment_id
     comment = Comment.get(comment_id)
     comment.is_active = false

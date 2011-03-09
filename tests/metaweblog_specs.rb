@@ -1129,6 +1129,87 @@ describe "metaweblog api" do
        comment.is_active.should be_false  
        last_response.body.should include("<boolean>1</boolean>")
      end
+     
+     it "should edit a comment the editComment method is called" do
+       comment = TestDataHelper.valid_comment
+ 
+       post '/xmlrpc/',  "<methodCall>
+       	<methodName>wp.editComment</methodName>
+       	<params>
+       		<param>
+       			<value>
+       				<string>2000</string>
+       			</value>
+       		</param>
+       		<param>
+       			<value>
+       				<string>#{@user.email}</string>
+       			</value>
+       		</param>
+       		<param>
+       			<value>
+       				<string>password123</string>
+       			</value>
+       		</param>
+       		<param>
+       			<value>
+       				<string>#{comment.id}</string>
+       			</value>
+       		</param>
+          <param>
+    			<value>
+     				<struct>
+     					<member>
+     						<name>status</name>
+     						<value>
+     							<string>approve</string>
+     						</value>
+             </member>
+             	<member>
+     						<name>date_created_gmt</name>
+     						<value>
+     							 <dateTime.iso8601>20110221T21:41:00</dateTime.iso8601>
+     						</value>
+             </member>
+             	<member>
+     						<name>content</name>
+     						<value>
+     							  <string>This should get everyone talking again!</string>
+     						</value>
+             </member>
+             	<member>
+     						<name>author</name>
+     						<value>
+     							  <string>Dan Watson</string>
+     						</value>
+             </member>
+             	<member>
+     						<name>author_url</name>
+     						<value>
+     							  <string>http://www.google.com</string>
+     						</value>
+             </member>
+             	<member>
+     						<name>author_email</name>
+     						<value>
+     							  <string>dan1@shout_mouth.com</string>
+     						</value>
+             </member>
+     				</struct>
+     			</value>
+     		</param>
+       	</params>
+       </methodCall>
+       "
+
+       comment.reload
+       comment.is_active.should be_true
+       comment.comment_content.should == "This should get everyone talking again!"
+       comment.comment_author.should == "Dan Watson"
+       comment.comment_author_email.should == "dan1@shout_mouth.com"
+       
+       last_response.body.should include("<boolean>1</boolean>")
+     end
   
   private 
   def find_value(xml, find, hierarchy = [], nth = nil)
