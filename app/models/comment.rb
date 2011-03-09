@@ -68,6 +68,21 @@ class Comment
   def avatar
     "http://www.gravatar.com/avatar/#{Digest::MD5.hexdigest(comment_author_email.downcase)}"
   end
+  
+  
+  def self.load_comments_from_xmlrpc_payload xmlrpc_call
+    data = xmlrpc_call[1][3]
+    
+    post_id = data["post_id"]
+    status = data["status"] == "spam"
+    limit = data["number"]
+    
+    comments = Comment.all(:is_spam => status)
+    comments = comments.all(:post => {:id => post_id}) unless post_id.nil?
+    comments = comments.all(:limit => limit) unless limit.nil?
+    
+    comments
+  end
 
   before :save do
     #Only check for spam if the configuration variable is set...

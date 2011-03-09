@@ -960,6 +960,64 @@ describe "metaweblog api" do
        find_value(last_response.body, "blog_tagline", ["member", "name", "value", "struct/member/name[text()='value']/../value/string"]).should == Blog.site_description
      end
      
+     it "should return the correct comments when the getComments method is called" do
+       TestDataHelper.load_all_comments
+       post_id = TestDataHelper.valid_post.id
+       
+       
+       post '/xmlrpc/',  "<methodCall>
+                         	<methodName>wp.getComments</methodName>
+                         	<params>
+                         		<param>
+                         			<value>
+                         				<string>2000</string>
+                         			</value>
+                         		</param>
+                         		<param>
+                         			<value>
+                                <string>#{@user.email}</string>
+                         			</value>
+                         		</param>
+                         		<param>
+                         			<value>
+                         				<string>password123</string>
+                         			</value>
+                         		</param>
+                         		<param>
+                         			<value>
+                         				<struct>
+                         					<member>
+                         						<name>number</name>
+                         						<value>
+                         							<i4>3</i4>
+                         						</value>
+                                 </member>
+                         					<member>
+                         						<name>status</name>
+                         						<value>
+                         							<string>spam</string>
+                         						</value>
+                         					</member>
+                         					<member>
+                         						<name>post_id</name>
+                         						<value>
+                         							<i4>#{post_id}</i4>
+                         						</value>
+                         					</member>
+                         				</struct>
+                         			</value>
+                         		</param>
+                         	</params>
+                         </methodCall>"
+       #Dont need to rest all the correct values are spat out. - This is done in the previous test
+       #Just checking for 3 comments all with post id of post_id
+       
+       find_value(last_response.body, "post_id", ["member", "name", "value", "i4"], 0).should == post_id.to_s
+       find_value(last_response.body, "post_id", ["member", "name", "value", "i4"], 1).should == post_id.to_s
+       find_value(last_response.body, "post_id", ["member", "name", "value", "i4"], 2).should == post_id.to_s
+       lambda{ find_value(last_response.body, "post_id", ["member", "name", "value", "i4"], 3)}.should raise_error
+     end
+     
      it "should return the correct comment when the getComment method is called" do
        comment = TestDataHelper.valid_comment
        
@@ -995,7 +1053,6 @@ describe "metaweblog api" do
        find_value(last_response.body, "comment_id", ["member", "name", "value", "i4"]).should == comment.id.to_s
        find_value(last_response.body, "parent", ["member", "name", "value", "i4"]).should == "0"
        find_value(last_response.body, "parent", ["member", "name", "value", "i4"]).should == "0"
-       find_value(last_response.body, "status", ["member", "name", "value", "string"]).should == "spam"
        find_value(last_response.body, "link", ["member", "name", "value", "string"]).should == comment.post.permalink
        find_value(last_response.body, "post_id", ["member", "name", "value", "i4"]).should == comment.post.id.to_s
        find_value(last_response.body, "post_title", ["member", "name", "value", "string"]).should == comment.post.title
