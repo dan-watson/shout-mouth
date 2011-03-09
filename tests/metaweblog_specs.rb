@@ -1094,6 +1094,41 @@ describe "metaweblog api" do
        find_value(last_response.body, "spam", ["member", "name", "value", "string"]).should == "Spam"
       
      end
+     
+     it "should mark a comment as inactive when the deleteComment method is called" do
+       comment = TestDataHelper.valid_comment
+       
+       
+       post '/xmlrpc/',  "<methodCall>
+       	<methodName>wp.deleteComment</methodName>
+       	<params>
+       		<param>
+       			<value>
+       				<string>2000</string>
+       			</value>
+       		</param>
+       		<param>
+       			<value>
+       				<string>#{@user.email}</string>
+       			</value>
+       		</param>
+       		<param>
+       			<value>
+       				<string>password123</string>
+       			</value>
+       		</param>
+       		<param>
+       			<value>
+       				<string>#{comment.id}</string>
+       			</value>
+       		</param>
+       	</params>
+       </methodCall>
+       "
+       comment.reload
+       comment.is_active.should be_false  
+       last_response.body.should include("<boolean>1</boolean>")
+     end
   
   private 
   def find_value(xml, find, hierarchy = [], nth = nil)

@@ -180,6 +180,11 @@ module Metaweblog
     XMLRPC::Marshal.dump_response(Comment.comment_status_list_to_wordpress)
   end
   
+  def delete_comment(xmlrpc_call)
+    Comment.mark_comment_as_inactive(xmlrpc_call[1][3])
+    XMLRPC::Marshal.dump_response(true)
+  end
+  
   #OK SERIOUSLY - This is not part of any api spec but seems to be part of wordpress
   #Some clients use this method to check the system is responding - not testing this method.
   def say_hello(xmlrpc_call)
@@ -230,6 +235,7 @@ module Metaweblog
       "metaWeblog.deletePost",
       "metaWeblog.getUsersBlogs",
       "blogger.getUserInfo",
+      "wp.deleteComment",
       "wp.getCommentStatusList",
       "wp.getComments",
       "wp.getComment",

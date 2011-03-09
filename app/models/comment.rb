@@ -90,7 +90,13 @@ class Comment
     
     comments
   end
-
+  
+  def self.mark_comment_as_inactive comment_id
+    comment = Comment.get(comment_id)
+    comment.is_active = false
+    comment.save  
+  end
+  
   before :save do
     #Only check for spam if the configuration variable is set...
     #good for testing
