@@ -53,7 +53,7 @@ class Comment
       :user_id => comment_author_email,
       :comment_id => id,
       :parent => 0,
-      :status => is_spam? ? "spam" : "approve",
+      :status => is_spam? ? "spam" : is_active ? "approve" : "hold",
       :content => comment_content,
       :link => post.permalink,
       :post_id => post.id,
@@ -69,6 +69,13 @@ class Comment
     "http://www.gravatar.com/avatar/#{Digest::MD5.hexdigest(comment_author_email.downcase)}"
   end
   
+  def self.comment_status_list_to_wordpress
+    {
+      :hold => "Unapproved",
+      :approve => "Approved",
+      :spam => "Spam"
+    }
+  end
   
   def self.load_comments_from_xmlrpc_payload xmlrpc_call
     data = xmlrpc_call[1][3]

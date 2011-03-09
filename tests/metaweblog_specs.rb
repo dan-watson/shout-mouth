@@ -1062,6 +1062,38 @@ describe "metaweblog api" do
        find_value(last_response.body, "author_ip", ["member", "name", "value", "string"]).should == comment.user_ip
       
      end
+     
+     it "should return the correct comment status list when the getCommentStatusList method is called" do
+       comment = TestDataHelper.valid_comment
+       
+       
+       post '/xmlrpc/',  "<methodCall>
+       	<methodName>wp.getCommentStatusList</methodName>
+       	<params>
+       		<param>
+       			<value>
+       				<string>2000</string>
+       			</value>
+       		</param>
+       		<param>
+       			<value>
+       				<string>#{@user.email}</string>
+       			</value>
+       		</param>
+       		<param>
+       			<value>
+       				<string>password123</string>
+       			</value>
+       		</param>
+       	</params>
+       </methodCall>
+       "
+                     
+       find_value(last_response.body, "approve", ["member", "name", "value", "string"]).should == "Approved"
+       find_value(last_response.body, "hold", ["member", "name", "value", "string"]).should == "Unapproved"
+       find_value(last_response.body, "spam", ["member", "name", "value", "string"]).should == "Spam"
+      
+     end
   
   private 
   def find_value(xml, find, hierarchy = [], nth = nil)

@@ -176,6 +176,10 @@ module Metaweblog
     XMLRPC::Marshal.dump_response(comments.map{|comment| comment.to_wordpress_comment})
   end
   
+  def get_comment_status_list(xmlrpc_call)
+    XMLRPC::Marshal.dump_response(Comment.comment_status_list_to_wordpress)
+  end
+  
   #OK SERIOUSLY - This is not part of any api spec but seems to be part of wordpress
   #Some clients use this method to check the system is responding - not testing this method.
   def say_hello(xmlrpc_call)
@@ -226,6 +230,8 @@ module Metaweblog
       "metaWeblog.deletePost",
       "metaWeblog.getUsersBlogs",
       "blogger.getUserInfo",
+      "wp.getCommentStatusList",
+      "wp.getComments",
       "wp.getComment",
       "wp.setOptions", #NOT IMPLEMENTED IN THIS VERSION - NEXT VERSION WILL SUPPORT DYNAMIC SITE CONFIGURATION
       "wp.getOptions",
@@ -282,11 +288,11 @@ module Metaweblog
     # wp.getPostFormats
     # wp.getMediaLibrary
     # wp.getMediaItem
-    # wp.getCommentStatusList
+    # wp.getCommentStatusList - IMPLEMENTED
     # wp.newComment
     # wp.editComment
     # wp.deleteComment
-    # wp.getComments
+    # wp.getComments - IMPLEMENTED
     # wp.getComment - IMPLEMENTED
     # wp.setOptions - NOT GOING TO IMPLEMENT AT THIS TIME
     # wp.getOptions - IMPLEMENTED
