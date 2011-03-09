@@ -964,7 +964,6 @@ describe "metaweblog api" do
        TestDataHelper.load_all_comments
        post_id = TestDataHelper.valid_post.id
        
-       
        post '/xmlrpc/',  "<methodCall>
                          	<methodName>wp.getComments</methodName>
                          	<params>
@@ -993,12 +992,6 @@ describe "metaweblog api" do
                          						</value>
                                  </member>
                          					<member>
-                         						<name>status</name>
-                         						<value>
-                         							<string>spam</string>
-                         						</value>
-                         					</member>
-                         					<member>
                          						<name>post_id</name>
                          						<value>
                          							<i4>#{post_id}</i4>
@@ -1010,8 +1003,6 @@ describe "metaweblog api" do
                          	</params>
                          </methodCall>"
        #Dont need to rest all the correct values are spat out. - This is done in the previous test
-       #Just checking for 3 comments all with post id of post_id
-       
        find_value(last_response.body, "post_id", ["member", "name", "value", "i4"], 0).should == post_id.to_s
        find_value(last_response.body, "post_id", ["member", "name", "value", "i4"], 1).should == post_id.to_s
        find_value(last_response.body, "post_id", ["member", "name", "value", "i4"], 2).should == post_id.to_s

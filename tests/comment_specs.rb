@@ -31,44 +31,6 @@ describe Comment, "defaults" do
   end
 end
 
-describe Comment, "spam checker" do
-
-  before(:all) do
-    #yay for rubys open classes....
-    class Blog
-      def self.check_spam
-        true
-      end
-    end
-  end
-
-  after(:all) do
-    #one more time 
-    class Blog
-      def self.check_spam
-        configuration['check_spam']
-      end
-    end
-  end
-
-  it "should return spam if the author name is viagra-test-123" do
-    #arrange
-    Akismetor.should_receive(:spam?).and_return(true)
-    #Assert
-    TestDataHelper.spam_comment.is_spam?.should be_true
-  end
-
-  it "should return ham if the comment is valid" do
-    #arrange
-    #Need to make sure save will be called
-    TestDataHelper.wipe_database
-    Akismetor.should_receive(:spam?).and_return(false)
-    
-    #Assert
-    TestDataHelper.valid_comment.is_spam?.should be_false
-
-  end
-end
 
 describe Comment, "querying" do
   before(:all) do

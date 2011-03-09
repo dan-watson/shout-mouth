@@ -151,7 +151,7 @@ class ShoutMouth < Sinatra::Base
     # get the autentication details see - metaweblog module method
     authentication_details = authentication_details_from(method, call)
 
-    #if authentication fails inform the client
+    #if authentication fails inform the client - authenticated? - metaweblog.rb
     halt 200, {'Content-Type' => 'text/xml'}, raise_xmlrpc_error(403, "Bad login/pass combination.") unless authenticated?(authentication_details) || does_not_need_authentication?(method)
 
     #if everything with the request is fine send the payload onto the method in the metaweblog module
@@ -168,15 +168,6 @@ class ShoutMouth < Sinatra::Base
     return request_body
   end
   
-  def authenticated?(authentication_details)
-    user = User.find_user(authentication_details[:username])
-    if user
-      user.authenticate(authentication_details[:password])
-    else
-      false
-    end
-  end
-
   helpers do
     def partial (template, locals = {})
       haml(template, :layout => false, :locals => locals)

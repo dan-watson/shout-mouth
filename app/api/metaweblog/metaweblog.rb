@@ -202,6 +202,24 @@ module Metaweblog
     total = xmlrpc_call[1][0].to_i + xmlrpc_call[1][1].to_i
     XMLRPC::Marshal.dump_response(total)
   end
+  
+  def multicall(xmlrpc_call)
+    call_list = xmlrpc_call[1]
+    response = ""
+    call_list.each{|method_call|
+                
+                method_name = method_call[0]["methodName"]
+                params = method_call[0]["params"]
+                method = method_name.gsub(/(.*)\.(.*)/, '\2').gsub(/([A-Z])/, '_\1').downcase
+                
+                call = [method_name, params]
+                
+                authentication_details = authentication_details_from(method, call)
+                response += send(method, call) if authenticated?(authentication_details)
+              }
+              response
+              
+  end
 
   def raise_xmlrpc_error(code, message)
     "<methodResponse>
@@ -223,7 +241,7 @@ module Metaweblog
   end
   
   def does_not_need_authentication?(method)
-    ["list_methods", "say_hello", "add_two_numbers"].include?(method)
+    ["list_methods", "multicall", "say_hello", "add_two_numbers"].include?(method)
   end
 
   def list_methods(xmlrpc_call)
@@ -231,6 +249,7 @@ module Metaweblog
       "demo.sayHello",
       "demo.addTwoNumbers",
       "system.listMethods",
+      "system.multicall",
       "metaWeblog.newMediaObject",
       "metaWeblog.newPost",
       "metaWeblog.editPost",
@@ -338,12 +357,21 @@ module Metaweblog
       Class.class_eval("#{client_from(xmlrpc_call)}Strategy").new.authentication_details_from(method, xmlrpc_call)
   end
   
+  def authenticated?(authentication_details)
+    user = User.find_user(authentication_details[:username])
+    if user
+      user.authenticate(authentication_details[:password])
+    else
+      false
+    end
+  end
 
   WORDPRESS = "Wordpress"
   BLOGGER = "Blogger"
   METAWEBLOG = "Metaweblog"
   
   def client_from(xmlrpc_call)
+    puts xmlrpc_call.to_s
      case xmlrpc_call[0].split(".")[0]
      when "wp"
        WORDPRESS

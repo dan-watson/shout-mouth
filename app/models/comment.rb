@@ -34,7 +34,7 @@ class Comment
       :comment_author_url => comment_author_url,
       :comment_content => comment_content
     }
-    Akismetor.spam?(comment_attributes)
+    is_spam.nil? ? Akismetor.spam?(comment_attributes) : is_spam #means it been set by the user or already set from askimet
   end
 
   def to_simple_comment
@@ -81,10 +81,13 @@ class Comment
     data = xmlrpc_call[1][3]
     
     post_id = data["post_id"]
-    status = data["status"] == "spam"
     limit = data["number"]
     
-    comments = Comment.all(:is_spam => status)
+    comments = Comment.all
+    comments = comments.all(:is_spam => false)
+    comments = comments.all(:is_active => true) if data["status"] == "active"
+    comments = comments.all(:is_spam => true) if data["status"] == "spam"
+    comments = comments.all(:is_active => false, :is_spam => false) if data["status"] == "hold" 
     comments = comments.all(:post => {:id => post_id}) unless post_id.nil?
     comments = comments.all(:limit => limit) unless limit.nil?
     
@@ -103,6 +106,10 @@ class Comment
     case 
       when data["status"] == "approve"
         comment.is_active = true
+        comment.is_spam = false
+      when data["status"] == "spam"
+        comment.is_spam = true
+        comment.is_active = false
       else
         comment.is_active = false
     end
@@ -116,9 +123,7 @@ class Comment
   end
   
   before :save do
-    #Only check for spam if the configuration variable is set...
-    #good for testing
-    Blog.check_spam ? self.is_spam = spam? : self.is_spam = false
+    self.is_spam = spam?
   end
 
   def readable_date
