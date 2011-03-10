@@ -14,138 +14,137 @@ module Metaweblog
 
     AmazonS3.save_file(name, data["bits"])
 
-    XMLRPC::Marshal.dump_response({
+    { 
       :file => name,
       :url => "#{Blog.amazon_s3_file_location}#{Blog.amazon_s3_bucket}/#{name}"
-    })
+    }
   end
 
   def new_post(xmlrpc_call)
     post = Post.new_post_from_xmlrpc_payload(xmlrpc_call)
     return raise_xmlrpc_error(4003, post.errors.full_messages.to_s) unless post.save
-    XMLRPC::Marshal.dump_response(post.id)
+    post.id
   end
 
   def edit_post(xmlrpc_call)
     post = Post.edit_post_from_xmlrpc_payload(xmlrpc_call)
     return raise_xmlrpc_error(4003, post.errors.full_messages.to_s) unless post.save
-    XMLRPC::Marshal.dump_response(post.reload.to_metaweblog)
+    post.reload.to_metaweblog
   end
 
   def get_post(xmlrpc_call)
     post = Post.first(:id => xmlrpc_call[1][0])
-    XMLRPC::Marshal.dump_response(post.to_metaweblog)
+    post.to_metaweblog
   end
 
   def get_categories(xmlrpc_call)
-    XMLRPC::Marshal.dump_response(Category.usable_active_categories.map{|category| category.to_metaweblog})
+    Category.usable_active_categories.map{|category| category.to_metaweblog}
   end
 
   def get_recent_posts(xmlrpc_call)
     limit = xmlrpc_call[1][3] 
     #Some clients pass limit as 0 for all posts
     limit == 0 ? posts = Post.all_active_posts : posts = Post.all_active_posts.all(:limit => limit)
-    XMLRPC::Marshal.dump_response(posts.map{|p| p.to_metaweblog})
+    posts.map{|p| p.to_metaweblog}
   end
 
   def delete_post(xmlrpc_call)
     Post.mark_as_inactive(xmlrpc_call[1][1])
-    XMLRPC::Marshal.dump_response(true)
+    true
   end
 
   def get_users_blogs(xmlrpc_call)
-    XMLRPC::Marshal.dump_response(Blog.to_metaweblog)
+    Blog.to_metaweblog
   end
 
   def get_user_info(xmlrpc_call)
     user = User.find_user(xmlrpc_call[1][1])
-    XMLRPC::Marshal.dump_response(user.to_metaweblog)
+    user.to_metaweblog
   end
 
   #Wordpress API
 
   def get_page_list(xmlrpc_call)
     pages = Post.all_active_pages.all
-    XMLRPC::Marshal.dump_response(pages.map{|p| p.to_minimal_wordpress_page})
+    pages.map{|p| p.to_minimal_wordpress_page}
   end
 
   def get_pages(xmlrpc_call)
     pages = Post.all_active_pages.all(:limit => xmlrpc_call[1][3])
-    XMLRPC::Marshal.dump_response(pages.map{|p| p.to_wordpress_page})
+    pages.map{|p| p.to_wordpress_page}
   end
 
   def get_page(xmlrpc_call)
     page = Post.first(:id => xmlrpc_call[1][1])
-    XMLRPC::Marshal.dump_response(page.to_wordpress_page)
+    page.to_wordpress_page
   end
 
   def edit_page(xmlrpc_call)
     page = Post.edit_page_from_xmlrpc_payload(xmlrpc_call)
     return raise_xmlrpc_error(4003, page.errors.full_messages.to_s) unless page.save
-    XMLRPC::Marshal.dump_response(true)
+    true
   end
 
   def delete_page(xmlrpc_call)
     Post.mark_as_inactive(xmlrpc_call[1][3])
-    XMLRPC::Marshal.dump_response(true)
+    true
   end
 
   def new_page(xmlrpc_call)
     page = Post.new_page_from_xmlrpc_payload(xmlrpc_call)
     return raise_xmlrpc_error(4003, page.errors.full_messages.to_s) unless page.save
-    XMLRPC::Marshal.dump_response(page.id)
+    page.id
   end
 
   def get_authors(xmlrpc_call)
     users = [] << User.find_user(xmlrpc_call[1][1])
-    XMLRPC::Marshal.dump_response(users.map{|u| u.to_wordpress_author})
+    users.map{|u| u.to_wordpress_author}
   end
 
   def get_tags(xmlrpc_call)
-    XMLRPC::Marshal.dump_response(Tag.usable_active_tags.map{|tag| tag.to_metaweblog})
+    Tag.usable_active_tags.map{|tag| tag.to_metaweblog}
   end
   
   def new_category(xmlrpc_call)
     category = Category.new_category_from_xmlrpc_payload(xmlrpc_call)
-    XMLRPC::Marshal.dump_response(category.id)
+    category.id
   end
   
   def delete_category(xmlrpc_call)
-    success = Category.mark_as_inactive_from_xmlrpc_payload(xmlrpc_call)
-    XMLRPC::Marshal.dump_response(success)
+    Category.mark_as_inactive_from_xmlrpc_payload(xmlrpc_call)
   end
   
   def suggest_categories(xmlrpc_call)
-    XMLRPC::Marshal.dump_response(Category.usable_active_categories.all(:category.like => "%#{xmlrpc_call[1][3]}%", :limit => xmlrpc_call[1][4]).map{|category| category.to_minimal_metaweblog})
+    Category.usable_active_categories.all(:category.like => "%#{xmlrpc_call[1][3]}%", :limit => xmlrpc_call[1][4]).map{|category| category.to_minimal_metaweblog}
   end
   
   def get_comment_count(xmlrpc_call)
      post = Post.first(:id => xmlrpc_call[1][3].to_i)
-     XMLRPC::Marshal.dump_response(post.to_wordpress_comment_count)
+     post.to_wordpress_comment_count
   end
   
   def get_post_status_list(xmlrpc_call)
     #OK - Wordpress returns a list of draft, pending, private, publish
     #We will return just publish at the moment as there is currently no functionality for the other constants
     # Method will not have a test as it really does not need it!
-    XMLRPC::Marshal.dump_response({:publish => "Published"})
+    {:publish => "Published"}
   end
   
   def get_page_status_list(xmlrpc_call)
     #OK - Wordpress returns a list of draft, private, publish
     #We will return just publish at the moment as there is currently no functionality for the other constants
     # Method will not have a test as it really does not need it!
-    XMLRPC::Marshal.dump_response({:publish => "Published"})
+    {:publish => "Published"}
   end
   
   def get_page_templates(xmlrpc_call)
     #Shout Mouth does not support per page templating as wordpress does just return the default preview for a post
     # Method will not have a test as it really does not need it!
-    XMLRPC::Marshal.dump_response({:WebPreview => "webpreview.html"})
+    {:WebPreview => "webpreview.html"}
   end
   
   def get_options(xmlrpc_call)
-    XMLRPC::Marshal.dump_response(Blog.to_wordpress_options)
+    Blog.to_wordpress_options
   end
   
   def set_options(xmlrpc_call)
@@ -168,57 +167,61 @@ module Metaweblog
   
   def get_comment(xmlrpc_call)
     comment = Comment.first(:id => xmlrpc_call[1][3])
-    XMLRPC::Marshal.dump_response(comment.to_wordpress_comment)
+    comment.to_wordpress_comment
   end
   
   def get_comments(xmlrpc_call)
     comments = Comment.load_comments_from_xmlrpc_payload(xmlrpc_call)
-    XMLRPC::Marshal.dump_response(comments.map{|comment| comment.to_wordpress_comment})
+    comments.map{|comment| comment.to_wordpress_comment}
   end
   
   def get_comment_status_list(xmlrpc_call)
-    XMLRPC::Marshal.dump_response(Comment.comment_status_list_to_wordpress)
+    Comment.comment_status_list_to_wordpress
   end
   
   def delete_comment(xmlrpc_call)
     Comment.mark_comment_as_inactive(xmlrpc_call[1][3])
-    XMLRPC::Marshal.dump_response(true)
+    true
   end
   
   def edit_comment(xmlrpc_call)
     comment = Comment.edit_comment_from_xmlrpc_payload(xmlrpc_call)
     return raise_xmlrpc_error(4003, comment.errors.full_messages.to_s) unless comment.save
-    XMLRPC::Marshal.dump_response(true)
+    true
   end
   #OK SERIOUSLY - This is not part of any api spec but seems to be part of wordpress
   #Some clients use this method to check the system is responding - not testing this method.
   def say_hello(xmlrpc_call)
-    XMLRPC::Marshal.dump_response("Hello!")
+    "Hello!"
   end
   
   #OK SERIOUSLY - This is not part of any api spec but seems to be part of wordpress
   #Some clients use this method to check the system is responding - not testing this method.
   def add_two_numbers(xmlrpc_call)
-    total = xmlrpc_call[1][0].to_i + xmlrpc_call[1][1].to_i
-    XMLRPC::Marshal.dump_response(total)
+    xmlrpc_call[1][0].to_i + xmlrpc_call[1][1].to_i
   end
   
   def multicall(xmlrpc_call)
-    call_list = xmlrpc_call[1]
-    response = ""
+    call_list = xmlrpc_call[1..-1][0][0]
+    
+    response = []
     call_list.each{|method_call|
-                
-                method_name = method_call[0]["methodName"]
-                params = method_call[0]["params"]
-                method = method_name.gsub(/(.*)\.(.*)/, '\2').gsub(/([A-Z])/, '_\1').downcase
-                
-                call = [method_name, params]
-                
-                authentication_details = authentication_details_from(method, call)
-                response += send(method, call) if authenticated?(authentication_details)
+                method_name = method_call["methodName"]
+                                params = method_call["params"]
+                                method = method_name.gsub(/(.*)\.(.*)/, '\2').gsub(/([A-Z])/, '_\1').downcase
+                                
+                                call = [method_name, params]
+                                
+                                authentication_details = authentication_details_from(method, call)
+                                response << send(method, call) if authenticated?(authentication_details)
+                                
               }
               response
               
+  end
+  
+  def dump_response(data)
+    XMLRPC::Marshal.dump_response(data)
   end
 
   def raise_xmlrpc_error(code, message)
@@ -371,7 +374,6 @@ module Metaweblog
   METAWEBLOG = "Metaweblog"
   
   def client_from(xmlrpc_call)
-    puts xmlrpc_call.to_s
      case xmlrpc_call[0].split(".")[0]
      when "wp"
        WORDPRESS
