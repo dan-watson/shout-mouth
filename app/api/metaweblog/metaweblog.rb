@@ -197,6 +197,9 @@ module Metaweblog
     comment.id
   end
   
+  def get_post_formats(xmlrpc_call)
+    {:standard => "Standard"}
+  end
   
   #OK SERIOUSLY - This is not part of any api spec but seems to be part of wordpress
   #Some clients use this method to check the system is responding - not testing this method.
@@ -271,6 +274,7 @@ module Metaweblog
       "metaWeblog.deletePost",
       "metaWeblog.getUsersBlogs",
       "blogger.getUserInfo",
+      "wp.getPostFormats",
       "wp.newComment",
       "wp.editComment",
       "wp.deleteComment",
@@ -329,7 +333,7 @@ module Metaweblog
     # blogger.getPost
     # blogger.getUserInfo - IMPLEMENTED
     # blogger.getUsersBlogs - IMPLEMENTED
-    # wp.getPostFormats - NOT GOING TO IMPLEMENT
+    # wp.getPostFormats - IMPLEMENTED
     # wp.getMediaLibrary - NOT GOING TO IMPLEMENT
     # wp.getMediaItem - NOT GOING TO IMPLEMENT
     # wp.getCommentStatusList - IMPLEMENTED
