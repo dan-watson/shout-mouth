@@ -1201,6 +1201,80 @@ describe "metaweblog api" do
        
        last_response.body.should include("<boolean>1</boolean>")
      end
+     
+     it "should add a comment the addComment method is called" do
+       
+       post = TestDataHelper.valid_post
+       comment_count = post.comments.count
+       
+       post '/xmlrpc/',  "<methodCall>
+       	<methodName>wp.newComment</methodName>
+       	<params>
+       		<param>
+       			<value>
+       				<string>2000</string>
+       			</value>
+       		</param>
+       		<param>
+       			<value>
+       				<string>#{@user.email}</string>
+       			</value>
+       		</param>
+       		<param>
+       			<value>
+       				<string>password123</string>
+       			</value>
+       		</param>
+       		<param>
+       			<value>
+       				<string>#{post.id}</string>
+       			</value>
+       		</param>
+          <param>
+    			<value>
+     				<struct>
+            <member>
+							<name>author</name>
+							<value>
+								<string>dan@shout_mouth.com</string>
+							</value>
+						</member>
+						<member>
+							<name>content</name>
+							<value>
+								<string>Comment from metaweblog</string>
+							</value>
+						</member>
+						<member>
+							<name>author_email</name>
+							<value>
+								<string/>
+							</value>
+						</member>
+						<member>
+							<name>comment_parent</name>
+							<value>
+								<i4>0</i4>
+							</value>
+						</member>
+						<member>
+							<name>author_url</name>
+							<value>
+								<string/>
+							</value>
+						</member>
+     				</struct>
+     			</value>
+     		</param>
+       	</params>
+       </methodCall>
+       "
+       
+       post.comments.reload
+       (comment_count + 1).should == post.comments.count
+       
+       
+     end
   
   private 
   def find_value(xml, find, hierarchy = [], nth = nil)

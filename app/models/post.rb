@@ -79,6 +79,23 @@ class Post
     collection.each{|tag| tags << tag}
   end
   
+  def add_comment_from_xmlrpc_payload xmlrpc_call
+  
+    data = xmlrpc_call[1][4]
+    user = User.first(:email => data["author"])
+    comment = Comment.new(:post => self, 
+                :comment_author => user.fullname, 
+                :comment_author_email => user.email, 
+                :comment_content => data["content"],
+                :comment_author_url => Blog.url,
+                :user_ip => "N/A",
+                :user_agent => "BLOGGING CLIENT",
+                :referrer => "N/A",
+                :is_spam => false)
+    comment
+    
+  end
+  
   def to_metaweblog
     {
       :postid => id,

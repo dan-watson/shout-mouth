@@ -189,6 +189,15 @@ module Metaweblog
     return raise_xmlrpc_error(4003, comment.errors.full_messages.to_s) unless comment.save
     true
   end
+  
+  def new_comment(xmlrpc_call)    
+    post = Post.get(xmlrpc_call[1][3])
+    comment = post.add_comment_from_xmlrpc_payload(xmlrpc_call)
+    return raise_xmlrpc_error(4003, comment.errors.full_messages.to_s) unless comment.save
+    comment.id
+  end
+  
+  
   #OK SERIOUSLY - This is not part of any api spec but seems to be part of wordpress
   #Some clients use this method to check the system is responding - not testing this method.
   def say_hello(xmlrpc_call)
@@ -262,6 +271,7 @@ module Metaweblog
       "metaWeblog.deletePost",
       "metaWeblog.getUsersBlogs",
       "blogger.getUserInfo",
+      "wp.newComment",
       "wp.editComment",
       "wp.deleteComment",
       "wp.getCommentStatusList",
@@ -323,7 +333,7 @@ module Metaweblog
     # wp.getMediaLibrary
     # wp.getMediaItem
     # wp.getCommentStatusList - IMPLEMENTED
-    # wp.newComment
+    # wp.newComment - IMPLEMENTED
     # wp.editComment - IMPLEMENTED
     # wp.deleteComment -IMPLEMENTED
     # wp.getComments - IMPLEMENTED
