@@ -201,6 +201,14 @@ module Metaweblog
     {:standard => "Standard"}
   end
   
+  def get_media_library(xmlrpc_call)
+    return raise_xmlrpc_error(4003, "Shout Mouth Message - Not Implemented")
+  end
+  
+  def get_media_item(xmlrpc_call)
+    return raise_xmlrpc_error(4003, "Shout Mouth Message - Not Implemented")
+  end
+   
   #OK SERIOUSLY - This is not part of any api spec but seems to be part of wordpress
   #Some clients use this method to check the system is responding - not testing this method.
   def say_hello(xmlrpc_call)
@@ -274,7 +282,8 @@ module Metaweblog
       "metaWeblog.deletePost",
       "metaWeblog.getUsersBlogs",
       "blogger.getUserInfo",
-      "wp.getPostFormats",
+      "wp.getMediaLibrary",
+      "wp.getMediaItem",
       "wp.newComment",
       "wp.editComment",
       "wp.deleteComment",
