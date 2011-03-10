@@ -202,11 +202,11 @@ module Metaweblog
   end
   
   def get_media_library(xmlrpc_call)
-    return raise_xmlrpc_error(4003, "Shout Mouth Message - Not Implemented")
+    raise_xmlrpc_error(4003, "Shout Mouth Message - Not Implemented")
   end
   
   def get_media_item(xmlrpc_call)
-    return raise_xmlrpc_error(4003, "Shout Mouth Message - Not Implemented")
+    raise_xmlrpc_error(4003, "Shout Mouth Message - Not Implemented")
   end
    
   #OK SERIOUSLY - This is not part of any api spec but seems to be part of wordpress
@@ -245,22 +245,12 @@ module Metaweblog
   end
 
   def raise_xmlrpc_error(code, message)
-    "<methodResponse>
-    <fault>
-    <value>
-    <struct>
-    <member>
-    <name>faultCode</name>
-    <value><int>#{code.to_s}</int></value>
-    </member>
-    <member>
-    <name>faultString</name>
-    <value><string>#{message}</string></value>
-    </member>
-    </struct>
-    </value>
-    </fault>
-    </methodResponse>"
+    {
+      :fault => {
+        :faultCode => code,
+        :faultString => message
+      }
+    }
   end
   
   def does_not_need_authentication?(method)
