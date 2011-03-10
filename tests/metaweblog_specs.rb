@@ -83,29 +83,27 @@ describe "metaweblog api" do
                            <param><value><i4>2</i4></value></param>
                            </params>
                            </methodCall>"
-     find_value(last_response.body, "postid", ["member", "name", "value", "i4"], 0).should == @second_post.id.to_s
+     find_value(last_response.body, "postid", ["member", "name", "value", "string"], 0).should == @second_post.id.to_s
      find_value(last_response.body, "dateCreated", ["member", "name", "value", "dateTime.iso8601"], 0).should == @second_post.created_at_iso8601
      find_value(last_response.body, "title", ["member", "name", "value", "string"], 0).should == @second_post.title
      find_value(last_response.body, "description", ["member", "name", "value", "string"], 0).should == @second_post.body
      find_value(last_response.body, "link", ["member", "name", "value", "string"], 0).should == @second_post.permalink
      find_value(last_response.body, "wp_slug", ["member", "name", "value", "string"], 0).should == @second_post.slug
      find_value(last_response.body, "mt_excerpt", ["member", "name", "value", "string"], 0).should == ""
-     find_value(last_response.body, "mt_allow_comments", ["member", "name", "value", "string"], 0).should == ""
+     find_value(last_response.body, "mt_allow_comments", ["member", "name", "value", "i4"], 0).should == "1"
      find_value(last_response.body, "mt_keywords", ["member", "name", "value", "string"], 0).should == @second_post.readable_tags.gsub(" ", "")
-     find_value(last_response.body, "publish", ["member", "name", "value", "boolean"], 0).should == "1"
      find_value(last_response.body, "categories", ["member", "name", "value", "array/data/value[1]/string"], 0).should == @second_post.categories[0].category
      find_value(last_response.body, "categories", ["member", "name", "value", "array/data/value[2]/string"], 0).should == @second_post.categories[1].category
      
-     find_value(last_response.body, "postid", ["member", "name", "value", "i4"], 1).should == @post.id.to_s
+     find_value(last_response.body, "postid", ["member", "name", "value", "string"], 1).should == @post.id.to_s
      find_value(last_response.body, "dateCreated", ["member", "name", "value", "dateTime.iso8601"], 1).should == @post.created_at_iso8601
      find_value(last_response.body, "title", ["member", "name", "value", "string"], 1).should == @post.title
      find_value(last_response.body, "description", ["member", "name", "value", "string"], 1).should == @post.body
      find_value(last_response.body, "link", ["member", "name", "value", "string"], 1).should == @post.permalink
      find_value(last_response.body, "wp_slug", ["member", "name", "value", "string"], 1).should == @post.slug
      find_value(last_response.body, "mt_excerpt", ["member", "name", "value", "string"], 1).should == ""
-     find_value(last_response.body, "mt_allow_comments", ["member", "name", "value", "string"], 1).should == ""
+     find_value(last_response.body, "mt_allow_comments", ["member", "name", "value", "i4"], 1).should == "1"
      find_value(last_response.body, "mt_keywords", ["member", "name", "value", "string"], 1).should == @post.readable_tags.gsub(" ", "")
-     find_value(last_response.body, "publish", ["member", "name", "value", "boolean"], 1).should == "1"
      find_value(last_response.body, "categories", ["member", "name", "value", "array/data/value[1]/string"], 1).should == @post.categories[0].category
      find_value(last_response.body, "categories", ["member", "name", "value", "array/data/value[2]/string"], 1).should == @post.categories[1].category
       
@@ -121,16 +119,15 @@ describe "metaweblog api" do
                            <param><value><i4>2</i4></value></param>
                            </params>
                            </methodCall>"
-     find_value(last_response.body, "postid", ["member", "name", "value", "i4"]).should == @second_post.id.to_s
+     find_value(last_response.body, "postid", ["member", "name", "value", "string"]).should == @second_post.id.to_s
      find_value(last_response.body, "dateCreated", ["member", "name", "value", "dateTime.iso8601"]).should == @second_post.created_at_iso8601
      find_value(last_response.body, "title", ["member", "name", "value", "string"]).should == @second_post.title
      find_value(last_response.body, "description", ["member", "name", "value", "string"]).should == @second_post.body
      find_value(last_response.body, "link", ["member", "name", "value", "string"]).should == @second_post.permalink
      find_value(last_response.body, "wp_slug", ["member", "name", "value", "string"]).should == @second_post.slug
      find_value(last_response.body, "mt_excerpt", ["member", "name", "value", "string"]).should == ""
-     find_value(last_response.body, "mt_allow_comments", ["member", "name", "value", "string"]).should == ""
+     find_value(last_response.body, "mt_allow_comments", ["member", "name", "value", "i4"]).should == "1"
      find_value(last_response.body, "mt_keywords", ["member", "name", "value", "string"]).should == @second_post.readable_tags.gsub(" ", "")
-     find_value(last_response.body, "publish", ["member", "name", "value", "boolean"]).should == "1"
      find_value(last_response.body, "categories", ["member", "name", "value", "array/data/value[1]/string"]).should == @second_post.categories[0].category
      find_value(last_response.body, "categories", ["member", "name", "value", "array/data/value[2]/string"]).should == @second_post.categories[1].category
    end
@@ -252,16 +249,15 @@ describe "metaweblog api" do
      post.categories[0].category.should == "category10"
      post.categories[1].category.should == "category11"
      
-     find_value(last_response.body, "postid", ["member", "name", "value", "i4"]).should == post_to_update_id.to_s
+     find_value(last_response.body, "postid", ["member", "name", "value", "string"]).should == post_to_update_id.to_s
      find_value(last_response.body, "dateCreated", ["member", "name", "value", "dateTime.iso8601"]).should == post.created_at_iso8601
      find_value(last_response.body, "title", ["member", "name", "value", "string"]).should == post.title
      find_value(last_response.body, "description", ["member", "name", "value", "string"]).should == post.body
      find_value(last_response.body, "link", ["member", "name", "value", "string"]).should == post.permalink
      find_value(last_response.body, "wp_slug", ["member", "name", "value", "string"]).should == post.slug
      find_value(last_response.body, "mt_excerpt", ["member", "name", "value", "string"]).should == ""
-     find_value(last_response.body, "mt_allow_comments", ["member", "name", "value", "string"]).should == ""
+     find_value(last_response.body, "mt_allow_comments", ["member", "name", "value", "i4"]).should == "1"
      find_value(last_response.body, "mt_keywords", ["member", "name", "value", "string"]).should == post.readable_tags.gsub(" ", "")
-     find_value(last_response.body, "publish", ["member", "name", "value", "boolean"]).should == "1"
      find_value(last_response.body, "categories", ["member", "name", "value", "array/data/value[1]/string"]).should == "category10"
      find_value(last_response.body, "categories", ["member", "name", "value", "array/data/value[2]/string"]).should == "category11"
      
@@ -418,13 +414,13 @@ describe "metaweblog api" do
                         </params>
                        </methodCall>"
   
-     find_value(last_response.body, "page_id", ["member", "name", "value", "i4"]).should == @page.id.to_s
+     find_value(last_response.body, "page_id", ["member", "name", "value", "string"]).should == @page.id.to_s
      find_value(last_response.body, "title", ["member", "name", "value", "string"]).should == @page.title
      find_value(last_response.body, "description", ["member", "name", "value", "string"]).should == @page.body
      find_value(last_response.body, "link", ["member", "name", "value", "string"]).should == @page.permalink
      find_value(last_response.body, "mt_convert_breaks", ["member", "name", "value", "string"]).should == "__default__"
      find_value(last_response.body, "dateCreated", ["member", "name", "value",  "dateTime.iso8601"]).should == @page.created_at_iso8601
-     find_value(last_response.body, "page_parent_id", ["member", "name", "value", "i4"]).should == 0.to_s
+     find_value(last_response.body, "page_parent_id", ["member", "name", "value", "string"]).should == 0.to_s
      
    end
    
@@ -456,13 +452,13 @@ describe "metaweblog api" do
                         </params>
                        </methodCall>"
   
-     find_value(last_response.body, "page_id", ["member", "name", "value", "i4"]).should == @page.id.to_s
+     find_value(last_response.body, "page_id", ["member", "name", "value", "string"]).should == @page.id.to_s
      find_value(last_response.body, "title", ["member", "name", "value", "string"]).should == @page.title
      find_value(last_response.body, "description", ["member", "name", "value", "string"]).should == @page.body
      find_value(last_response.body, "link", ["member", "name", "value", "string"]).should == @page.permalink
      find_value(last_response.body, "mt_convert_breaks", ["member", "name", "value", "string"]).should == "__default__"
      find_value(last_response.body, "dateCreated", ["member", "name", "value",  "dateTime.iso8601"]).should == @page.created_at_iso8601
-     find_value(last_response.body, "page_parent_id", ["member", "name", "value", "i4"]).should == 0.to_s
+     find_value(last_response.body, "page_parent_id", ["member", "name", "value", "string"]).should == 0.to_s
    end
    
    it "should return correct response and update record when the editPage method is called" do
@@ -589,9 +585,9 @@ describe "metaweblog api" do
                             </params>
                             </methodCall>"
   
-     find_value(last_response.body, "page_id", ["member", "name", "value", "i4"], 0).should == @page.id.to_s
+     find_value(last_response.body, "page_id", ["member", "name", "value", "string"], 0).should == @page.id.to_s
      find_value(last_response.body, "page_title", ["member", "name", "value", "string"], 0).should == @page.title
-     find_value(last_response.body, "page_parent_id", ["member", "name", "value", "i4"], 0).should == "0"
+     find_value(last_response.body, "page_parent_id", ["member", "name", "value", "string"], 0).should == "0"
      find_value(last_response.body, "dateCreated", ["member", "name", "value", "dateTime.iso8601"], 0).should == @page.created_at_iso8601
      find_value(last_response.body, "date_created_gmt", ["member", "name", "value", "dateTime.iso8601"], 0).should == @page.created_at_iso8601   
    end
@@ -1003,9 +999,9 @@ describe "metaweblog api" do
                          	</params>
                          </methodCall>"
        #Dont need to rest all the correct values are spat out. - This is done in the previous test
-       find_value(last_response.body, "post_id", ["member", "name", "value", "i4"], 0).should == post_id.to_s
-       find_value(last_response.body, "post_id", ["member", "name", "value", "i4"], 1).should == post_id.to_s
-       find_value(last_response.body, "post_id", ["member", "name", "value", "i4"], 2).should == post_id.to_s
+       find_value(last_response.body, "post_id", ["member", "name", "value", "string"], 0).should == post_id.to_s
+       find_value(last_response.body, "post_id", ["member", "name", "value", "string"], 1).should == post_id.to_s
+       find_value(last_response.body, "post_id", ["member", "name", "value", "string"], 2).should == post_id.to_s
        lambda{ find_value(last_response.body, "post_id", ["member", "name", "value", "i4"], 3)}.should raise_error
      end
      
@@ -1041,11 +1037,10 @@ describe "metaweblog api" do
                      
        find_value(last_response.body, "date_created_gmt", ["member", "name", "value", "dateTime.iso8601"]).should == comment.created_at_iso8601
        find_value(last_response.body, "user_id", ["member", "name", "value", "string"]).should == comment.comment_author_email
-       find_value(last_response.body, "comment_id", ["member", "name", "value", "i4"]).should == comment.id.to_s
-       find_value(last_response.body, "parent", ["member", "name", "value", "i4"]).should == "0"
-       find_value(last_response.body, "parent", ["member", "name", "value", "i4"]).should == "0"
+       find_value(last_response.body, "comment_id", ["member", "name", "value", "string"]).should == comment.id.to_s
+       find_value(last_response.body, "parent", ["member", "name", "value", "string"]).should == "0"
        find_value(last_response.body, "link", ["member", "name", "value", "string"]).should == comment.post.permalink
-       find_value(last_response.body, "post_id", ["member", "name", "value", "i4"]).should == comment.post.id.to_s
+       find_value(last_response.body, "post_id", ["member", "name", "value", "string"]).should == comment.post.id.to_s
        find_value(last_response.body, "post_title", ["member", "name", "value", "string"]).should == comment.post.title
        find_value(last_response.body, "author", ["member", "name", "value", "string"]).should == comment.comment_author
        find_value(last_response.body, "author_url", ["member", "name", "value", "string"]).should == comment.comment_author_url

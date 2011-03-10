@@ -1,7 +1,6 @@
 ===ToDo
 
 - Fully implement the rest of the Wordpress API so Wordpress blogging clients will work with shout mouth.
-- Update RSD generation to inform blogging clients that other API's are available once Wordpress API is implemented
 - Implement Hierarchal Pages - Correct data driven menu for hierarchal pages.
 
 

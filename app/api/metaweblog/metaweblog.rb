@@ -127,7 +127,7 @@ module Metaweblog
     #OK - Wordpress returns a list of draft, pending, private, publish
     #We will return just publish at the moment as there is currently no functionality for the other constants
     # Method will not have a test as it really does not need it!
-    {:publish => "Published"}
+    {:publish => "Published", :draft => "Draft"}
   end
   
   def get_page_status_list(xmlrpc_call)
@@ -233,8 +233,9 @@ module Metaweblog
                                 call = [method_name, params]
                                 
                                 authentication_details = authentication_details_from(method, call)
-                                response << send(method, call) if authenticated?(authentication_details)
-                                
+                                array_holder = []
+                                array_holder << send(method, call) if authenticated?(authentication_details)
+                                response << array_holder
               }
               response
               
@@ -272,15 +273,15 @@ module Metaweblog
       "metaWeblog.deletePost",
       "metaWeblog.getUsersBlogs",
       "blogger.getUserInfo",
-      "wp.getMediaLibrary",
-      "wp.getMediaItem",
+      #"wp.getMediaLibrary", #NOT IMPLEMENTED
+      #"wp.getMediaItem", # NOT IMPLEMENTED
       "wp.newComment",
       "wp.editComment",
       "wp.deleteComment",
       "wp.getCommentStatusList",
       "wp.getComments",
       "wp.getComment",
-      "wp.setOptions", #NOT IMPLEMENTED IN THIS VERSION - NEXT VERSION WILL SUPPORT DYNAMIC SITE CONFIGURATION
+      #"wp.setOptions", #NOT IMPLEMENTED 
       "wp.getOptions",
       "wp.getPageTemplates",
       "wp.getPageStatusList",
@@ -362,7 +363,7 @@ module Metaweblog
     # wp.getPage -IMPLEMENTED
     # wp.getUsersBlogs - IMPLEMENTED
     
-    XMLRPC::Marshal.dump_response(methods)
+    methods
   end
 
   #OK the metaweblog / workpress api sucks a little. For some reason only known to hindu cows... Different methods payloads will supply the

@@ -98,37 +98,60 @@ class Post
   
   def to_metaweblog
     {
-      :postid => id,
       :dateCreated => created_at,
-      :title => title,
+      :userid => user.id.to_s,
+      :postid => id.to_s,
       :description => body,
+      :title => title,
       :link => permalink,
-      :wp_slug => slug,
+      :permaLink => permalink,
+      :categories => categories.map{|category| category.category},
       :mt_excerpt => "",
-      :mt_allow_comments => "",
+      :mt_text_more => "",
+      :mt_allow_comments => 1,
+      :mt_allow_pings => 0,
       :mt_keywords => readable_tags.gsub(" ", ""),
-      :publish => is_active,
-      :categories => categories.map{|category| category.category}
+      :wp_slug => slug,
+      :wp_password => "",
+      :wp_author_id => user.id.to_s,
+      :wp_author_display_name => user.fullname,
+      :date_created_gmt => created_at,
+      :post_status => is_active ? "publish" : "draft",
+      :custom_fields => [
+                          {
+                            :id => "2",
+                            :key => "_edit_last",
+                            :value => user.id.to_s
+        
+                          },
+                          {
+                            :id => "1",
+                            :key => "_edit_lock",
+                            :value => "#1299280582:#{user.id.to_s}"
+                          }
+                        ],
+      :wp_post_format => "standard"
+      #:publish => is_active
     }
   end
 
   def to_wordpress_page
     {
-      :page_id => id,
+      :page_id => id.to_s,
       :title => title,
       :description => body,
       :link => permalink,
       :mt_convert_breaks => "__default__",
       :dateCreated => created_at,
-      :page_parent_id => 0
+      :page_parent_id => "0"
     }
   end
   
   def to_minimal_wordpress_page
     {
-      :page_id => id,
+      :page_id => id.to_s,
       :page_title => title,
-      :page_parent_id => 0,
+      :page_parent_id => "0",
       :dateCreated => created_at,
       :date_created_gmt => created_at
     }

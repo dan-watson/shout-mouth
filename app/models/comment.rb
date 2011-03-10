@@ -51,17 +51,18 @@ class Comment
     {
       :date_created_gmt => created_at,
       :user_id => comment_author_email,
-      :comment_id => id,
-      :parent => 0,
+      :comment_id => id.to_s,
+      :parent => "0",
       :status => is_spam? ? "spam" : is_active ? "approve" : "hold",
       :content => comment_content,
       :link => post.permalink,
-      :post_id => post.id,
+      :post_id => post.id.to_s,
       :post_title => post.title,
       :author => comment_author,
       :author_url => comment_author_url,
       :author_email => comment_author_email,
-      :author_ip => user_ip
+      :author_ip => user_ip,
+      :type => ""
     }
   end
 

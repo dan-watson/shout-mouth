@@ -1,24 +1,18 @@
-<?xml version="1.0" encoding="utf-8" ?> 
+<?xml version="1.0" encoding="utf-8" ?>
+ 
 <manifest xmlns="http://schemas.microsoft.com/wlw/manifest/weblog">
+ 
   <options>
-    <clientType>Metaweblog</clientType>
-    <supportsEmbeds>Yes</supportsEmbeds>
-	  <supportsKeywords>Yes</supportsKeywords>
-	  <supportsNewCategories>Yes</supportsNewCategories>
-	  <supportsNewCategoriesInline>Yes</supportsNewCategoriesInline>
-	  <supportsCommentPolicy>Yes</supportsCommentPolicy>
-	  <supportsSlug>No</supportsSlug>
-	  <supportsExcerpt>No</supportsExcerpt>
-	  <supportsPages>Yes</supportsPages>
-	  <supportsPageParent>No</supportsPageParent>
-    <supportsAuthor>Yes</supportsAuthor>
-    <supportsGetTags>Yes</supportsGetTags>
-    <requiresHtmlTitles>No</requiresHtmlTitles>
-    <fileUploadNameFormat>{FileName}</fileUploadNameFormat>
-</options>
-<views>
-    <default>WebLayout</default>
-    <view type="WebLayout" src="/webpreview.html" />
-    <view type="WebPreview" src="/webpreview.html" />
-</views>
+    <clientType>WordPress</clientType>
+	<supportsKeywords>Yes</supportsKeywords>
+	<supportsGetTags>Yes</supportsGetTags>
+  </options>
+
+  <views>
+	    <default>WebLayout</default>
+	    <view type="WebLayout" src="/webpreview.html" />
+	    <view type="WebPreview" src="/webpreview.html" />
+  </views>
+
+ 
 </manifest>
