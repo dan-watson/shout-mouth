@@ -44,7 +44,7 @@ module Metaweblog
   def get_recent_posts(xmlrpc_call)
     limit = xmlrpc_call[1][3] 
     #Some clients pass limit as 0 for all posts
-    limit == 0 ? posts = Post.all_active_posts : posts = Post.all_active_posts.all(:limit => limit)
+    limit == 0 ? posts = Post.all(:is_page => false, :order => [ :created_at.desc ]) : posts = Post.all(:is_page => false, :order => [ :created_at.desc ], :limit => limit)
     posts.map{|p| p.to_metaweblog}
   end
 
@@ -329,9 +329,9 @@ module Metaweblog
     # blogger.getPost
     # blogger.getUserInfo - IMPLEMENTED
     # blogger.getUsersBlogs - IMPLEMENTED
-    # wp.getPostFormats
-    # wp.getMediaLibrary
-    # wp.getMediaItem
+    # wp.getPostFormats - NOT GOING TO IMPLEMENT
+    # wp.getMediaLibrary - NOT GOING TO IMPLEMENT
+    # wp.getMediaItem - NOT GOING TO IMPLEMENT
     # wp.getCommentStatusList - IMPLEMENTED
     # wp.newComment - IMPLEMENTED
     # wp.editComment - IMPLEMENTED
