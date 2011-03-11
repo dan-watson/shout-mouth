@@ -32,8 +32,8 @@ class Category
     
     def to_metaweblog
       {
-        :categoryId => id,
-        :parentId => 0,
+        :categoryId => id.to_s,
+        :parentId => 0.to_s,
         :description => category,
         :categoryDescription => "",
         :categoryName => category,

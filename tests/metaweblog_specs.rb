@@ -145,8 +145,8 @@ describe "metaweblog api" do
      category1 = TestDataHelper.category1
      category2 = TestDataHelper.category2
      
-     find_value(last_response.body, "categoryId", ["member", "name", "value", "i4"], 0).should == category1.id.to_s 
-     find_value(last_response.body, "parentId", ["member", "name", "value", "i4"], 0).should == "0" 
+     find_value(last_response.body, "categoryId", ["member", "name", "value", "string"], 0).should == category1.id.to_s 
+     find_value(last_response.body, "parentId", ["member", "name", "value", "string"], 0).should == "0" 
      find_value(last_response.body, "description", ["member", "name", "value", "string"], 0).should == category1.category             
      find_value(last_response.body, "categoryDescription", ["member", "name", "value", "string"], 0).should == ""
      find_value(last_response.body, "categoryName", ["member", "name", "value", "string"], 0).should == category1.category
@@ -154,8 +154,8 @@ describe "metaweblog api" do
      find_value(last_response.body, "rssUrl", ["member", "name", "value", "string"], 0).should == ""
      find_value(last_response.body, "title", ["member", "name", "value", "string"], 0).should == category1.category
      
-     find_value(last_response.body, "categoryId", ["member", "name", "value", "i4"], 1).should == category2.id.to_s  
-     find_value(last_response.body, "parentId", ["member", "name", "value", "i4"], 1).should == "0" 
+     find_value(last_response.body, "categoryId", ["member", "name", "value", "string"], 1).should == category2.id.to_s  
+     find_value(last_response.body, "parentId", ["member", "name", "value", "string"], 1).should == "0" 
      find_value(last_response.body, "description", ["member", "name", "value", "string"], 1).should == category2.category                 
      find_value(last_response.body, "categoryDescription", ["member", "name", "value", "string"], 1).should == ""
      find_value(last_response.body, "categoryName", ["member", "name", "value", "string"], 1).should == category2.category 
@@ -653,7 +653,7 @@ describe "metaweblog api" do
      page.categories[0].category.should == "page"
      page.is_active.should be_true
      page.year.nil?.should be_false
-     last_response.body.should include("<i4>#{page.id.to_s}</i4>")
+     last_response.body.should include("<string>#{page.id.to_s}</string>")
   
      page.destroy
    end
@@ -713,16 +713,16 @@ describe "metaweblog api" do
                           </params>
                          </methodCall>"
     
-       find_value(last_response.body, "tag_id", ["member", "name", "value", "i4"], 0).should == tags[0].id.to_s
+       find_value(last_response.body, "tag_id", ["member", "name", "value", "string"], 0).should == tags[0].id.to_s
        find_value(last_response.body, "name", ["member", "name", "value", "string"], 0).should == tags[0].tag
-       find_value(last_response.body, "count", ["member", "name", "value", "i4"], 0).should == tags[0].posts.count.to_s
+       find_value(last_response.body, "count", ["member", "name", "value", "string"], 0).should == tags[0].posts.count.to_s
        find_value(last_response.body, "slug", ["member", "name", "value", "string"], 0).should == tags[0].tag
        find_value(last_response.body, "html_url", ["member", "name", "value", "string"], 0).should == tags[0].permalink
        find_value(last_response.body, "rss_url", ["member", "name", "value", "string"], 0).should == ""
        
-       find_value(last_response.body, "tag_id", ["member", "name", "value", "i4"], 1).should == tags[1].id.to_s            
+       find_value(last_response.body, "tag_id", ["member", "name", "value", "string"], 1).should == tags[1].id.to_s            
        find_value(last_response.body, "name", ["member", "name", "value", "string"], 1).should == tags[1].tag
-       find_value(last_response.body, "count", ["member", "name", "value", "i4"], 1).should == tags[1].posts.count.to_s   
+       find_value(last_response.body, "count", ["member", "name", "value", "string"], 1).should == tags[1].posts.count.to_s   
        find_value(last_response.body, "slug", ["member", "name", "value", "string"], 1).should == tags[1].tag  
        find_value(last_response.body, "html_url", ["member", "name", "value", "string"], 1).should == tags[1].permalink 
        find_value(last_response.body, "rss_url", ["member", "name", "value", "string"], 1).should == ""           

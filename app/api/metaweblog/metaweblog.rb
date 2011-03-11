@@ -93,7 +93,7 @@ module Metaweblog
   def new_page(xmlrpc_call)
     page = Post.new_page_from_xmlrpc_payload(xmlrpc_call)
     return raise_xmlrpc_error(4003, page.errors.full_messages.to_s) unless page.save
-    page.id
+    page.id.to_s
   end
 
   def get_authors(xmlrpc_call)
@@ -127,14 +127,14 @@ module Metaweblog
     #OK - Wordpress returns a list of draft, pending, private, publish
     #We will return just publish at the moment as there is currently no functionality for the other constants
     # Method will not have a test as it really does not need it!
-    {:publish => "Published", :draft => "Draft"}
+    PostStatus.statuses
   end
   
   def get_page_status_list(xmlrpc_call)
     #OK - Wordpress returns a list of draft, private, publish
     #We will return just publish at the moment as there is currently no functionality for the other constants
     # Method will not have a test as it really does not need it!
-    {:publish => "Published"}
+    PostStatus.statuses
   end
   
   def get_page_templates(xmlrpc_call)

@@ -116,7 +116,7 @@ class Post
       :wp_author_id => user.id.to_s,
       :wp_author_display_name => user.fullname,
       :date_created_gmt => created_at,
-      :post_status => is_active ? "publish" : "draft",
+      :post_status => PostStatus.status_from_boolean(is_active),
       :custom_fields => [
                           {
                             :id => "2",
@@ -137,15 +137,44 @@ class Post
 
   def to_wordpress_page
     {
-      :page_id => id.to_s,
-      :title => title,
-      :description => body,
-      :link => permalink,
-      :mt_convert_breaks => "__default__",
       :dateCreated => created_at,
-      :page_parent_id => "0"
+      :userid => user.id.to_s,
+      :page_id => id.to_s,
+      :page_status =>  PostStatus.status_from_boolean(is_active),
+      :description => body,
+      :title => title,
+      :link => permalink,
+      :permaLink => permalink,
+      :categories => categories.map{|category| category.category},
+      :excerpt => "",
+      :text_more => "",
+      :mt_allow_comments => 0,
+      :mt_allow_pings => 0,
+      :wp_slug => slug,
+      :wp_password => "",
+      :wp_author => user.fullname,
+      :wp_page_parent_id => 0,
+      :wp_page_parent_title => "",
+      :wp_page_order => 0,
+      :wp_author_id => user.id.to_s,
+      :wp_author_display_name => user.fullname,
+      :date_created_gmt => created_at,
+      :mt_convert_breaks => "__default__",
+      :page_parent_id => "0",
+      :custom_fields => [
+        {
+          :id => "13",
+          :key => "localDraftUniqueID",
+          :value => ""
+
+        }
+      ],
+      :wp_page_template => "default"
+        
     }
   end
+  
+  
   
   def to_minimal_wordpress_page
     {
@@ -187,8 +216,13 @@ class Post
   def self.new_post_from_xmlrpc_payload xmlrpc_call
     post = Post.new(:title => xmlrpc_call[1][3]["title"],
     :body => xmlrpc_call[1][3]["description"],
-    :user => User.find_user(xmlrpc_call[1][1]),
-    :is_active => xmlrpc_call[1][4])
+    :user => User.find_user(xmlrpc_call[1][1]))
+    
+    if xmlrpc_call[1][3]["post_status"].nil?
+      post.is_active = xmlrpc_call[1][4]
+    else
+      post.is_active = PostStatus.boolean_from_status(xmlrpc_call[1][3]["post_status"])
+    end
     
     xmlrpc_call[1][3]["mt_keywords"].nil? ? post.add_tags(Tag.tags_from_array(xmlrpc_call[1][3]["categories"])) : post.add_tags(Tag.tags_from_array(xmlrpc_call[1][3]["mt_keywords"].split(",")))
     post.add_categories(Category.categories_from_array(xmlrpc_call[1][3]["categories"]))
@@ -214,7 +248,12 @@ class Post
     post.post_tags.destroy
     xmlrpc_call[1][3]["mt_keywords"].nil? ? post.add_tags(Tag.tags_from_array(xmlrpc_call[1][3]["categories"])) : post.add_tags(Tag.tags_from_array(xmlrpc_call[1][3]["mt_keywords"].split(",")))
     
-    post.is_active = xmlrpc_call[1][4]
+    if xmlrpc_call[1][3]["post_status"].nil?
+      post.is_active = xmlrpc_call[1][4]
+    else
+      post.is_active = PostStatus.boolean_from_status(xmlrpc_call[1][3]["post_status"])
+    end
+    
     post.created_at = xmlrpc_call[1][3]["dateCreated"].to_time  unless xmlrpc_call[1][3]["dateCreated"].nil?
     
     post
@@ -224,8 +263,13 @@ class Post
     post = Post.new(:title => xmlrpc_call[1][3]["title"],
     :body => xmlrpc_call[1][3]["description"],
     :user => User.find_user(xmlrpc_call[1][1]),
-    :is_page => true,
-    :is_active => xmlrpc_call[1][4])
+    :is_page => true)
+    
+    if xmlrpc_call[1][3]["page_status"].nil?
+      post.is_active = xmlrpc_call[1][4]
+    else
+      post.is_active = PostStatus.boolean_from_status(xmlrpc_call[1][3]["page_status"])
+    end
     
     post.add_tag Tag.first_or_create({:tag => "page"}, {:tag => "page"})
     post.add_category Category.first_or_create({:category => "page"}, {:category => "page"})

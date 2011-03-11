@@ -23,9 +23,9 @@ class Tag
   
   def to_metaweblog
     {
-      :tag_id => id,
+      :tag_id => id.to_s,
       :name => tag,
-      :count => posts.count,
+      :count => posts.count.to_s,
       :slug => tag,
       :html_url => permalink,
       :rss_url => ""
