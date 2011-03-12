@@ -125,7 +125,6 @@ class ShoutMouth < Sinatra::Base
   end
 
   get '/*' do
-    puts params[:splat]
     legacy_route = LegacyRoute.first(:slug => params[:splat])
     redirect legacy_route.post.permalink, 301 unless legacy_route.nil?
     redirect '/404'
@@ -141,7 +140,7 @@ class ShoutMouth < Sinatra::Base
   post %r{/xmlrpc([*.[a-z]/]+)} do
     #generate the xml
     xml =  load_xml_from_request(@request.body.read, @request.params)
-    puts "xmlpassed: #{xml}"
+    #puts "xmlpassed: #{xml}"
     #create xmlrpc request call
     call = XMLRPC::Marshal.load_call(xml.to_valid_xmlrpc_request)
     # convert *.getPost to get_post

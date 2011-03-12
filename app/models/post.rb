@@ -9,6 +9,7 @@ class Post
   property :is_page, Boolean, :default => false
   property :month, String
   property :year, Integer
+  property :local_draft_id, String, :length => 200, :default => ""
 
   validates_presence_of :title, :body, :tags, :categories
   validates_uniqueness_of :title
@@ -165,8 +166,7 @@ class Post
         {
           :id => "13",
           :key => "localDraftUniqueID",
-          :value => slug
-
+          :value => local_draft_id
         }
       ],
       :wp_page_template => "default"
@@ -214,6 +214,7 @@ class Post
   end
 
   def self.new_post_from_xmlrpc_payload xmlrpc_call
+  
     post = Post.new(:title => xmlrpc_call[1][3]["title"],
     :body => xmlrpc_call[1][3]["description"],
     :user => User.find_user(xmlrpc_call[1][1]))
@@ -260,21 +261,37 @@ class Post
   end
 
   def self.new_page_from_xmlrpc_payload xmlrpc_call
-    post = Post.new(:title => xmlrpc_call[1][3]["title"],
-    :body => xmlrpc_call[1][3]["description"],
-    :user => User.find_user(xmlrpc_call[1][1]),
-    :is_page => true)
+
+    #Some clients use the new method to update a page!
     
-    if xmlrpc_call[1][3]["page_status"].nil?
-      post.is_active = xmlrpc_call[1][4]
-    else
-      post.is_active = PostStatus.boolean_from_status(xmlrpc_call[1][3]["page_status"])
+    #if id does not exist in payload then use title else use id
+    
+    pages = Post.all(:id => xmlrpc_call[1][3]["postid"]) | Post.all(:title => xmlrpc_call[1][3]["title"], :is_page => true)
+    page = pages.first.nil? ? Post.new : pages.first
+    
+    page.is_page = true    
+    page.id = nil if page.new?
+    page.local_draft_id = xmlrpc_call[1][3]["custom_fields"].nil? ? "" : xmlrpc_call[1][3]["custom_fields"][0]["value"]
+    
+    if(page.title != xmlrpc_call[1][3]["title"] && !page.new?)
+      page.add_legacy_route page.slug
     end
     
-    post.add_tag Tag.first_or_create({:tag => "page"}, {:tag => "page"})
-    post.add_category Category.first_or_create({:category => "page"}, {:category => "page"})
+    page.title = xmlrpc_call[1][3]["title"]
+    page.body = xmlrpc_call[1][3]["description"]
+    page.user = User.find_user(xmlrpc_call[1][1])
     
-    post
+    
+    if xmlrpc_call[1][3]["page_status"].nil?
+      page.is_active = xmlrpc_call[1][4]
+    else
+      page.is_active = PostStatus.boolean_from_status(xmlrpc_call[1][3]["page_status"])
+    end
+    
+    page.add_tag Tag.first_or_create({:tag => "page"}, {:tag => "page"})
+    page.add_category Category.first_or_create({:category => "page"}, {:category => "page"})
+    
+    page
   end
 
   def self.edit_page_from_xmlrpc_payload xmlrpc_call
@@ -287,11 +304,12 @@ class Post
     if xmlrpc_call[1][4]["page_status"].nil?
       page.is_active = xmlrpc_call[1][5]
     else
-      post.is_active = PostStatus.boolean_from_status(xmlrpc_call[1][4]["page_status"])
+      page.is_active = PostStatus.boolean_from_status(xmlrpc_call[1][4]["page_status"])
     end
 
     page.title = xmlrpc_call[1][4]["title"]
     page.body = xmlrpc_call[1][4]["description"]
+    page.local_draft_id = xmlrpc_call[1][4]["custom_fields"].nil? ? "" : xmlrpc_call[1][4]["custom_fields"][0]["value"]
     
     page
   end

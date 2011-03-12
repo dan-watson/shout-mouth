@@ -413,6 +413,7 @@ describe "metaweblog api" do
                          </param>
                         </params>
                        </methodCall>"
+                       
   
      find_value(last_response.body, "page_id", ["member", "name", "value", "i4"]).should == @page.id.to_s
      find_value(last_response.body, "title", ["member", "name", "value", "string"]).should == @page.title
@@ -644,7 +645,7 @@ describe "metaweblog api" do
       </params>
      </methodCall>
      "
-  
+    
      page = Post.first(:title => "Title New Page")
      page.is_page.should be_true
      page.title.should ==  "Title New Page"

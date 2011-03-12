@@ -37,6 +37,7 @@ describe Post, "defaults" do
     post.year.should == post.created_at.year
     post.month.should == post.created_at.strftime("%B")
   end
+
 end
 
 describe Post, "slug" do
