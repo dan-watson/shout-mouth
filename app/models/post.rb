@@ -139,33 +139,33 @@ class Post
     {
       :dateCreated => created_at,
       :userid => user.id.to_s,
-      :page_id => id.to_s,
+      :page_id => id,
       :page_status =>  PostStatus.status_from_boolean(is_active),
       :description => body,
       :title => title,
       :link => permalink,
       :permaLink => permalink,
-      :categories => categories.map{|category| category.category},
+      :categories => [],#categories.map{|category| category.category},
       :excerpt => "",
       :text_more => "",
       :mt_allow_comments => 0,
       :mt_allow_pings => 0,
       :wp_slug => slug,
       :wp_password => "",
-      :wp_author => user.fullname,
+      :wp_author => user.email,
       :wp_page_parent_id => 0,
       :wp_page_parent_title => "",
       :wp_page_order => 0,
       :wp_author_id => user.id.to_s,
-      :wp_author_display_name => user.fullname,
+      :wp_author_display_name => user.fullname, #possible need to be email,
       :date_created_gmt => created_at,
-      :mt_convert_breaks => "__default__",
-      :page_parent_id => "0",
+      #:mt_convert_breaks => "__default__",
+      #:page_parent_id => "0",
       :custom_fields => [
         {
           :id => "13",
           :key => "localDraftUniqueID",
-          :value => ""
+          :value => slug
 
         }
       ],
@@ -283,10 +283,16 @@ class Post
     if(page.title != xmlrpc_call[1][4]["title"])
       page.add_legacy_route page.slug
     end
+    
+    if xmlrpc_call[1][4]["page_status"].nil?
+      page.is_active = xmlrpc_call[1][5]
+    else
+      post.is_active = PostStatus.boolean_from_status(xmlrpc_call[1][4]["page_status"])
+    end
 
     page.title = xmlrpc_call[1][4]["title"]
     page.body = xmlrpc_call[1][4]["description"]
-    page.is_active = xmlrpc_call[1][5]
+    
     page
   end
 
