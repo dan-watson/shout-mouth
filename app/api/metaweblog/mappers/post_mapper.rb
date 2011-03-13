@@ -35,6 +35,10 @@ class PostMapper
       post.is_active = PostStatus.boolean_from_status(@xmlrpc_call[1][3]["post_status"])
     end
     
+    if !@xmlrpc_call[1][3]["dateCreated"].nil?
+      post.created_at = @xmlrpc_call[1][3]["dateCreated"].to_time
+    end
+    
     @xmlrpc_call[1][3]["mt_keywords"].nil? ? post.add_tags(Tag.tags_from_array(@xmlrpc_call[1][3]["categories"])) : post.add_tags(Tag.tags_from_array(@xmlrpc_call[1][3]["mt_keywords"].split(",")))
     post.add_categories(Category.categories_from_array(@xmlrpc_call[1][3]["categories"]))
     
