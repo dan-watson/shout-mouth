@@ -144,6 +144,16 @@ class Post
       :postid => id.to_s
     }
   end
+  
+  def to_movable_type
+    {
+      :dateCreated => created_at,
+      :userid => user.id.to_s,
+      :postid => id.to_s,
+      :title => title,
+      :date_created_gmt => created_at
+    }
+  end
 
   def to_wordpress_page
     {
@@ -257,7 +267,6 @@ class Post
      
      post.categories
      post.category_posts.destroy
-     puts cataegory_ids
      cataegory_ids.each{|id| post.categories << Category.get(id)}
      
      post.tags

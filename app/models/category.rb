@@ -43,6 +43,14 @@ class Category
       }
     end
     
+    def to_movable_type_post_category
+      {
+        :categoryName => category,
+        :categoryId => id.to_s,
+        :isPrimary => false
+      }
+    end
+    
     def to_minimal_metaweblog
       {
         :category_id => id.to_s,
@@ -50,7 +58,7 @@ class Category
       }
     end
     
-    def to_movable_type
+    def to_movable_type_category_list_item
       {
         :categoryId => id.to_s,
         :categoryName => category

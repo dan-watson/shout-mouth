@@ -71,6 +71,10 @@ module Metaweblog
   def get_categories(xmlrpc_call)
     Category.usable_active_categories.map{|category| category.to_metaweblog}
   end
+  
+  def get_post_categories(xmlrpc_call)
+    Post.get(xmlrpc_call[1][0]).categories.map{|category| category.to_movable_type_post_category}
+  end
 
   def get_recent_posts(xmlrpc_call)
     
@@ -89,6 +93,18 @@ module Metaweblog
     
     return posts.map{|p| p.to_blogger} if client == BLOGGER
     posts.map{|p| p.to_metaweblog}
+  end
+  
+  def get_recent_post_titles(xmlrpc_call)
+    xmlrpc_call[1][3].nil? ? limit = 0 : limit = xmlrpc_call[1][3]
+    
+    posts =  Post.all(:is_page => false, :order => [ :created_at.desc ])
+    
+    if(limit > 0)
+      posts = posts.all(:limit => limit)
+    end
+    
+    posts.map{|post| post.to_movable_type}
   end
 
   def delete_post(xmlrpc_call)
@@ -169,7 +185,7 @@ module Metaweblog
   end
   
   def get_category_list(xmlrpc_call)
-    Category.usable_active_categories.all.map{|category| category.to_movable_type}
+    Category.usable_active_categories.all.map{|category| category.to_movable_type_category_list_item}
   end
   
   def get_comment_count(xmlrpc_call)
@@ -323,6 +339,9 @@ module Metaweblog
       "demo.addTwoNumbers",
       "system.listMethods",
       "system.multicall",
+      "mt.getPostCategories",
+      "mt.getRecentPostTitles",
+      "mt.getCategoryList",
       "metaWeblog.newMediaObject",
       "metaWeblog.newPost",
       "metaWeblog.editPost",
@@ -380,9 +399,9 @@ module Metaweblog
     # mt.supportedTextFilters
     # mt.supportedMethods
     # mt.setPostCategories
-    # mt.getPostCategories
-    # mt.getRecentPostTitles
-    # mt.getCategoryList
+    # mt.getPostCategories - IMPLEMENTED - TESTED AGAINST WORDPRESS
+    # mt.getRecentPostTitles - IMPLEMENTED - TESTED AGAINST WORDPRESS
+    # mt.getCategoryList - IMPLEMENTED - TESTED AGAINST WORDPRESS
     # metaWeblog.getUsersBlogs - IMPLEMENTED
     # metaWeblog.setTemplate - NOT GOING TO IMPLEMENT - TESTED AGAINST WORDPRESS
     # metaWeblog.getTemplate - NOT GOING TO IMPLEMENT - TESTED AGAINST WORDPRESS
@@ -393,8 +412,8 @@ module Metaweblog
     # metaWeblog.getPost - IMPLEMENTED
     # metaWeblog.editPost - IMPLEMENTED
     # metaWeblog.newPost - IMPLEMENTED
-    # blogger.deletePost - IMPLEMENTED
-    # blogger.editPost - IMPLEMENTED
+    # blogger.deletePost - IMPLEMENTED - TESTED AGAINST WORDPRESS
+    # blogger.editPost - IMPLEMENTED - TESTED AGAINST WORDPRESS
     # blogger.newPost - IMPLEMENTED - TESTED AGAINST WORDPRESS
     # blogger.setTemplate - NOT GOING TO IMPLEMENT - TESTED AGAINST WORDPRESS
     # blogger.getTemplate - NOT GOING TO IMPLEMENT - TESTED AGAINST WORDPRESS

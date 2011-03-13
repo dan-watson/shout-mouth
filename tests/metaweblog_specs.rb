@@ -109,6 +109,31 @@ describe "metaweblog api" do
       
   end
   
+   it "should return correct response when the getRecentPostTitle method is called using the movable type api" do
+     post '/xmlrpc/',     "<methodCall> 
+                           <methodName>mt.getRecentPostTitles</methodName>
+                           <params>
+                           <param><value><string>Blog Name</string></value></param>
+                           <param><value><string>#{@user.email}</string></value></param>
+                           <param><value><string>password123</string></value></param>
+                           <param><value><i4>2</i4></value></param>
+                           </params>
+                           </methodCall>"
+                           
+     find_value(last_response.body, "dateCreated", ["member", "name", "value", "dateTime.iso8601"], 0).should == @second_post.created_at_iso8601
+     find_value(last_response.body, "userid", ["member", "name", "value", "string"], 0).should == @second_post.user.id.to_s
+     find_value(last_response.body, "postid", ["member", "name", "value", "string"], 0).should == @second_post.id.to_s
+     find_value(last_response.body, "title", ["member", "name", "value", "string"], 0).should == @second_post.title
+     find_value(last_response.body, "date_created_gmt", ["member", "name", "value", "dateTime.iso8601"], 0).should == @second_post.created_at_iso8601
+
+     
+     find_value(last_response.body, "dateCreated", ["member", "name", "value", "dateTime.iso8601"], 1).should == @post.created_at_iso8601
+     find_value(last_response.body, "userid", ["member", "name", "value", "string"], 1).should == @post.user.id.to_s
+     find_value(last_response.body, "postid", ["member", "name", "value", "string"], 1).should == @post.id.to_s
+     find_value(last_response.body, "title", ["member", "name", "value", "string"], 1).should == @post.title
+     find_value(last_response.body, "date_created_gmt", ["member", "name", "value", "dateTime.iso8601"], 1).should == @post.created_at_iso8601
+
+  end
    it "should return correct response when the getRecentPosts method is called using the blogger api" do
      post '/xmlrpc/',     "<methodCall> 
                            <methodName>blogger.getRecentPosts</methodName>
@@ -222,6 +247,26 @@ describe "metaweblog api" do
      
      find_value(last_response.body, "categoryId", ["member", "name", "value", "string"], 1).should == category2.id.to_s  
      find_value(last_response.body, "categoryName", ["member", "name", "value", "string"], 1).should == category2.category
+   end
+   
+   it "should return correct response when the getPostCategories method is called with a movable type client" do
+     for_post = TestDataHelper.valid_post
+     
+     post '/xmlrpc/',  "<methodCall>
+                           <methodName>mt.getPostCategories</methodName>
+                           <params>
+                           <param><value><string>#{for_post.id}</string></value></param>
+                           <param><value><string>#{@user.email}</string></value></param>
+                           <param><value><string>password123</string></value></param>
+                           </params>
+                           </methodCall>"
+
+     
+     find_value(last_response.body, "categoryName", ["member", "name", "value", "string"], 0).should == for_post.categories[0].category 
+     find_value(last_response.body, "categoryId", ["member", "name", "value", "string"], 0).should == for_post.categories[0].id.to_s
+     
+     find_value(last_response.body, "categoryName", ["member", "name", "value", "string"], 1).should == for_post.categories[1].category
+     find_value(last_response.body, "categoryId", ["member", "name", "value", "string"], 1).should == for_post.categories[1].id.to_s
    end
    
    it "should update the correct post and give the correct response when the editPost method is called" do
