@@ -269,6 +269,66 @@ describe "metaweblog api" do
      find_value(last_response.body, "categoryId", ["member", "name", "value", "string"], 1).should == for_post.categories[1].id.to_s
    end
    
+   it "should update the post's categries when the setPostCategories method is called with a movable type client" do
+     for_post = TestDataHelper.valid_post
+     cat1 = TestDataHelper.category1
+     cat2 = TestDataHelper.category2
+     
+     post '/xmlrpc/',  "<methodCall>
+                         <methodName>mt.setPostCategories</methodName>
+                         <params>
+                           <param>
+                             <value>
+                       	<int>#{for_post.id}</int>
+                             </value>
+                           </param>
+                           <param>
+                             <value>
+                       	<string>#{@user.email}</string>
+                             </value>
+                           </param>
+                           <param>
+                             <value>
+                       	<string>password123</string>
+                             </value>
+                           </param>
+                           <param>
+                             <value>
+                       	<array>
+                       	  <data>
+                       	    <value>
+                       	      <struct>
+                       		<member>
+                       		  <name>categoryId</name>
+                       		  <value>
+                       		    <int>#{cat1.id}</int>
+                       		  </value>
+                       		</member>
+                       	      </struct>
+                       	    </value>
+                       	    <value>
+                       	      <struct>
+                       		<member>
+                       		  <name>categoryId</name>
+                       		  <value>
+                       		    <int>#{cat2.id}</int>
+                       		  </value>
+                       		</member>
+                       	      </struct>
+                       	    </value>
+                       	  </data>
+                       	</array>
+                             </value>
+                           </param>
+                         </params>
+                       </methodCall>"
+
+     for_post.reload
+     for_post.categories[0].id.should == cat1.id
+     for_post.categories[1].id.should == cat2.id
+     
+   end
+   
    it "should update the correct post and give the correct response when the editPost method is called" do
      
      post_to_update_id = @post.id
@@ -421,6 +481,24 @@ describe "metaweblog api" do
 
     end
    
+    it "should set a post to active when the publishPost method is called" do
+      inactive_post = TestDataHelper.valid_post
+      inactive_post.is_active = false
+      inactive_post.save
+      
+      post '/xmlrpc/', "
+      <methodCall>
+      	<methodName>mt.publishPost</methodName>
+      <params>
+      <param><value><int>#{inactive_post.id}</int></value></param>
+      <param><value><string>#{@user.email}</string></value></param>
+      <param><value><string>password123</string></value></param>
+      </params>
+      </methodCall>"
+      
+      inactive_post.reload
+      inactive_post.is_active.should be_true
+    end
     
     it "should create a new post and give the correct response when the newPost method is called" do  
       post '/xmlrpc/',  "<methodCall>

@@ -277,6 +277,18 @@ class Post
      post
   end
   
+  def self.set_post_categories_from_xmlrpc_payload xmlrpc_call
+    post = Post.get(xmlrpc_call[1][0])
+    
+    categories = xmlrpc_call[1][3]
+    
+    post.categories
+    post.category_posts.destroy
+    categories.each{|category| post.categories << Category.get(category["categoryId"])}
+    
+    post.save
+  end
+  
   def self.new_post_from_xmlrpc_payload xmlrpc_call
   
     post = Post.new(:title => xmlrpc_call[1][3]["title"],
@@ -376,6 +388,12 @@ class Post
     page.local_draft_id = xmlrpc_call[1][4]["custom_fields"].nil? ? "" : xmlrpc_call[1][4]["custom_fields"][0]["value"]
     
     page
+  end
+  
+  def self.mark_as_active post_id
+    post = Post.get(post_id)
+    post.is_active = true
+    post.save
   end
 
   def self.mark_as_inactive post_id

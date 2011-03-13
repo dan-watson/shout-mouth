@@ -50,6 +50,11 @@ module Metaweblog
     return raise_xmlrpc_error(4003, post.errors.full_messages.to_s) unless post.save
     post.reload.to_metaweblog
   end
+  
+  def publish_post(xmlrpc_call)
+    #return a boolean - wordpress returns the id - should be ok as it is part of the mt specs.
+    Post.mark_as_active(xmlrpc_call[1][0])
+  end
 
   def get_post(xmlrpc_call) 
     client = client_from(xmlrpc_call)
@@ -74,6 +79,10 @@ module Metaweblog
   
   def get_post_categories(xmlrpc_call)
     Post.get(xmlrpc_call[1][0]).categories.map{|category| category.to_movable_type_post_category}
+  end
+  
+  def set_post_categories(xmlrpc_call)
+    Post.set_post_categories_from_xmlrpc_payload(xmlrpc_call)
   end
 
   def get_recent_posts(xmlrpc_call)
@@ -291,6 +300,15 @@ module Metaweblog
     xmlrpc_call[1][0].to_i + xmlrpc_call[1][1].to_i
   end
   
+  
+  def supported_text_filters(xmlrpc_call)
+    [] #same as wp - return empty array
+  end
+  
+  def get_trackback_pings(xmlrpc_call)
+    [] #dont support trackbacks so return empty array
+  end
+  
   def multicall(xmlrpc_call)
     call_list = xmlrpc_call[1..-1][0][0]
     
@@ -330,7 +348,11 @@ module Metaweblog
   end
   
   def does_not_need_authentication?(method)
-    ["list_methods", "multicall", "say_hello", "add_two_numbers"].include?(method)
+    ["list_methods", "multicall", "say_hello", "add_two_numbers", "supported_methods", "supported_text_filters", "get_trackback_pings"].include?(method)
+  end
+  
+  def supported_methods(xmlrpc_call)
+    list_methods(xmlrpc_call).reverse
   end
 
   def list_methods(xmlrpc_call)
@@ -339,6 +361,11 @@ module Metaweblog
       "demo.addTwoNumbers",
       "system.listMethods",
       "system.multicall",
+      "mt.publishPost",
+      "mt.getTrackbackPings",
+      "mt.supportedTextFilters",
+      "mt.supportedMethods",
+      "mt.setPostCategories",
       "mt.getPostCategories",
       "mt.getRecentPostTitles",
       "mt.getCategoryList",
@@ -387,18 +414,19 @@ module Metaweblog
       "wp.newPage",
       "wp.getCategories",
       "wp.getAuthors",
-      "wp.getTags"]
+      "wp.getTags",
+      "wp.getUsersBlogs"]
     # LIST OF ALL API METHODS - LONG ARGGGHHHH!! LETS GO
     # system.listMethods - IMPLEMENTED
     # demo.addTwoNumbers - IMPLEMENTED
     # demo.sayHello - IMPLEMENTED
     # pingback.extensions.getPingbacks
     # pingback.ping
-    # mt.publishPost
-    # mt.getTrackbackPings
-    # mt.supportedTextFilters
-    # mt.supportedMethods
-    # mt.setPostCategories
+    # mt.publishPost  - IMPLEMENTED - TESTED AGAINST WORDPRESS
+    # mt.getTrackbackPings - NOT IMPLEMENTED JUST RETURNS EMPTY ARRAY - TESTED AGAINST WP
+    # mt.supportedTextFilters -  IMPLEMENTED - TESTED AGAINST WORDPRESS
+    # mt.supportedMethods - IMPLEMENTED - CHECK ORDERING
+    # mt.setPostCategories - IMPLEMENTED - TESTED AGAINST WORDPRESS
     # mt.getPostCategories - IMPLEMENTED - TESTED AGAINST WORDPRESS
     # mt.getRecentPostTitles - IMPLEMENTED - TESTED AGAINST WORDPRESS
     # mt.getCategoryList - IMPLEMENTED - TESTED AGAINST WORDPRESS
