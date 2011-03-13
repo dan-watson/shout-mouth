@@ -49,4 +49,11 @@ class Category
         :category_name => category
       }
     end
+    
+    def to_movable_type
+      {
+        :categoryId => id.to_s,
+        :categoryName => category
+      }
+    end
 end

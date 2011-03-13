@@ -204,6 +204,26 @@ describe "metaweblog api" do
      find_value(last_response.body, "rssUrl", ["member", "name", "value", "string"], 1).should == ""
    end
    
+   it "should return correct response when the getCategoryList method is called with a movable type client" do
+     post '/xmlrpc/',  "<methodCall>
+                           <methodName>mt.getCategoryList</methodName>
+                           <params>
+                           <param><value><string>Blog Name</string></value></param>
+                           <param><value><string>#{@user.email}</string></value></param>
+                           <param><value><string>password123</string></value></param>
+                           </params>
+                           </methodCall>"
+                                     
+     category1 = TestDataHelper.category1
+     category2 = TestDataHelper.category2
+     
+     find_value(last_response.body, "categoryId", ["member", "name", "value", "string"], 0).should == category1.id.to_s 
+     find_value(last_response.body, "categoryName", ["member", "name", "value", "string"], 0).should == category1.category 
+     
+     find_value(last_response.body, "categoryId", ["member", "name", "value", "string"], 1).should == category2.id.to_s  
+     find_value(last_response.body, "categoryName", ["member", "name", "value", "string"], 1).should == category2.category
+   end
+   
    it "should update the correct post and give the correct response when the editPost method is called" do
      
      post_to_update_id = @post.id

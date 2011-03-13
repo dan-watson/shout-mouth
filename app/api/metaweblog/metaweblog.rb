@@ -168,6 +168,10 @@ module Metaweblog
     Category.usable_active_categories.all(:category.like => "%#{xmlrpc_call[1][3]}%", :limit => xmlrpc_call[1][4]).map{|category| category.to_minimal_metaweblog}
   end
   
+  def get_category_list(xmlrpc_call)
+    Category.usable_active_categories.all.map{|category| category.to_movable_type}
+  end
+  
   def get_comment_count(xmlrpc_call)
      post = Post.first(:id => xmlrpc_call[1][3].to_i)
      post.to_wordpress_comment_count
@@ -329,6 +333,7 @@ module Metaweblog
       "metaWeblog.getTemplate", #NOT IMPLEMENTED
       "metaWeblog.deletePost", #NOT IMPLEMENTED
       "metaWeblog.getUsersBlogs",
+      "blogger.deletePost",
       "blogger.editPost",
       "blogger.newPost",
       "blogger.setTemplate", #NOT IMPLEMENTED
@@ -388,7 +393,7 @@ module Metaweblog
     # metaWeblog.getPost - IMPLEMENTED
     # metaWeblog.editPost - IMPLEMENTED
     # metaWeblog.newPost - IMPLEMENTED
-    # blogger.deletePost
+    # blogger.deletePost - IMPLEMENTED
     # blogger.editPost - IMPLEMENTED
     # blogger.newPost - IMPLEMENTED - TESTED AGAINST WORDPRESS
     # blogger.setTemplate - NOT GOING TO IMPLEMENT - TESTED AGAINST WORDPRESS
