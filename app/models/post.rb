@@ -222,6 +222,25 @@ class Post
     all_active.all(:is_page => true)
   end
 
+  def self.new_post_from_xmlrpc_payload_blogger_client xmlrpc_call
+    
+    title = xmlrpc_call[1][4].gsub(/<title>(.+?)<\/title>/).first.gsub(/<?(.)title>/,"")
+    cataegory_ids = xmlrpc_call[1][4].gsub(/<category>(.+?)<\/category>/).first.gsub(/<?(.)category>/,"").split(",")
+    body = xmlrpc_call[1][4].gsub(/<(.+?)>(.+?)<(.+?)>/, "")
+    is_active = xmlrpc_call[1][5]
+    
+    post = Post.new(:title => title,
+    :body => body,
+    :user => User.find_user(xmlrpc_call[1][2]),
+    :is_active => is_active)
+    
+    cataegory_ids.each{|id| post.categories << Category.get(id)}
+    post.categories.each{|category| post.tags << Tag.first_or_create({:tag => category.category}, {:tag => category.category})}
+    
+    post
+    
+  end
+  
   def self.new_post_from_xmlrpc_payload xmlrpc_call
   
     post = Post.new(:title => xmlrpc_call[1][3]["title"],

@@ -21,6 +21,16 @@ module Metaweblog
   end
 
   def new_post(xmlrpc_call)
+    
+    client = client_from(xmlrpc_call)
+    
+    if(client == BLOGGER)
+      post = Post.new_post_from_xmlrpc_payload_blogger_client(xmlrpc_call)
+      return raise_xmlrpc_error(4003, post.errors.full_messages.to_s) unless post.save
+      return post.id 
+    end
+    
+    
     post = Post.new_post_from_xmlrpc_payload(xmlrpc_call)
     return raise_xmlrpc_error(4003, post.errors.full_messages.to_s) unless post.save
     post.id
@@ -86,6 +96,13 @@ module Metaweblog
     user.to_metaweblog
   end
 
+  def set_template(xmlrpc_call)
+    raise_xmlrpc_error(401, "Sorry, this user cannot edit the template.")
+  end
+  
+  def get_template(xmlrpc_call)
+    raise_xmlrpc_error(401, "Sorry, this user cannot edit the template.")
+  end
   #Wordpress API
 
   def get_page_list(xmlrpc_call)
@@ -299,8 +316,12 @@ module Metaweblog
       "metaWeblog.getPost",
       "metaWeblog.getCategories",
       "metaWeblog.getRecentPosts",
-      "metaWeblog.deletePost",
+      "metaWeblog.setTemplate",
+      "metaWeblog.getTemplate", #NOT IMPLEMENTED
+      "metaWeblog.deletePost", #NOT IMPLEMENTED
       "metaWeblog.getUsersBlogs",
+      "blogger.setTemplate", #NOT IMPLEMENTED
+      "blogger.getTemplate", #NOT IMPLEMENTED
       "blogger.getPost",
       "blogger.getRecentPosts",
       "blogger.getUserInfo",
@@ -347,8 +368,8 @@ module Metaweblog
     # mt.getRecentPostTitles
     # mt.getCategoryList
     # metaWeblog.getUsersBlogs - IMPLEMENTED
-    # metaWeblog.setTemplate
-    # metaWeblog.getTemplate
+    # metaWeblog.setTemplate - NOT GOING TO IMPLEMENT - TESTED AGAINST WORDPRESS
+    # metaWeblog.getTemplate - NOT GOING TO IMPLEMENT - TESTED AGAINST WORDPRESS
     # metaWeblog.deletePost - IMPLEMENTED
     # metaWeblog.newMediaObject - IMPLEMENTED
     # metaWeblog.getCategories - IMPLEMENTED
@@ -359,8 +380,8 @@ module Metaweblog
     # blogger.deletePost
     # blogger.editPost
     # blogger.newPost
-    # blogger.setTemplate
-    # blogger.getTemplate
+    # blogger.setTemplate - NOT GOING TO IMPLEMENT - TESTED AGAINST WORDPRESS
+    # blogger.getTemplate - NOT GOING TO IMPLEMENT - TESTED AGAINST WORDPRESS
     # blogger.getRecentPosts - IMPLEMENTED - TESTED AGAINST WORDPRESS
     # blogger.getPost - IMPLEMENTED - TESTED AGAINST WORDPRESS
     # blogger.getUserInfo - IMPLEMENTED - TESTED AGAINST WORDPRESS

@@ -380,6 +380,61 @@ describe "metaweblog api" do
       
       last_response.body.should include("<int>#{post.id}</int>")
     end
+    
+    it "should create a new post and give the correct response when the newPost method is called from a blogger client" do  
+      
+      id = TestDataHelper.category1.id
+      id_1 = TestDataHelper.category2.id
+      
+      post '/xmlrpc/',  
+      
+      "<methodCall>
+      	<methodName>blogger.newPost</methodName>
+      	<params>
+      		<param>
+      			<value>
+      				<string>Blog Name</string>
+      			</value>
+      		</param>
+      		<param>
+      			<value>
+      				<string>2000</string>
+      			</value>
+      		</param>
+      		<param>
+      			<value>
+      				<string>#{@user.email}</string>
+      			</value>
+      		</param>
+      		<param>
+      			<value>
+      				<string>password123</string>
+      			</value>
+      		</param>
+      		<param>
+      			<value>
+      				<string>&lt;title&gt;NEWY&lt;/title&gt;&lt;category&gt;#{id},#{id_1}&lt;/category&gt;This is the body</string>
+      			</value>
+      		</param>
+      		<param>
+      			<value>
+      				<boolean>1</boolean>
+      			</value>
+      		</param>
+      	</params>
+      </methodCall>"
+      
+      post = Post.first(:title => "NEWY")
+      post.title.should == "NEWY"
+      post.body.should == "This is the body"
+      post.categories.count.should == 2
+      post.tags.count.should == 2
+      post.month.should == DateTime.now.strftime("%B")
+      post.year.should == DateTime.now.year
+      post.is_active.should be_true
+      
+      last_response.body.should include("<int>#{post.id}</int>")
+    end
    
    it "should mark a post as not published and give the correct response when the deletePost method is called" do  
      
