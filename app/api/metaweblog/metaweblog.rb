@@ -37,6 +37,15 @@ module Metaweblog
   end
 
   def edit_post(xmlrpc_call)
+    
+    client = client_from(xmlrpc_call)
+    
+    if(client == BLOGGER)
+      post = Post.edit_post_from_xmlrpc_payload_blogger_client(xmlrpc_call)
+      return raise_xmlrpc_error(4003, post.errors.full_messages.to_s) unless post.save
+      return true
+    end
+    
     post = Post.edit_post_from_xmlrpc_payload(xmlrpc_call)
     return raise_xmlrpc_error(4003, post.errors.full_messages.to_s) unless post.save
     post.reload.to_metaweblog
@@ -320,6 +329,8 @@ module Metaweblog
       "metaWeblog.getTemplate", #NOT IMPLEMENTED
       "metaWeblog.deletePost", #NOT IMPLEMENTED
       "metaWeblog.getUsersBlogs",
+      "blogger.editPost",
+      "blogger.newPost",
       "blogger.setTemplate", #NOT IMPLEMENTED
       "blogger.getTemplate", #NOT IMPLEMENTED
       "blogger.getPost",
@@ -378,8 +389,8 @@ module Metaweblog
     # metaWeblog.editPost - IMPLEMENTED
     # metaWeblog.newPost - IMPLEMENTED
     # blogger.deletePost
-    # blogger.editPost
-    # blogger.newPost
+    # blogger.editPost - IMPLEMENTED
+    # blogger.newPost - IMPLEMENTED - TESTED AGAINST WORDPRESS
     # blogger.setTemplate - NOT GOING TO IMPLEMENT - TESTED AGAINST WORDPRESS
     # blogger.getTemplate - NOT GOING TO IMPLEMENT - TESTED AGAINST WORDPRESS
     # blogger.getRecentPosts - IMPLEMENTED - TESTED AGAINST WORDPRESS

@@ -241,6 +241,33 @@ class Post
     
   end
   
+  def self.edit_post_from_xmlrpc_payload_blogger_client xmlrpc_call
+     post = Post.get(xmlrpc_call[1][1])
+
+     title = xmlrpc_call[1][4].gsub(/<title>(.+?)<\/title>/).first.gsub(/<?(.)title>/,"")
+     
+     if(post.title != title)
+       post.add_legacy_route post.slug
+     end
+
+     post.title = title
+     post.body = xmlrpc_call[1][4].gsub(/<(.+?)>(.+?)<(.+?)>/, "")
+
+     cataegory_ids = xmlrpc_call[1][4].gsub(/<category>(.+?)<\/category>/).first.gsub(/<?(.)category>/,"").split(",")
+     
+     post.categories
+     post.category_posts.destroy
+     puts cataegory_ids
+     cataegory_ids.each{|id| post.categories << Category.get(id)}
+     
+     post.tags
+     post.post_tags.destroy
+     post.categories.each{|category| post.tags << Tag.first_or_create({:tag => category.category}, {:tag => category.category})}
+     
+     post.is_active = xmlrpc_call[1][5]
+     post
+  end
+  
   def self.new_post_from_xmlrpc_payload xmlrpc_call
   
     post = Post.new(:title => xmlrpc_call[1][3]["title"],

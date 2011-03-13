@@ -303,6 +303,59 @@ describe "metaweblog api" do
      
    end
    
+   
+    it "should update the correct post and give the correct response when the editPost method is called using the blogger api" do
+
+      post_to_update_id = @post.id
+      old_post_slug = @post.slug
+      id = TestDataHelper.category1.id
+      id_1 = TestDataHelper.category2.id
+        
+      post '/xmlrpc/',  "<methodCall>
+       <methodName>blogger.editPost</methodName>
+       <params>
+       <param>
+        <value>
+         <string>Irrel</string>
+        </value>
+       </param>
+        <param>
+         <value>
+          <string>#{post_to_update_id}</string>
+         </value>
+        </param>
+        <param>
+         <value>
+          <string>#{@user.email}</string>
+         </value>
+        </param>
+        <param>
+         <value>
+          <string>password123</string>
+         </value>
+        </param>
+        <param>
+    			<value>
+    				<string>&lt;title&gt;NEWYUPDATE-011&lt;/title&gt;&lt;category&gt;#{id},#{id_1}&lt;/category&gt;This is the body</string>
+    			</value>
+    		</param>
+    		<param>
+    			<value>
+    				<boolean>1</boolean>
+    			</value>
+    		</param>
+       </params>
+      </methodCall>"
+
+      post = Post.find(:id => post_to_update_id).first
+      post.title.should == "NEWYUPDATE-011"
+      post.body.should == "This is the body"
+      post.legacy_routes[0].slug.should == old_post_slug
+      post.categories.count.should == 2
+      post.tags.count.should == 2
+
+    end
+   
     
     it "should create a new post and give the correct response when the newPost method is called" do  
       post '/xmlrpc/',  "<methodCall>
