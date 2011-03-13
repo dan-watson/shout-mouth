@@ -137,7 +137,6 @@ module Metaweblog
   def get_template(xmlrpc_call)
     raise_xmlrpc_error(401, "Sorry, this user cannot edit the template.")
   end
-  #Wordpress API
 
   def get_page_list(xmlrpc_call)
     pages = Post.all_active_pages.all
@@ -203,22 +202,14 @@ module Metaweblog
   end
   
   def get_post_status_list(xmlrpc_call)
-    #OK - Wordpress returns a list of draft, pending, private, publish
-    #We will return just publish at the moment as there is currently no functionality for the other constants
-    # Method will not have a test as it really does not need it!
     PostStatus.statuses
   end
   
   def get_page_status_list(xmlrpc_call)
-    #OK - Wordpress returns a list of draft, private, publish
-    #We will return just publish at the moment as there is currently no functionality for the other constants
-    # Method will not have a test as it really does not need it!
     PostStatus.statuses
   end
   
   def get_page_templates(xmlrpc_call)
-    #Shout Mouth does not support per page templating as wordpress does just return the default preview for a post
-    # Method will not have a test as it really does not need it!
     {:Default => "default"}
   end
   
@@ -287,15 +278,11 @@ module Metaweblog
   def get_media_item(xmlrpc_call)
     raise_xmlrpc_error(4003, "Shout Mouth Message - Not Implemented")
   end
-   
-  #OK SERIOUSLY - This is not part of any api spec but seems to be part of wordpress
-  #Some clients use this method to check the system is responding - not testing this method.
+
   def say_hello(xmlrpc_call)
     "Hello!"
   end
   
-  #OK SERIOUSLY - This is not part of any api spec but seems to be part of wordpress
-  #Some clients use this method to check the system is responding - not testing this method.
   def add_two_numbers(xmlrpc_call)
     xmlrpc_call[1][0].to_i + xmlrpc_call[1][1].to_i
   end
@@ -307,6 +294,19 @@ module Metaweblog
   
   def get_trackback_pings(xmlrpc_call)
     [] #dont support trackbacks so return empty array
+  end
+  
+  def get_pingbacks(xmlrpc_call)
+    [] #dont support trackbacks so return empty array
+  end
+  
+  def ping(xmlrpc_call)
+    #dont support pings so just return a nice response - same as wordpress
+    link_from = xmlrpc_call[1][0] #external url
+    link_to = xmlrpc_call[1][1] #post
+    
+    puts xmlrpc_call[1][0]
+    "Pingback from #{link_from} to #{link_to} registered. Keep the web talking! :-)"
   end
   
   def multicall(xmlrpc_call)
@@ -331,7 +331,7 @@ module Metaweblog
   
   def dump_response(data)
     response = XMLRPC::Marshal.dump_response(data)
-    #Wordpress Send The Response with slight differences....
+    #Wordpress Sends The Response with slight differences....
     
     response.gsub("<i4>", "<int>")
             .gsub("</i4>", "</int>")
@@ -348,143 +348,106 @@ module Metaweblog
   end
   
   def does_not_need_authentication?(method)
-    ["list_methods", "multicall", "say_hello", "add_two_numbers", "supported_methods", "supported_text_filters", "get_trackback_pings"].include?(method)
+    ["list_methods",
+      "get_capabilities", 
+      "multicall", 
+      "say_hello", 
+      "add_two_numbers", 
+      "supported_methods", 
+      "supported_text_filters", 
+      "get_trackback_pings",
+      "get_pingbacks",
+      "ping"].include?(method)
   end
   
+  def get_capabilities(xmlrpc_call)
+    {
+        :xmlrpc => {
+          :specUrl => "http://www.xmlrpc.com/spec",
+          :specVersion => 1
+        },
+        :faults_interop => {
+          :specUrl => "http://xmlrpc-epi.sourceforge.net/specs/rfc.fault_codes.php",
+          :specVersion => 20010516
+        },
+        :'system.multicall' => {
+          :specUrl => "http://www.xmlrpc.com/discuss/msgReader$1208",
+          :specVersion => 1
+        } 
+        
+      }
+  end
   def supported_methods(xmlrpc_call)
     list_methods(xmlrpc_call).reverse
   end
 
   def list_methods(xmlrpc_call)
-    methods = [ 
-      "demo.sayHello",
-      "demo.addTwoNumbers",
-      "system.listMethods",
-      "system.multicall",
-      "mt.publishPost",
-      "mt.getTrackbackPings",
-      "mt.supportedTextFilters",
-      "mt.supportedMethods",
-      "mt.setPostCategories",
-      "mt.getPostCategories",
-      "mt.getRecentPostTitles",
-      "mt.getCategoryList",
-      "metaWeblog.newMediaObject",
-      "metaWeblog.newPost",
-      "metaWeblog.editPost",
-      "metaWeblog.getPost",
-      "metaWeblog.getCategories",
-      "metaWeblog.getRecentPosts",
-      "metaWeblog.setTemplate",
-      "metaWeblog.getTemplate", #NOT IMPLEMENTED
-      "metaWeblog.deletePost", #NOT IMPLEMENTED
-      "metaWeblog.getUsersBlogs",
-      "blogger.deletePost",
-      "blogger.editPost",
-      "blogger.newPost",
-      "blogger.setTemplate", #NOT IMPLEMENTED
-      "blogger.getTemplate", #NOT IMPLEMENTED
-      "blogger.getPost",
-      "blogger.getRecentPosts",
-      "blogger.getUserInfo",
-      "blogger.getUsersBlogs",
-      #"wp.getMediaLibrary", #NOT IMPLEMENTED
-      #"wp.getMediaItem", # NOT IMPLEMENTED
-      "wp.newComment",
-      "wp.editComment",
-      "wp.deleteComment",
-      "wp.getCommentStatusList",
-      "wp.getComments",
-      "wp.getComment",
-      #"wp.setOptions", #NOT IMPLEMENTED 
-      "wp.getOptions",
-      "wp.getPageTemplates",
-      "wp.getPageStatusList",
-      "wp.getPostStatusList",
-      "wp.getCommentCount",
-      "wp.uploadFile",
-      "wp.suggestCategories",
-      "wp.deleteCategory",
-      "wp.newCategory",
-      "wp.getPageList",
-      "wp.getPages",
-      "wp.getPage",
-      "wp.editPage",
-      "wp.deletePage",
-      "wp.newPage",
-      "wp.getCategories",
-      "wp.getAuthors",
-      "wp.getTags",
-      "wp.getUsersBlogs"]
-    # LIST OF ALL API METHODS - LONG ARGGGHHHH!! LETS GO
-    # system.listMethods - IMPLEMENTED
-    # demo.addTwoNumbers - IMPLEMENTED
-    # demo.sayHello - IMPLEMENTED
-    # pingback.extensions.getPingbacks
-    # pingback.ping
-    # mt.publishPost  - IMPLEMENTED - TESTED AGAINST WORDPRESS
-    # mt.getTrackbackPings - NOT IMPLEMENTED JUST RETURNS EMPTY ARRAY - TESTED AGAINST WP
-    # mt.supportedTextFilters -  IMPLEMENTED - TESTED AGAINST WORDPRESS
-    # mt.supportedMethods - IMPLEMENTED - CHECK ORDERING
-    # mt.setPostCategories - IMPLEMENTED - TESTED AGAINST WORDPRESS
-    # mt.getPostCategories - IMPLEMENTED - TESTED AGAINST WORDPRESS
-    # mt.getRecentPostTitles - IMPLEMENTED - TESTED AGAINST WORDPRESS
-    # mt.getCategoryList - IMPLEMENTED - TESTED AGAINST WORDPRESS
-    # metaWeblog.getUsersBlogs - IMPLEMENTED
-    # metaWeblog.setTemplate - NOT GOING TO IMPLEMENT - TESTED AGAINST WORDPRESS
-    # metaWeblog.getTemplate - NOT GOING TO IMPLEMENT - TESTED AGAINST WORDPRESS
-    # metaWeblog.deletePost - IMPLEMENTED
-    # metaWeblog.newMediaObject - IMPLEMENTED
-    # metaWeblog.getCategories - IMPLEMENTED
-    # metaWeblog.getRecentPosts - IMPLEMENTED
-    # metaWeblog.getPost - IMPLEMENTED
-    # metaWeblog.editPost - IMPLEMENTED
-    # metaWeblog.newPost - IMPLEMENTED
-    # blogger.deletePost - IMPLEMENTED - TESTED AGAINST WORDPRESS
-    # blogger.editPost - IMPLEMENTED - TESTED AGAINST WORDPRESS
-    # blogger.newPost - IMPLEMENTED - TESTED AGAINST WORDPRESS
-    # blogger.setTemplate - NOT GOING TO IMPLEMENT - TESTED AGAINST WORDPRESS
-    # blogger.getTemplate - NOT GOING TO IMPLEMENT - TESTED AGAINST WORDPRESS
-    # blogger.getRecentPosts - IMPLEMENTED - TESTED AGAINST WORDPRESS
-    # blogger.getPost - IMPLEMENTED - TESTED AGAINST WORDPRESS
-    # blogger.getUserInfo - IMPLEMENTED - TESTED AGAINST WORDPRESS
-    # blogger.getUsersBlogs - IMPLEMENTED - TESTED AGAINST WORDPRESS
-    # wp.getPostFormats - IMPLEMENTED - TESTED AGAINST WORDPRESS
-    # wp.getMediaLibrary - NOT GOING TO IMPLEMENT
-    # wp.getMediaItem - NOT GOING TO IMPLEMENT
-    # wp.getCommentStatusList - IMPLEMENTED - TESTED AGAINST WORDPRESS
-    # wp.newComment - IMPLEMENTED - TESTED AGAINST WORDPRESS
-    # wp.editComment - IMPLEMENTED - TESTED AGAINST WORDPRESS
-    # wp.deleteComment -IMPLEMENTED - TESTED AGAINST WORDPRESS
-    # wp.getComments - IMPLEMENTED - TESTED AGAINST WORDPRESS
-    # wp.getComment - IMPLEMENTED - TESTED AGAINST WORDPRESS
-    # wp.setOptions - NOT GOING TO IMPLEMENT AT THIS TIME
-    # wp.getOptions - IMPLEMENTED - TESTED AGAINST WORDPRESS
-    # wp.getPageTemplates - IMPLEMENTED - TESTED AGAINST WORDPRESS
-    # wp.getPageStatusList - IMPLEMENTED - TESTED AGAINST WORDPRESS
-    # wp.getPostStatusList - IMPLEMENTED - TESTED AGAINST WORDPRESS
-    # wp.getCommentCount - IMPLEMENTED - TESTED AGAINST WORDPRESS
-    # wp.uploadFile - IMPLEMENTED - NOT TESTED ALTHOUGH IN THE SOURCE FOR WORDPRESS THIS IS JUST A POINTER TO metaWeblog.newMediaObject
-    # wp.suggestCategories - IMPLEMENTED - TESTED AGAINST WORDPRESS
-    # wp.deleteCategory - IMPLEMENTED - TESTED AGAINST WORDPRESS
-    # wp.newCategory - IMPLEMENTED - TESTED AGAINST WORDPRESS
-    # wp.getTags - IMPLEMENTED - TESTED AGAINST WORDPRESS
-    # wp.getCategories - IMPLEMENTED - TESTED AGAINST WORDPRESS
-    # wp.getAuthors - IMPLEMENTED - TESTED AGAINST WORDPRESS
-    # wp.getPageList - IMPLEMENTED - TESTED AGAINST WORDPRESS
-    # wp.editPage - IMPLEMENTED - TESTED AGAINST WORDPRESS
-    # wp.deletePage - IMPLEMENTED - TESTED AGAINST WORDPRESS
-    # wp.newPage - IMPLEMENTED - TESTED AGAINST WORDPRESS
-    # wp.getPages - IMPLEMENTED - TESTED AGAINST WORDPRESS
-    # wp.getPage -IMPLEMENTED - TESTED AGAINST WORDPRESS
-    # wp.getUsersBlogs - IMPLEMENTED - TESTED AGAINST WORDPRESS
+    methods =["system.multicall",
+    "system.listMethods",
+    "system.getCapabilities",
+    "demo.addTwoNumbers",
+    "demo.sayHello",
+    "pingback.extensions.getPingbacks",
+    "pingback.ping",
+    "mt.publishPost",
+    "mt.getTrackbackPings",
+    "mt.supportedTextFilters",
+    "mt.supportedMethods",
+    "mt.setPostCategories",
+    "mt.getPostCategories",
+    "mt.getRecentPostTitles",
+    "mt.getCategoryList",
+    "metaWeblog.getUsersBlogs",
+    "metaWeblog.setTemplate", 
+    "metaWeblog.getTemplate", #NOT IMPLEMENTED
+    "metaWeblog.deletePost",
+    "metaWeblog.newMediaObject",
+    "metaWeblog.getCategories",
+    "metaWeblog.getRecentPosts",
+    "metaWeblog.getPost",
+    "metaWeblog.editPost",
+    "metaWeblog.newPost",
+    "blogger.deletePost",
+    "blogger.editPost",
+    "blogger.newPost",
+    "blogger.setTemplate", #NOT IMPLEMENTED
+    "blogger.getTemplate", #NOT IMPLEMENTED
+    "blogger.getRecentPosts",
+    "blogger.getPost",
+    "blogger.getUserInfo",
+    "blogger.getUsersBlogs",
+    "wp.getPostFormats",
+    "wp.getMediaLibrary", # NOT IMPLEMENTED
+    "wp.getMediaItem", # NOT IMPLEMENTED
+    "wp.getCommentStatusList",
+    "wp.newComment",
+    "wp.editComment",
+    "wp.deleteComment",
+    "wp.getComments",
+    "wp.getComment",
+    "wp.setOptions", #NOT IMPLEMENTED 
+    "wp.getOptions",
+    "wp.getPageTemplates",
+    "wp.getPageStatusList",
+    "wp.getPostStatusList",
+    "wp.getCommentCount",
+    "wp.uploadFile",
+    "wp.suggestCategories",
+    "wp.deleteCategory",
+    "wp.newCategory",
+    "wp.getTags",
+    "wp.getCategories",
+    "wp.getAuthors",
+    "wp.getPageList",
+    "wp.editPage",
+    "wp.deletePage",
+    "wp.newPage",
+    "wp.getPages",
+    "wp.getPage",
+    "wp.getUsersBlogs"]
     
     methods
   end
-
-  #OK the metaweblog / workpress api sucks a little. For some reason only known to hindu cows... Different methods payloads will supply the
-  #username and password in different positions in the xml structure - values are not named and can only be obtained
-  #by position - needed to pull in different stratergy's for different clients
 
   def authentication_details_from(method, xmlrpc_call)
       Class.class_eval("#{client_from(xmlrpc_call)}Strategy").new.authentication_details_from(method, xmlrpc_call)
