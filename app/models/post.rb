@@ -135,6 +135,15 @@ class Post
       #:publish => is_active
     }
   end
+  
+  def to_blogger
+    {
+      :userid => user.id.to_s,
+      :dateCreated => created_at,
+      :content => "<title>#{title}</title><category>#{categories.map{|category| category.id.to_s}.join(",")}</category>#{body}",
+      :postid => id.to_s
+    }
+  end
 
   def to_wordpress_page
     {
@@ -188,9 +197,9 @@ class Post
   
   def to_wordpress_comment_count
     {
-      :approved => comments.all_active_and_ham.count,
+      :approved => comments.all_active_and_ham.count.to_s,
       :awaiting_moderation => 0, #comments are auto-moderated with askimet
-      :spam => comments.all_active_and_spam.count,
+      :spam => comments.all_active_and_spam.count.to_s,
       :total_comments => comments.all_active.count
     }
   end

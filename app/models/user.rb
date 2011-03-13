@@ -43,21 +43,21 @@ class User
   def to_metaweblog
     {
       :nickname => fullname,
-      :userid => id,
+      :userid => id.to_s,
       :url => Blog.url,
-      :firstname => firstname,
       :lastname => lastname,
-      :email => email
+      :firstname => firstname
+      #:email => email
     }
   end
 
   def to_wordpress_author
     {
-      :user_id => id,
+      :user_id => id.to_s,
       :user_login => email,
       :display_name => fullname,
-      :user_email => email,
-      :meta_value => ""
+      :user_email => email
+      #:meta_value => ""
     }
   end
 

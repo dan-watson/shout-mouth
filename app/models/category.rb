@@ -39,13 +39,13 @@ class Category
         :categoryName => category,
         :htmlUrl => permalink,
         :rssUrl => "",
-        :title => category #do we need this? not part of the wordpress api but is part of wordpress
+        #:title => category #do we need this? not part of the wordpress api but is part of wordpress
       }
     end
     
     def to_minimal_metaweblog
       {
-        :category_id => id,
+        :category_id => id.to_s,
         :category_name => category
       }
     end

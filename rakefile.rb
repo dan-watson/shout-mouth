@@ -151,7 +151,7 @@ namespace :import do
           image.remove_attribute "height"
           image.remove_attribute "width"
         }
-        post.body = doc.to_s
+        post.body = doc.xpath("//body").children.to_s
         post.save
       }
     end

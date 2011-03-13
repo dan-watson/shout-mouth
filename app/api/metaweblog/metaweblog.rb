@@ -32,8 +32,20 @@ module Metaweblog
     post.reload.to_metaweblog
   end
 
-  def get_post(xmlrpc_call)
-    post = Post.first(:id => xmlrpc_call[1][0])
+  def get_post(xmlrpc_call) 
+    client = client_from(xmlrpc_call)
+    id = 0
+    
+    case
+      when client == BLOGGER
+        id = xmlrpc_call[1][1]
+      else
+        id = xmlrpc_call[1][0]
+    end
+
+    post = Post.first(:id => id)
+    
+    return post.to_blogger if client == BLOGGER
     post.to_metaweblog
   end
 
@@ -42,9 +54,21 @@ module Metaweblog
   end
 
   def get_recent_posts(xmlrpc_call)
-    limit = xmlrpc_call[1][3] 
+    
+    client = client_from(xmlrpc_call)
+    limit = 0
+    
+    case
+      when client == BLOGGER
+          limit = xmlrpc_call[1][4] 
+      else
+          limit = xmlrpc_call[1][3] 
+    end
+    
     #Some clients pass limit as 0 for all posts
     limit == 0 ? posts = Post.all(:is_page => false, :order => [ :created_at.desc ]) : posts = Post.all(:is_page => false, :order => [ :created_at.desc ], :limit => limit)
+    
+    return posts.map{|p| p.to_blogger} if client == BLOGGER
     posts.map{|p| p.to_metaweblog}
   end
 
@@ -140,7 +164,7 @@ module Metaweblog
   def get_page_templates(xmlrpc_call)
     #Shout Mouth does not support per page templating as wordpress does just return the default preview for a post
     # Method will not have a test as it really does not need it!
-    {:WebPreview => "webpreview.html"}
+    {:Default => "default"}
   end
   
   def get_options(xmlrpc_call)
@@ -242,7 +266,12 @@ module Metaweblog
   end
   
   def dump_response(data)
-    XMLRPC::Marshal.dump_response(data)
+    response = XMLRPC::Marshal.dump_response(data)
+    #Wordpress Send The Response with slight differences....
+    
+    response.gsub("<i4>", "<int>")
+            .gsub("</i4>", "</int>")
+            .gsub("<string/>", "<string></string>")
   end
 
   def raise_xmlrpc_error(code, message)
@@ -272,7 +301,10 @@ module Metaweblog
       "metaWeblog.getRecentPosts",
       "metaWeblog.deletePost",
       "metaWeblog.getUsersBlogs",
+      "blogger.getPost",
+      "blogger.getRecentPosts",
       "blogger.getUserInfo",
+      "blogger.getUsersBlogs",
       #"wp.getMediaLibrary", #NOT IMPLEMENTED
       #"wp.getMediaItem", # NOT IMPLEMENTED
       "wp.newComment",
@@ -329,39 +361,39 @@ module Metaweblog
     # blogger.newPost
     # blogger.setTemplate
     # blogger.getTemplate
-    # blogger.getRecentPosts
-    # blogger.getPost
-    # blogger.getUserInfo - IMPLEMENTED
-    # blogger.getUsersBlogs - IMPLEMENTED
-    # wp.getPostFormats - IMPLEMENTED
+    # blogger.getRecentPosts - IMPLEMENTED - TESTED AGAINST WORDPRESS
+    # blogger.getPost - IMPLEMENTED - TESTED AGAINST WORDPRESS
+    # blogger.getUserInfo - IMPLEMENTED - TESTED AGAINST WORDPRESS
+    # blogger.getUsersBlogs - IMPLEMENTED - TESTED AGAINST WORDPRESS
+    # wp.getPostFormats - IMPLEMENTED - TESTED AGAINST WORDPRESS
     # wp.getMediaLibrary - NOT GOING TO IMPLEMENT
     # wp.getMediaItem - NOT GOING TO IMPLEMENT
-    # wp.getCommentStatusList - IMPLEMENTED
-    # wp.newComment - IMPLEMENTED
-    # wp.editComment - IMPLEMENTED
-    # wp.deleteComment -IMPLEMENTED
-    # wp.getComments - IMPLEMENTED
-    # wp.getComment - IMPLEMENTED
+    # wp.getCommentStatusList - IMPLEMENTED - TESTED AGAINST WORDPRESS
+    # wp.newComment - IMPLEMENTED - TESTED AGAINST WORDPRESS
+    # wp.editComment - IMPLEMENTED - TESTED AGAINST WORDPRESS
+    # wp.deleteComment -IMPLEMENTED - TESTED AGAINST WORDPRESS
+    # wp.getComments - IMPLEMENTED - TESTED AGAINST WORDPRESS
+    # wp.getComment - IMPLEMENTED - TESTED AGAINST WORDPRESS
     # wp.setOptions - NOT GOING TO IMPLEMENT AT THIS TIME
-    # wp.getOptions - IMPLEMENTED
-    # wp.getPageTemplates - IMPLEMENTED
-    # wp.getPageStatusList - IMPLEMENTED
-    # wp.getPostStatusList - IMPLEMENTED
-    # wp.getCommentCount - IMPLEMENTED
-    # wp.uploadFile - IMPLEMENTED
-    # wp.suggestCategories - IMPLEMENTED
-    # wp.deleteCategory - IMPLEMENTED
-    # wp.newCategory - IMPLEMENTED
-    # wp.getTags - IMPLEMENTED
-    # wp.getCategories - IMPLEMENTED
-    # wp.getAuthors - IMPLEMENTED
-    # wp.getPageList - IMPLEMENTED
-    # wp.editPage - IMPLEMENTED
-    # wp.deletePage - IMPLEMENTED
-    # wp.newPage - IMPLEMENTED
-    # wp.getPages - IMPLEMENTED
-    # wp.getPage -IMPLEMENTED
-    # wp.getUsersBlogs - IMPLEMENTED
+    # wp.getOptions - IMPLEMENTED - TESTED AGAINST WORDPRESS
+    # wp.getPageTemplates - IMPLEMENTED - TESTED AGAINST WORDPRESS
+    # wp.getPageStatusList - IMPLEMENTED - TESTED AGAINST WORDPRESS
+    # wp.getPostStatusList - IMPLEMENTED - TESTED AGAINST WORDPRESS
+    # wp.getCommentCount - IMPLEMENTED - TESTED AGAINST WORDPRESS
+    # wp.uploadFile - IMPLEMENTED - NOT TESTED ALTHOUGH IN THE SOURCE FOR WORDPRESS THIS IS JUST A POINTER TO metaWeblog.newMediaObject
+    # wp.suggestCategories - IMPLEMENTED - TESTED AGAINST WORDPRESS
+    # wp.deleteCategory - IMPLEMENTED - TESTED AGAINST WORDPRESS
+    # wp.newCategory - IMPLEMENTED - TESTED AGAINST WORDPRESS
+    # wp.getTags - IMPLEMENTED - TESTED AGAINST WORDPRESS
+    # wp.getCategories - IMPLEMENTED - TESTED AGAINST WORDPRESS
+    # wp.getAuthors - IMPLEMENTED - TESTED AGAINST WORDPRESS
+    # wp.getPageList - IMPLEMENTED - TESTED AGAINST WORDPRESS
+    # wp.editPage - IMPLEMENTED - TESTED AGAINST WORDPRESS
+    # wp.deletePage - IMPLEMENTED - TESTED AGAINST WORDPRESS
+    # wp.newPage - IMPLEMENTED - TESTED AGAINST WORDPRESS
+    # wp.getPages - IMPLEMENTED - TESTED AGAINST WORDPRESS
+    # wp.getPage -IMPLEMENTED - TESTED AGAINST WORDPRESS
+    # wp.getUsersBlogs - IMPLEMENTED - TESTED AGAINST WORDPRESS
     
     methods
   end
