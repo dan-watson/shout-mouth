@@ -53,6 +53,10 @@ class Blog
   def self.comments_open_for_days
     configuration['comments_open_for_days'].to_i
   end
+  
+  def self.use_file_based_storage
+    configuration['use_file_based_storage']
+  end
 
   private
   def self.configuration

@@ -13,6 +13,7 @@ defaults: &defaults
   check_spam: true
   # 0 is forever
   comments_open_for_days:"14" 
+  use_file_based_storage: true
       
 development:
   <<: *defaults
@@ -31,5 +32,6 @@ test: &test
   twitter_account: '@twitter'
   check_spam: false
   comments_open_for_days: "14" 
+  use_file_based_storage: true
 production:
   <<: *defaults

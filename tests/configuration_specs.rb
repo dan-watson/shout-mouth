@@ -50,4 +50,8 @@ describe Blog, "configuration" do
   it "should return the correct configuration variable for the comments_open_for_days key" do
     Blog.comments_open_for_days.should == 14
   end
+  
+  it "should return the correct configuration variable for the use_file_based_storage key" do
+    Blog.use_file_based_storage.should == true
+  end
 end

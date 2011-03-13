@@ -1,4 +1,5 @@
 require Dir.pwd + '/app/api/amazon_s3/amazon_s3'
+require Dir.pwd + '/app/api/upload/upload'
 require Dir.pwd + '/app/api/metaweblog/strategies/authentication_details'
 require Dir.pwd + '/app/api/metaweblog/presenters/presenters'
 require Dir.pwd + '/app/api/metaweblog/mappers/mappers'
@@ -14,13 +15,12 @@ module Metaweblog
   def new_media_object(xmlrpc_call)
     data = xmlrpc_call[1][3]
     name = data["name"].gsub(/\//,'')
+    plain_name = data["name"]
+    bits = data["bits"]
 
-    AmazonS3.save_file(name, data["bits"])
+    return Upload.save_file(plain_name, bits) if Blog.use_file_based_storage
 
-    { 
-      :file => name,
-      :url => "#{Blog.amazon_s3_file_location}#{Blog.amazon_s3_bucket}/#{name}"
-    }
+    AmazonS3.save_file(name, bits)
   end
 
   def new_post(xmlrpc_call)

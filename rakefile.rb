@@ -160,15 +160,20 @@ namespace :import do
     def upload_file(url, upload)
       uri = URI.parse(url)
       name = url.split('/').last.gsub(/(.*=)/, "").downcase 
-            
+      location = {:url => "", :file => ""}
+        
       if(upload)
         Net::HTTP.start(uri.host) { |http|
-          resp = http.get(uri.request_uri)
-          AmazonS3.save_file(name, resp.body)
+          resp = http.get(uri.request_uri)          
+          if(Blog.use_file_based_storage)
+            location = Upload.save_file(name, resp.body)
+          else
+            location = AmazonS3.save_file(name, resp.body)
+          end
         }
       end
-      puts "-----------------CHANGE: #{url} > #{Blog.amazon_s3_file_location}#{Blog.amazon_s3_bucket}/#{name}"
-      return "#{Blog.amazon_s3_file_location}#{Blog.amazon_s3_bucket}/#{name}"
+      
+      return location[:url]
     end
 
     def replace_references(body, old_url, new_url)
