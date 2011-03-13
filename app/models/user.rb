@@ -40,27 +40,6 @@ class User
     "#{firstname} #{lastname}"
   end
 
-  def to_metaweblog
-    {
-      :nickname => fullname,
-      :userid => id.to_s,
-      :url => Blog.url,
-      :lastname => lastname,
-      :firstname => firstname
-      #:email => email
-    }
-  end
-
-  def to_wordpress_author
-    {
-      :user_id => id.to_s,
-      :user_login => email,
-      :display_name => fullname,
-      :user_email => email
-      #:meta_value => ""
-    }
-  end
-
   private
 
   def generate_salt

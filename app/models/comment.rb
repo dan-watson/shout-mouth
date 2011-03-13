@@ -37,45 +37,8 @@ class Comment
     is_spam.nil? ? Akismetor.spam?(comment_attributes) : is_spam #means it been set by the user or already set from askimet
   end
 
-  def to_simple_comment
-    {
-      :comment_author_url => comment_author_url,
-      :comment_author => comment_author,
-      :readable_date => readable_date,
-      :comment_content => comment_content,
-      :avatar => avatar
-    }
-  end
-  
-  def to_wordpress_comment
-    {
-      :date_created_gmt => created_at,
-      :user_id => comment_author_email,
-      :comment_id => id.to_s,
-      :parent => "0",
-      :status => is_spam? ? "spam" : is_active ? "approve" : "hold",
-      :content => comment_content,
-      :link => post.permalink,
-      :post_id => post.id.to_s,
-      :post_title => post.title,
-      :author => comment_author,
-      :author_url => comment_author_url,
-      :author_email => comment_author_email,
-      :author_ip => user_ip,
-      :type => ""
-    }
-  end
-
   def avatar
     "http://www.gravatar.com/avatar/#{Digest::MD5.hexdigest(comment_author_email.downcase)}"
-  end
-  
-  def self.comment_status_list_to_wordpress
-    {
-      :hold => "Unapproved",
-      :approve => "Approved",
-      :spam => "Spam"
-    }
   end
   
   def self.load_comments_from_xmlrpc_payload xmlrpc_call

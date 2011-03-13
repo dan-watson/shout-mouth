@@ -20,16 +20,4 @@ class Tag
   def permalink
      "#{Blog.url}/tag/#{tag}" 
   end
-  
-  def to_metaweblog
-    {
-      :tag_id => id.to_s,
-      :name => tag,
-      :count => posts.count.to_s,
-      :slug => tag,
-      :html_url => permalink,
-      :rss_url => ""
-    }
-  end
-  
 end

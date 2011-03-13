@@ -1,5 +1,7 @@
 require Dir.pwd + '/app/api/amazon_s3/amazon_s3'
 require Dir.pwd + '/app/api/metaweblog/strategies/authentication_details'
+require Dir.pwd + '/app/api/metaweblog/presenters/presenters'
+
 
 module Metaweblog
 
@@ -48,7 +50,7 @@ module Metaweblog
     
     post = Post.edit_post_from_xmlrpc_payload(xmlrpc_call)
     return raise_xmlrpc_error(4003, post.errors.full_messages.to_s) unless post.save
-    post.reload.to_metaweblog
+    PostPresenter.new(post.reload).to_metaweblog
   end
   
   def publish_post(xmlrpc_call)
@@ -69,16 +71,16 @@ module Metaweblog
 
     post = Post.first(:id => id)
     
-    return post.to_blogger if client == BLOGGER
-    post.to_metaweblog
+    return PostPresenter.new(post).to_blogger if client == BLOGGER
+    PostPresenter.new(post).to_metaweblog
   end
 
   def get_categories(xmlrpc_call)
-    Category.usable_active_categories.map{|category| category.to_metaweblog}
+    Category.usable_active_categories.map{|category| CategoryPresenter.new(category).to_metaweblog}
   end
   
   def get_post_categories(xmlrpc_call)
-    Post.get(xmlrpc_call[1][0]).categories.map{|category| category.to_movable_type_post_category}
+    Post.get(xmlrpc_call[1][0]).categories.map{|category| CategoryPresenter.new(category).to_movable_type_post_category}
   end
   
   def set_post_categories(xmlrpc_call)
@@ -100,8 +102,8 @@ module Metaweblog
     #Some clients pass limit as 0 for all posts
     limit == 0 ? posts = Post.all(:is_page => false, :order => [ :created_at.desc ]) : posts = Post.all(:is_page => false, :order => [ :created_at.desc ], :limit => limit)
     
-    return posts.map{|p| p.to_blogger} if client == BLOGGER
-    posts.map{|p| p.to_metaweblog}
+    return posts.map{|p| PostPresenter.new(p).to_blogger} if client == BLOGGER
+    posts.map{|p| PostPresenter.new(p).to_metaweblog}
   end
   
   def get_recent_post_titles(xmlrpc_call)
@@ -113,7 +115,7 @@ module Metaweblog
       posts = posts.all(:limit => limit)
     end
     
-    posts.map{|post| post.to_movable_type}
+    posts.map{|post| PostPresenter.new(post).to_movable_type}
   end
 
   def delete_post(xmlrpc_call)
@@ -122,12 +124,12 @@ module Metaweblog
   end
 
   def get_users_blogs(xmlrpc_call)
-    Blog.to_metaweblog
+    BlogPresenter.new(Blog).to_metaweblog
   end
 
   def get_user_info(xmlrpc_call)
     user = User.find_user(xmlrpc_call[1][1])
-    user.to_metaweblog
+    UserPresenter.new(user).to_metaweblog
   end
 
   def set_template(xmlrpc_call)
@@ -140,17 +142,17 @@ module Metaweblog
 
   def get_page_list(xmlrpc_call)
     pages = Post.all_active_pages.all
-    pages.map{|p| p.to_minimal_wordpress_page}
+    pages.map{|p| PostPresenter.new(p).to_minimal_wordpress_page}
   end
 
   def get_pages(xmlrpc_call)
     pages = Post.all_active_pages.all(:limit => xmlrpc_call[1][3])
-    pages.map{|p| p.to_wordpress_page}
+    pages.map{|p| PostPresenter.new(p).to_wordpress_page}
   end
 
   def get_page(xmlrpc_call)
     page = Post.first(:id => xmlrpc_call[1][1])
-    page.to_wordpress_page
+    PostPresenter.new(page).to_wordpress_page
   end
 
   def edit_page(xmlrpc_call)
@@ -172,11 +174,11 @@ module Metaweblog
 
   def get_authors(xmlrpc_call)
     users = [] << User.find_user(xmlrpc_call[1][1])
-    users.map{|u| u.to_wordpress_author}
+    users.map{|u| UserPresenter.new(u).to_wordpress_author}
   end
 
   def get_tags(xmlrpc_call)
-    Tag.usable_active_tags.map{|tag| tag.to_metaweblog}
+    Tag.usable_active_tags.map{|tag| TagPresenter.new(tag).to_metaweblog}
   end
   
   def new_category(xmlrpc_call)
@@ -189,16 +191,16 @@ module Metaweblog
   end
   
   def suggest_categories(xmlrpc_call)
-    Category.usable_active_categories.all(:category.like => "%#{xmlrpc_call[1][3]}%", :limit => xmlrpc_call[1][4]).map{|category| category.to_minimal_metaweblog}
+    Category.usable_active_categories.all(:category.like => "%#{xmlrpc_call[1][3]}%", :limit => xmlrpc_call[1][4]).map{|category| CategoryPresenter.new(category).to_minimal_metaweblog}
   end
   
   def get_category_list(xmlrpc_call)
-    Category.usable_active_categories.all.map{|category| category.to_movable_type_category_list_item}
+    Category.usable_active_categories.all.map{|category| CategoryPresenter.new(category).to_movable_type_category_list_item}
   end
   
   def get_comment_count(xmlrpc_call)
      post = Post.first(:id => xmlrpc_call[1][3].to_i)
-     post.to_wordpress_comment_count
+     PostPresenter.new(post).to_wordpress_comment_count
   end
   
   def get_post_status_list(xmlrpc_call)
@@ -214,7 +216,7 @@ module Metaweblog
   end
   
   def get_options(xmlrpc_call)
-    Blog.to_wordpress_options
+   BlogPresenter.new(Blog).to_wordpress_options
   end
   
   def set_options(xmlrpc_call)
@@ -237,16 +239,16 @@ module Metaweblog
   
   def get_comment(xmlrpc_call)
     comment = Comment.first(:id => xmlrpc_call[1][3])
-    comment.to_wordpress_comment
+    CommentPresenter.new(comment).to_wordpress_comment
   end
   
   def get_comments(xmlrpc_call)
     comments = Comment.load_comments_from_xmlrpc_payload(xmlrpc_call)
-    comments.map{|comment| comment.to_wordpress_comment}
+    comments.map{|comment| CommentPresenter.new(comment).to_wordpress_comment}
   end
   
   def get_comment_status_list(xmlrpc_call)
-    Comment.comment_status_list_to_wordpress
+    CommentPresenter.comment_status_list
   end
   
   def delete_comment(xmlrpc_call)

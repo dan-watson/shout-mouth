@@ -29,39 +29,4 @@ class Category
     def permalink
       "#{Blog.url}/category/#{category}" 
     end
-    
-    def to_metaweblog
-      {
-        :categoryId => id.to_s,
-        :parentId => 0.to_s,
-        :description => category,
-        :categoryDescription => "",
-        :categoryName => category,
-        :htmlUrl => permalink,
-        :rssUrl => "",
-        #:title => category #do we need this? not part of the wordpress api but is part of wordpress
-      }
-    end
-    
-    def to_movable_type_post_category
-      {
-        :categoryName => category,
-        :categoryId => id.to_s,
-        :isPrimary => false
-      }
-    end
-    
-    def to_minimal_metaweblog
-      {
-        :category_id => id.to_s,
-        :category_name => category
-      }
-    end
-    
-    def to_movable_type_category_list_item
-      {
-        :categoryId => id.to_s,
-        :categoryName => category
-      }
-    end
 end

@@ -1,0 +1,6 @@
+require Dir.pwd + '/app/api/metaweblog/presenters/post_presenter'
+require Dir.pwd + '/app/api/metaweblog/presenters/category_presenter'
+require Dir.pwd + '/app/api/metaweblog/presenters/comment_presenter'
+require Dir.pwd + '/app/api/metaweblog/presenters/blog_presenter'
+require Dir.pwd + '/app/api/metaweblog/presenters/tag_presenter'
+require Dir.pwd + '/app/api/metaweblog/presenters/user_presenter'
