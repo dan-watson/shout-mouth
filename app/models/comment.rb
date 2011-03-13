@@ -20,6 +20,11 @@ class Comment
 
   belongs_to :post
 
+  before :save do
+    self.is_spam = spam?
+  end
+
+  #Instance Methods
   def spam?
     comment_attributes = {
       :key => Blog.akismet_key,  #Grab From Config
@@ -40,65 +45,23 @@ class Comment
   def avatar
     "http://www.gravatar.com/avatar/#{Digest::MD5.hexdigest(comment_author_email.downcase)}"
   end
-  
-  def self.load_comments_from_xmlrpc_payload xmlrpc_call
-    data = xmlrpc_call[1][3]
-    
-    post_id = data["post_id"]
-    limit = data["number"]
-    
-    comments = Comment.all
-    comments = comments.all(:is_spam => false)
-    comments = comments.all(:is_active => true) if data["status"] == "active"
-    comments = comments.all(:is_spam => true) if data["status"] == "spam"
-    comments = comments.all(:is_active => false, :is_spam => false) if data["status"] == "hold" 
-    comments = comments.all(:post => {:id => post_id}) unless post_id.nil?
-    comments = comments.all(:limit => limit) unless limit.nil?
-    
-    comments
-  end
-  
-  def self.edit_comment_from_xmlrpc_payload xmlrpc_call
-    comment = Comment.get(xmlrpc_call[1][3])
-    data = xmlrpc_call[1][4]
-    
-    comment.comment_content = data["content"]
-    comment.comment_author = data["author"]
-    comment.comment_author_url = data["author_url"]
-    comment.comment_author_email = data["author_email"]
-    
-    case 
-      when data["status"] == "approve"
-        comment.is_active = true
-        comment.is_spam = false
-      when data["status"] == "spam"
-        comment.is_spam = true
-        comment.is_active = false
-      else
-        comment.is_active = false
-    end
-    comment
-  end
-  
-  def self.mark_comment_as_inactive comment_id
-    comment = Comment.get(comment_id)
-    comment.is_active = false
-    comment.save  
-  end
-  
-  before :save do
-    self.is_spam = spam?
-  end
 
   def readable_date
     created_at.to_date.strftime("%A, #{created_at.day.ordinalize} %B, %Y")
   end
 
-  #Scope
+  #Factory Methods Input
+  def self.mark_comment_as_inactive comment_id
+    comment = Comment.get(comment_id)
+    comment.is_active = false
+    comment.save
+  end
+
+  #Factory Methods Output
   def self.all_active_and_ham
     all_active.all(:is_spam => false)
   end
-  
+
   def self.all_active_and_spam
     all_active.all(:is_spam => true)
   end

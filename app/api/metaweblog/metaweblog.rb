@@ -1,6 +1,7 @@
 require Dir.pwd + '/app/api/amazon_s3/amazon_s3'
 require Dir.pwd + '/app/api/metaweblog/strategies/authentication_details'
 require Dir.pwd + '/app/api/metaweblog/presenters/presenters'
+require Dir.pwd + '/app/api/metaweblog/mappers/mappers'
 
 
 module Metaweblog
@@ -23,32 +24,26 @@ module Metaweblog
   end
 
   def new_post(xmlrpc_call)
-    
-    client = client_from(xmlrpc_call)
-    
-    if(client == BLOGGER)
-      post = Post.new_post_from_xmlrpc_payload_blogger_client(xmlrpc_call)
+        
+    if(client_from(xmlrpc_call) == BLOGGER)
+      post = PostMapper.new(xmlrpc_call).new_post_from_xmlrpc_payload_blogger_client
       return raise_xmlrpc_error(4003, post.errors.full_messages.to_s) unless post.save
       return post.id 
     end
     
-    
-    post = Post.new_post_from_xmlrpc_payload(xmlrpc_call)
+    post = PostMapper.new(xmlrpc_call).new_post_from_xmlrpc_payload
     return raise_xmlrpc_error(4003, post.errors.full_messages.to_s) unless post.save
     post.id
   end
 
   def edit_post(xmlrpc_call)
-    
-    client = client_from(xmlrpc_call)
-    
-    if(client == BLOGGER)
-      post = Post.edit_post_from_xmlrpc_payload_blogger_client(xmlrpc_call)
+    if(client_from(xmlrpc_call) == BLOGGER)
+      post = PostMapper.new(xmlrpc_call).edit_post_from_xmlrpc_payload_blogger_client
       return raise_xmlrpc_error(4003, post.errors.full_messages.to_s) unless post.save
       return true
     end
     
-    post = Post.edit_post_from_xmlrpc_payload(xmlrpc_call)
+    post = PostMapper.new(xmlrpc_call).edit_post_from_xmlrpc_payload
     return raise_xmlrpc_error(4003, post.errors.full_messages.to_s) unless post.save
     PostPresenter.new(post.reload).to_metaweblog
   end
@@ -84,7 +79,7 @@ module Metaweblog
   end
   
   def set_post_categories(xmlrpc_call)
-    Post.set_post_categories_from_xmlrpc_payload(xmlrpc_call)
+    PostMapper.new(xmlrpc_call).set_post_categories_from_xmlrpc_payload
   end
 
   def get_recent_posts(xmlrpc_call)
@@ -156,7 +151,7 @@ module Metaweblog
   end
 
   def edit_page(xmlrpc_call)
-    page = Post.edit_page_from_xmlrpc_payload(xmlrpc_call)
+    page = PostMapper.new(xmlrpc_call).edit_page_from_xmlrpc_payload
     return raise_xmlrpc_error(4003, page.errors.full_messages.to_s) unless page.save
     true
   end
@@ -167,7 +162,7 @@ module Metaweblog
   end
 
   def new_page(xmlrpc_call)
-    page = Post.new_page_from_xmlrpc_payload(xmlrpc_call)
+    page = PostMapper.new(xmlrpc_call).new_page_from_xmlrpc_payload
     return raise_xmlrpc_error(4003, page.errors.full_messages.to_s) unless page.save
     page.id.to_s
   end
@@ -182,12 +177,12 @@ module Metaweblog
   end
   
   def new_category(xmlrpc_call)
-    category = Category.new_category_from_xmlrpc_payload(xmlrpc_call)
+    category = CategoryMapper.new(xmlrpc_call).new_category_from_xmlrpc_payload
     category.id
   end
   
   def delete_category(xmlrpc_call)
-    Category.mark_as_inactive_from_xmlrpc_payload(xmlrpc_call)
+    CategoryMapper.new(xmlrpc_call).mark_as_inactive_from_xmlrpc_payload
   end
   
   def suggest_categories(xmlrpc_call)
@@ -243,7 +238,7 @@ module Metaweblog
   end
   
   def get_comments(xmlrpc_call)
-    comments = Comment.load_comments_from_xmlrpc_payload(xmlrpc_call)
+    comments = CommentMapper.new(xmlrpc_call).load_comments_from_xmlrpc_payload
     comments.map{|comment| CommentPresenter.new(comment).to_wordpress_comment}
   end
   
@@ -257,14 +252,14 @@ module Metaweblog
   end
   
   def edit_comment(xmlrpc_call)
-    comment = Comment.edit_comment_from_xmlrpc_payload(xmlrpc_call)
+    comment = CommentMapper.new(xmlrpc_call).edit_comment_from_xmlrpc_payload
     return raise_xmlrpc_error(4003, comment.errors.full_messages.to_s) unless comment.save
     true
   end
   
   def new_comment(xmlrpc_call)    
     post = Post.get(xmlrpc_call[1][3])
-    comment = post.add_comment_from_xmlrpc_payload(xmlrpc_call)
+    comment = PostMapper.new(xmlrpc_call).add_comment_from_xmlrpc_payload_for(post)
     return raise_xmlrpc_error(4003, comment.errors.full_messages.to_s) unless comment.save
     comment.id
   end
@@ -379,6 +374,7 @@ module Metaweblog
         
       }
   end
+  
   def supported_methods(xmlrpc_call)
     list_methods(xmlrpc_call).reverse
   end

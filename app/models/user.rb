@@ -15,6 +15,7 @@ class User
 
   has n, :posts
 
+  #Constructor
   def initialize(attributes = nil)
     super(attributes)
 
@@ -28,10 +29,7 @@ class User
     end
   end
 
-  def self.find_user email
-    User.first(:email => email, :is_active => true)
-  end
-
+  #Instance Methods
   def authenticate password
     encrypt_password(password, self.salt) == self.password
   end
@@ -40,8 +38,13 @@ class User
     "#{firstname} #{lastname}"
   end
 
-  private
+  #Factory Methods
+  def self.find_user email
+    User.first(:email => email, :is_active => true)
+  end
 
+  #Private Methods
+  private
   def generate_salt
     (0...8).map{rand(25).chr}.join
   end
