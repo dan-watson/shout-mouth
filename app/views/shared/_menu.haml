@@ -8,5 +8,15 @@
 	
 	-pages.each do |page|
 		%li
-			%a{:href => "#{page.permalink}", :rel => "follow"}=page.title
-	
+			%a{:href => "#{page.permalink}", :rel => "follow"}
+				=page.title
+			%div.clear
+			-if page.child_pages.any?
+				%ul.child_menu
+					-page.child_pages.each do |child|
+						%li.child_menu_item 
+							%a{:href => "#{child.permalink}", :rel => "follow", :class => "child_menu_item_link"}
+								=child.title
+							
+							
+							

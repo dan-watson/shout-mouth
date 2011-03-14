@@ -62,6 +62,7 @@ pre {
 }
 #menu{
 	float:right;
+	margin-right:40px;
 }
 #menu ul{
 	margin-top:30px;
@@ -71,6 +72,31 @@ pre {
 	display:block;
 	margin-right:20px;
 }
+.child_menu{
+	padding:0px;
+	margin:0px 0px 0px 0px !important;
+	display:none;
+	position:absolute;
+	border:solid 1px #EEEEEE;
+	background-color:#FFFFFF;
+}
+.child_menu_item{
+	float:none !important;
+	margin:0px !important;
+	padding:0px;
+}
+.child_menu_item_link{
+	display:block;
+	margin:0px 0px 0px 0px !important;
+	padding:6px 10px 6px 15px !important;
+	font-size:0.8em;
+}
+.child_menu_item_link:hover{
+	text-decoration:none;
+	background-color:#7A0000;
+	color:#FFFFFF;
+}
+
 #separator{
 	float:left;
 	height:10px;

@@ -67,7 +67,7 @@ class PostPresenter
     {
       :page_id => @post.id.to_s,
       :page_title => @post.title,
-      :page_parent_id => "0",
+      :page_parent_id => @post.parent_page_id.to_s,
       :dateCreated => @post.created_at,
       :date_created_gmt => @post.created_at
     }
@@ -91,9 +91,9 @@ class PostPresenter
       :wp_slug => @post.slug,
       :wp_password => "",
       :wp_author => @post.user.email,
-      :wp_page_parent_id => 0,
+      :wp_page_parent_id => @post.parent_page_id,
       :wp_page_parent_title => "",
-      :wp_page_order => 0,
+      :wp_page_order => @post.page_order,
       :wp_author_id => @post.user.id.to_s,
       :wp_author_display_name => @post.user.fullname, #possible need to be email,
       :date_created_gmt => @post.created_at,

@@ -1,7 +1,5 @@
 ===ToDo
-
-- Implement file based storage option.
-- Implement Hierarchal Pages - Correct data driven menu for hierarchal pages.
+- Connection String Configuration Based On Rack Enviroment
 
 
 ===Demo Information

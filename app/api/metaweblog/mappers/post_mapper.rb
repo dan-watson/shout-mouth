@@ -164,6 +164,13 @@ class PostMapper
     page.add_tag Tag.first_or_create({:tag => "page"}, {:tag => "page"})
     page.add_category Category.first_or_create({:category => "page"}, {:category => "page"})
     
+    #wp_page_order - int
+    page.page_order = @xmlrpc_call[1][3]["wp_page_order"] unless @xmlrpc_call[1][3]["wp_page_order"].nil?
+    
+    #wp_page_parent_id - int
+    page.parent_page_id = @xmlrpc_call[1][3]["wp_page_parent_id"] unless @xmlrpc_call[1][3]["wp_page_parent_id"].nil?
+    
+    
     page
   end
   

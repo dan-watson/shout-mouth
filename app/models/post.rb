@@ -10,6 +10,8 @@ class Post
   property :month, String
   property :year, Integer
   property :local_draft_id, String, :length => 200, :default => ""
+  property :page_order, Integer, :default => 0
+  property :parent_page_id, Integer, :default => 0
 
   validates_presence_of :title, :body, :tags, :categories
   validates_uniqueness_of :title
@@ -19,13 +21,21 @@ class Post
   has n, :legacy_routes
   has n, :tags, :through => Resource, :is_active => true
   has n, :categories, :through => Resource, :is_active => true
-
+  
   before :save do
     self.persisted_slug = self.slug
     self.month = created_at.strftime("%B")
     self.year = created_at.year
   end
   
+  def parent_page
+    Post.get(parent_page_id)
+  end
+  
+  def child_pages
+    Post.all(:parent_page_id => id, :is_active => true, :order => [:page_order.asc])
+  end
+
   #Instance Methods
   def author
     user.fullname
@@ -70,23 +80,23 @@ class Post
   def add_legacy_route legacy_url
     legacy_routes << LegacyRoute.new(:slug => legacy_url)
   end
-  
+
   def add_category category
     categories << category
   end
-  
+
   def add_categories collection
     collection.each{|category| categories << category}
   end
-  
+
   def add_tag tag
     tags << tag
   end
-  
+
   def add_tags collection
     collection.each{|tag| tags << tag}
   end
-  
+
   #Factory Methods Output
   def self.month_year_counter
     all_active_posts.group_by{|post| "#{post.year}-#{post.month}"}
@@ -99,8 +109,8 @@ class Post
   def self.all_active_pages
     all_active.all(:is_page => true)
   end
-  
-   #Factory Methods Input
+
+  #Factory Methods Input
   def self.mark_as_active post_id
     post = Post.get(post_id)
     post.is_active = true
