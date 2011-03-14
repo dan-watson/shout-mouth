@@ -1,7 +1,7 @@
 ===Features For Version 2.0
--Support mysql for production
--Implement Auto-setup
--Administration System
+- Support mysql for production
+- Implement Auto-setup
+- Administration System
 
 
 ===Demo Information
