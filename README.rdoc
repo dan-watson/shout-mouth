@@ -48,12 +48,7 @@ To run all the tests
 	rake specs:run_all
 	
 ===Rails Style Console
-racksh - when in the application root
-
-===Tested Blogging Clients
-- Windows Live Writer (fully supported)
-- Wordpress Client For Ipad - (ropey at best - will be fully functional once the full wordpress API is implemented)
-- Blogger Client For Ipad - (ropey at best - this is due to the clients interpretation of how the API should work - - will be fully functional once the full wordpress API is implemented)
+racksh - when in the application root -eg RACK_ENV=production racksh
 
 
 ===Writing Plugins For Shout Mouth
