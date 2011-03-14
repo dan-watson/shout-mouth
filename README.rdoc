@@ -1,3 +1,9 @@
+===Features For Version 2.0
+-Support mysql for production
+-Implement Auto-setup
+-Administration System
+
+
 ===Demo Information
 
 Runs the site on test data (bundler must be installed)
