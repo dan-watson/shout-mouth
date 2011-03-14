@@ -1,4 +1,5 @@
 .rvmrc
-db/shout_mouth.db
+db/*.db
 config/_config.yaml
 logs/
+public/uploads
