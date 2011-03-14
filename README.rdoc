@@ -1,7 +1,3 @@
-===ToDo
-- Connection String Configuration Based On Rack Enviroment
-
-
 ===Demo Information
 
 Runs the site on test data (bundler must be installed)
