@@ -2,6 +2,7 @@
 - Support mysql for production
 - Implement Auto-setup
 - Administration System
+- Google Analytics Key In Config
 
 
 ===Demo Information
