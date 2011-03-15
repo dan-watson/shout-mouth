@@ -3,6 +3,9 @@
 - Implement Auto-setup
 - Administration System
 - Google Analytics Key In Config
+- Meta Tags & Site Description Keys
+- Fix Bug With Footer information - Maybe a config item.
+- Queued Posts - When posting in the future queue up the posts
 
 
 ===Demo Information
