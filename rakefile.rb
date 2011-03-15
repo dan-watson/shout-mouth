@@ -171,6 +171,12 @@ namespace :import do
             location = AmazonS3.save_file(name, resp.body)
           end
         }
+      else
+        if(Blog.use_file_based_storage)
+          location = {:file => name, :url => "#{Blog.url}/uploads/#{name}"}
+        else
+          location = {:file => name, :url => "#{Blog.amazon_s3_file_location}#{Blog.amazon_s3_bucket}/#{name}"}
+        end
       end
       
       return location[:url]
