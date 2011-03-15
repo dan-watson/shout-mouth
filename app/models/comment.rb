@@ -49,6 +49,16 @@ class Comment
   def readable_date
     created_at.to_date.strftime("%A, #{created_at.day.ordinalize} %B, %Y")
   end
+  
+  def to_simple_comment
+    {
+      :comment_author_url => comment_author_url,
+      :comment_author =>  comment_author,
+      :readable_date =>  readable_date,
+      :comment_content =>  comment_content,
+      :avatar =>  avatar
+    }
+  end
 
   #Factory Methods Input
   def self.mark_comment_as_inactive comment_id

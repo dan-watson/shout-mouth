@@ -3,17 +3,7 @@ class CommentPresenter
   def initialize(comment)
     @comment = comment
   end
-  
-  def to_simple_comment
-    {
-      :comment_author_url => @comment.comment_author_url,
-      :comment_author =>  @comment.comment_author,
-      :readable_date =>  @comment.readable_date,
-      :comment_content =>  @comment.comment_content,
-      :avatar =>  @comment.avatar
-    }
-  end
-  
+    
   def to_wordpress_comment
     {
       :date_created_gmt =>  @comment.created_at,
