@@ -14,6 +14,7 @@ defaults: &defaults
   # 0 is forever
   comments_open_for_days:"14" 
   use_file_based_storage: true
+  footer_more_text: "Disclaimer: The opinions expressed herein are my own personal opinions and do not represent my employer's view in any way."
       
 development:
   <<: *defaults
@@ -33,5 +34,6 @@ test: &test
   check_spam: false
   comments_open_for_days: "14" 
   use_file_based_storage: true
+  footer_more_text: "Footer More"
 production:
   <<: *defaults

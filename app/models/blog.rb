@@ -57,6 +57,10 @@ class Blog
   def self.use_file_based_storage
     configuration['use_file_based_storage']
   end
+  
+  def self.footer_more_text
+    configuration['footer_more_text']
+  end
 
   private
   def self.configuration

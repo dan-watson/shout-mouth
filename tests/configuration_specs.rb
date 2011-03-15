@@ -54,4 +54,9 @@ describe Blog, "configuration" do
   it "should return the correct configuration variable for the use_file_based_storage key" do
     Blog.use_file_based_storage.should == true
   end
+  
+  it "should return the correct configuration variable for the footer_more_text key" do
+    Blog.footer_more_text.should == "Footer More"
+  end
+  
 end
