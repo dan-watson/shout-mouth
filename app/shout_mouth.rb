@@ -192,5 +192,9 @@ class ShoutMouth < Sinatra::Base
     def pages
       Post.all_active_pages.all(:parent_page_id => 0,:order => [:page_order.asc])
     end
+    
+    def meta_keywords
+      Tag.usable_active_tags.map{|tag| tag.tag}.join(", ")
+    end
   end
 end
