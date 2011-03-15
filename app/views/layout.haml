@@ -21,6 +21,8 @@
 				
 				
 			#footer== &copy; #{DateTime.now.year} #{Blog.site_name} #{Blog.footer_more_text}
-		
+	 
+		-if Blog.use_google_analytics
+			=partial(:'shared/_google_analytics')
 		
 		

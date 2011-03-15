@@ -59,4 +59,12 @@ describe Blog, "configuration" do
     Blog.footer_more_text.should == "Footer More"
   end
   
+  it "should return the correct configuration variable for the google_analytics_key" do
+    Blog.google_analytics_key.should == "UA-0000000-0"
+  end
+  
+  it "should return the use_google_analytics as true" do
+    Blog.use_google_analytics.should be_true
+  end
+  
 end

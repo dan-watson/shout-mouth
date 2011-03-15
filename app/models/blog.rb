@@ -61,6 +61,14 @@ class Blog
   def self.footer_more_text
     configuration['footer_more_text']
   end
+  
+  def self.google_analytics_key
+    configuration['google_analytics_key']
+  end
+  
+  def self.use_google_analytics
+    self.google_analytics_key.length > 0
+  end
 
   private
   def self.configuration

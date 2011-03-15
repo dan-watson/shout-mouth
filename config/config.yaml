@@ -13,8 +13,9 @@ defaults: &defaults
   check_spam: true
   # 0 is forever
   comments_open_for_days:"14" 
-  use_file_based_storage: true
-  footer_more_text: "Disclaimer: The opinions expressed herein are my own personal opinions and do not represent my employer's view in any way."
+  use_file_based_storage: true #Stop amazons3 being used as a image/document store.
+  footer_more_text: "<br /><br />Disclaimer: The opinions expressed herein are my own personal opinions and do not represent my employer's view in any way."
+  google_analytics_key: "UA-0000000-0" #Empty string will supress google analytics - ""
       
 development:
   <<: *defaults
@@ -35,5 +36,7 @@ test: &test
   comments_open_for_days: "14" 
   use_file_based_storage: true
   footer_more_text: "Footer More"
+  google_analytics_key: "UA-0000000-0"
+  
 production:
   <<: *defaults
