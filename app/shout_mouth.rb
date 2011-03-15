@@ -54,7 +54,7 @@ class ShoutMouth < Sinatra::Base
       :user_ip => request.ip,
       :user_agent => request.user_agent,
       :referrer => request.referer,
-      :post => Post.find(:persisted_slug => params[:slug]).first
+      :post => Post.first(:persisted_slug => params[:slug])
     }))
     #even if the comment is marked as spam send it back so it will show on the page to satisfy the spammer / bot has
     #done its job correctly
