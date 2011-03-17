@@ -2,9 +2,18 @@
 - Support mysql for production
 - Implement Auto-setup
 - Administration System
+	- manage users 
+	- manage tags
+	- manage categories
+	- manage settings (will need to move settings from yaml to db)
+	- manage edit / add posts
 - Queued Posts - When posting in the future queue up the posts
+- Cache data that will not change on a regular basis - all tags / all categories
 
 
+===Known Issues
+- Error relating to permissions on the db folder and shout_mouth.db file (Cannot connect to readonly database) - change permissions on the file and folder to rectify this.
+ 
 ===Demo Information
 
 Runs the site on test data (bundler must be installed)
