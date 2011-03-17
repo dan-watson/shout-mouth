@@ -7,7 +7,6 @@
 	- manage categories
 	- manage settings (will need to move settings from yaml to db)
 	- manage edit / add posts
-- Cache data that will not change on a regular basis - all tags / all categories
 
 
 ===Known Issues
