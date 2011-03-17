@@ -71,7 +71,7 @@ module Metaweblog
   end
 
   def get_categories(xmlrpc_call)
-    Category.usable_active_categories.map{|category| CategoryPresenter.new(category).to_metaweblog}
+    Category.all.map{|category| CategoryPresenter.new(category).to_metaweblog}
   end
   
   def get_post_categories(xmlrpc_call)
@@ -136,12 +136,12 @@ module Metaweblog
   end
 
   def get_page_list(xmlrpc_call)
-    pages = Post.all_active_pages.all
+    pages = Post.all(:is_page => true)
     pages.map{|p| PostPresenter.new(p).to_minimal_wordpress_page}
   end
 
   def get_pages(xmlrpc_call)
-    pages = Post.all_active_pages.all(:limit => xmlrpc_call[1][3])
+    pages = Post.all(:is_page => true, :limit => xmlrpc_call[1][3])
     pages.map{|p| PostPresenter.new(p).to_wordpress_page}
   end
 
@@ -173,7 +173,7 @@ module Metaweblog
   end
 
   def get_tags(xmlrpc_call)
-    Tag.usable_active_tags.map{|tag| TagPresenter.new(tag).to_metaweblog}
+    Tag.all.map{|tag| TagPresenter.new(tag).to_metaweblog}
   end
   
   def new_category(xmlrpc_call)
@@ -186,11 +186,11 @@ module Metaweblog
   end
   
   def suggest_categories(xmlrpc_call)
-    Category.usable_active_categories.all(:category.like => "%#{xmlrpc_call[1][3]}%", :limit => xmlrpc_call[1][4]).map{|category| CategoryPresenter.new(category).to_minimal_metaweblog}
+    Category.all(:category.like => "%#{xmlrpc_call[1][3]}%", :limit => xmlrpc_call[1][4]).map{|category| CategoryPresenter.new(category).to_minimal_metaweblog}
   end
   
   def get_category_list(xmlrpc_call)
-    Category.usable_active_categories.all.map{|category| CategoryPresenter.new(category).to_movable_type_category_list_item}
+    Category.all.map{|category| CategoryPresenter.new(category).to_movable_type_category_list_item}
   end
   
   def get_comment_count(xmlrpc_call)

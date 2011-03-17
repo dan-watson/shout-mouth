@@ -19,7 +19,7 @@ class Category
   #Factory Methods Output
   def self.usable_active_categories
     all.posts #need to force dynamic creation of the category posts class - this does not fire a query
-    all_active.all(:category.not => "page", :category_posts => { :post => { :is_active => true }})
+    all_active.all(:category.not => "page", :category_posts => { :post => { :is_active => true, :created_at.lte => Time.now }})
   end
 
 end

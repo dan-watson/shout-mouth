@@ -103,11 +103,16 @@ class Post
   end
 
   def self.all_active_posts
-    all_active.all(:is_page => false)
+    #Get all posts published created before now.... this allows queueing of future posts.
+    all_active.all(:is_page => false, :created_at.lte => Time.now)
   end
 
   def self.all_active_pages
     all_active.all(:is_page => true)
+  end
+  
+  def self.all_active_posts_and_pages
+    all_active_posts.union(all_active_pages)
   end
 
   #Factory Methods Input

@@ -21,7 +21,7 @@ class Tag
   #Factor Methods Output
   def self.usable_active_tags
     all.posts #need to force dynamic creation of the tag_posts class - this does not fire a query
-    all_active.all(:tag.not => "page", :post_tags => {:post => { :is_active => true }}, :order => [:tag.asc])
+    all_active.all(:tag.not => "page", :post_tags => {:post => { :is_active => true , :created_at.lte => Time.now }}, :order => [:tag.asc])
   end
 
 end

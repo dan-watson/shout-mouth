@@ -876,12 +876,14 @@ describe "metaweblog api" do
                             </param>
                             </params>
                             </methodCall>"
-  
-     find_value(last_response.body, "page_id", ["member", "name", "value", "string"], 0).should == @page.id.to_s
-     find_value(last_response.body, "page_title", ["member", "name", "value", "string"], 0).should == @page.title
-     find_value(last_response.body, "page_parent_id", ["member", "name", "value", "string"], 0).should == "0"
-     find_value(last_response.body, "dateCreated", ["member", "name", "value", "dateTime.iso8601"], 0).should == @page.created_at_iso8601
-     find_value(last_response.body, "date_created_gmt", ["member", "name", "value", "dateTime.iso8601"], 0).should == @page.created_at_iso8601   
+     
+     #The first one is the non valid page
+     
+     find_value(last_response.body, "page_id", ["member", "name", "value", "string"], 1).should == @page.id.to_s
+     find_value(last_response.body, "page_title", ["member", "name", "value", "string"], 1).should == @page.title
+     find_value(last_response.body, "page_parent_id", ["member", "name", "value", "string"], 1).should == "0"
+     find_value(last_response.body, "dateCreated", ["member", "name", "value", "dateTime.iso8601"], 1).should == @page.created_at_iso8601
+     find_value(last_response.body, "date_created_gmt", ["member", "name", "value", "dateTime.iso8601"], 1).should == @page.created_at_iso8601   
    end
    
    it "should return create a new record when the newPage method is called" do
@@ -982,7 +984,7 @@ describe "metaweblog api" do
    end
     it "should return correct response when the getTags method is called" do
   
-       tags = Tag.usable_active_tags
+       tags = Tag.all
        
        post '/xmlrpc/',  "<methodCall>
                           <methodName>wp.getTags</methodName>
