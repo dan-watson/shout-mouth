@@ -10,7 +10,7 @@ describe "Catching all legacy routes" do
 
   it "should invoke the url action that will catch all when no other matching route is defined" do
         get '/some-legacy-some-random.aspx'
-        last_response.headers["Location"].should include "404"
+        last_response.status.should == 404
   end
   
   it "should redirect a legancy post to its new url" do
