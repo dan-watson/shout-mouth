@@ -1,5 +1,5 @@
 ===Features For Version 2.0
-- Support mysql for production
+- MySql For Production ENV - Cannot get do_mysql gem to behave!!!
 - Implement Auto-setup
 - Administration System
 	- manage users 
@@ -7,6 +7,8 @@
 	- manage categories
 	- manage settings (will need to move settings from yaml to db)
 	- manage edit / add posts
+-Robots txt
+-404 status code
 
 
 ===Known Issues

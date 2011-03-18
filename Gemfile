@@ -7,10 +7,10 @@ gem "haml"
 gem "akismetor"
 gem "i18n"
 gem "aws-s3"
-
+gem "dm-sqlite-adapter"
+	
 group :development do
 	gem "shotgun"
-	gem "dm-sqlite-adapter"
 	gem 'passenger'
 	gem 'racksh'
 end
