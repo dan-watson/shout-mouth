@@ -120,14 +120,12 @@ class ShoutMouth < Sinatra::Base
   end
 
   # Catch All
-  get '/404' do
-    haml :not_found
-  end
-
   get '/*' do
     legacy_route = LegacyRoute.first(:slug => params[:splat])
     redirect legacy_route.post.permalink, 301 unless legacy_route.nil?
-    redirect '/404'
+    
+    status 404
+    haml :not_found
   end
 
 
