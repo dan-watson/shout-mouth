@@ -7,8 +7,7 @@
 	- manage categories
 	- manage settings (will need to move settings from yaml to db)
 	- manage edit / add posts
--404 status code
-
+- Notification of comment.
 
 ===Known Issues
 - Error relating to permissions on the db folder and shout_mouth.db file (Cannot connect to readonly database) - change permissions on the file and folder to rectify this. rake:sqlite_file_permissions 
