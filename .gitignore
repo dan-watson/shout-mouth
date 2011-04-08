@@ -1,5 +1,7 @@
 .rvmrc
+.powenv
 db/*.db
 config/_config.yaml
 logs/
 public/uploads
+tmp/
