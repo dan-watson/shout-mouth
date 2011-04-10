@@ -414,18 +414,7 @@ describe "metaweblog api" do
      post.categories[0].category.should == "category10"
      post.categories[1].category.should == "category11"
      
-     find_value(last_response.body, "postid", ["member", "name", "value", "string"]).should == post_to_update_id.to_s
-     find_value(last_response.body, "dateCreated", ["member", "name", "value", "dateTime.iso8601"]).should == post.created_at_iso8601
-     find_value(last_response.body, "title", ["member", "name", "value", "string"]).should == post.title
-     find_value(last_response.body, "description", ["member", "name", "value", "string"]).should == post.body
-     find_value(last_response.body, "link", ["member", "name", "value", "string"]).should == post.permalink
-     find_value(last_response.body, "wp_slug", ["member", "name", "value", "string"]).should == post.slug
-     find_value(last_response.body, "mt_excerpt", ["member", "name", "value", "string"]).should == ""
-     find_value(last_response.body, "mt_allow_comments", ["member", "name", "value", "int"]).should == "1"
-     find_value(last_response.body, "mt_keywords", ["member", "name", "value", "string"]).should == post.readable_tags.gsub(" ", "")
-     find_value(last_response.body, "categories", ["member", "name", "value", "array/data/value[1]/string"]).should == "category10"
-     find_value(last_response.body, "categories", ["member", "name", "value", "array/data/value[2]/string"]).should == "category11"
-     
+     last_response.body.should include("<boolean>1</boolean>")
    end
    
    

@@ -45,7 +45,8 @@ module Metaweblog
     
     post = PostMapper.new(xmlrpc_call).edit_post_from_xmlrpc_payload
     return raise_xmlrpc_error(4003, post.errors.full_messages.to_s) unless post.save
-    PostPresenter.new(post.reload).to_metaweblog
+    #PostPresenter.new(post.reload).to_metaweblog
+    return true
   end
   
   def publish_post(xmlrpc_call)
