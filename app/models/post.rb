@@ -27,6 +27,7 @@ class Post
     self.persisted_slug = self.slug
     self.month = created_at.strftime("%B")
     self.year = created_at.year
+    puts "here"
     invalidate_cache
   end
   
@@ -71,22 +72,23 @@ class Post
   
   
   def invalidate_cache
-    puts "here"
-    puts settings.cache_enabled
+    #Seems to be a bug in the Sinatra::Cache library when removing the cached page
+    #so re-written here
+    cache_path = File.join(File.dirname(__FILE__) , "..","..", "public", "cache")
     #Remove page / post cache
-    cache_expire(link)
+    FileUtils.rm_rf(File.join(cache_path, link + ".html"))
     #Remove tag cache
-    tags.each{|tag| cache_expire(tag.link)}
+    tags.each{|tag| FileUtils.rm_rf(File.join(cache_path, tag.link + ".html"))}
     #Remove archive cache
-    cache_expire('/archive')
+    FileUtils.rm_rf(File.join(cache_path, "archive.html"))
     #Remove rss cache
-    cache_expire('/rss')
+    FileUtils.rm_rf(File.join(cache_path, "rss.html"))
     #Remove category cache
-    categories.each{|category| cache_expire(category.link)}
+    categories.each{|category| FileUtils.rm_rf(File.join(cache_path, category.link + ".html"))}
     #Remove date cache
-    cache_expire("/posts/date/#{month}-#{year}")
+    FileUtils.rm_rf(File.join(cache_path, "/posts/date/#{year}-#{month}.html"))
     #Remove index cache
-    cache_expire('/index')
+    FileUtils.rm_rf(File.join(cache_path, "index.html"))
   end
 
   def permalink
