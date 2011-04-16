@@ -1,5 +1,6 @@
 require 'rubygems'
 require 'sinatra'
+require 'sinatra/cache'
 require 'haml'
 require 'json'
 require 'xmlrpc/marshal'
@@ -23,7 +24,12 @@ class ShoutMouth < Sinatra::Base
   set :public, File.dirname(__FILE__) + '/../public'
   set :views, File.dirname(__FILE__) + '/views'
   set :root, File.dirname(__FILE__)
-
+  
+  #Cache Setup
+  register(Sinatra::Cache)
+  set :cache_enabled, true
+  set :cache_output_dir, Proc.new { File.join(public,'cache') }
+  
   get '/' do
     prepend_title("Home")
     @articles = Post.all_active_posts.all(:limit => Blog.posts_on_home_page.to_i)

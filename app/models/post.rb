@@ -2,7 +2,8 @@ require Dir.pwd + '/app/models/base/shout_record'
 
 class Post
   include Shout::Record
-
+  include Sinatra::Cache::Helpers
+  
   property :title, String, :length => 1000
   property :persisted_slug, String, :length => 1000
   property :body, Text, :lazy => false
@@ -26,6 +27,7 @@ class Post
     self.persisted_slug = self.slug
     self.month = created_at.strftime("%B")
     self.year = created_at.year
+    invalidate_cache
   end
   
   def parent_page
@@ -66,10 +68,34 @@ class Post
 
     slug
   end
+  
+  
+  def invalidate_cache
+    puts "here"
+    puts settings.cache_enabled
+    #Remove page / post cache
+    cache_expire(link)
+    #Remove tag cache
+    tags.each{|tag| cache_expire(tag.link)}
+    #Remove archive cache
+    cache_expire('/archive')
+    #Remove rss cache
+    cache_expire('/rss')
+    #Remove category cache
+    categories.each{|category| cache_expire(category.link)}
+    #Remove date cache
+    cache_expire("/posts/date/#{month}-#{year}")
+    #Remove index cache
+    cache_expire('/index')
+  end
 
   def permalink
-    return "#{Blog.url}/post/#{url_date}/#{slug}" unless is_page?
-    "#{Blog.url}/page/#{slug}"
+    "#{Blog.url}#{link}"
+  end
+  
+  def link
+    return "/post/#{url_date}/#{slug}" unless is_page?
+    "/page/#{slug}"
   end
 
   def allow_comments?

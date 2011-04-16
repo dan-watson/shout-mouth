@@ -8,7 +8,11 @@ class Category
 
   #Instance MEthods
   def permalink
-    "#{Blog.url}/category/#{category}"
+    "#{Blog.url}#{link}"
+  end
+  
+  def link
+    "/category/#{category}"
   end
 
   #Factory Methods Input

@@ -10,9 +10,13 @@ class Tag
 
   #Instance Methods
   def permalink
-    "#{Blog.url}/tag/#{tag}"
+    "#{Blog.url}#{link}"
   end
-
+  
+  def link
+    "/tag/#{tag}"
+  end
+  
   #Factory Methods Input
   def self.tags_from_array(array)
     array.map{|tag| Tag.first_or_create({:tag => tag.strip}, {:tag => tag.strip})}
