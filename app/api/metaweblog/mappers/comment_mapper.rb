@@ -26,10 +26,10 @@ class CommentMapper
     comment = Comment.get(@xmlrpc_call[1][3])
     data = @xmlrpc_call[1][4]
     
-    comment.comment_content = data["content"]
-    comment.comment_author = data["author"]
-    comment.comment_author_url = data["author_url"]
-    comment.comment_author_email = data["author_email"]
+    comment.comment_content = data["content"] unless data["content"].nil?
+    comment.comment_author = data["author"] unless data["author"].nil?
+    comment.comment_author_url = data["author_url"] unless data["author_url"].nil?
+    comment.comment_author_email = data["author_email"] unless data["author_email"].nil?
     
     case 
       when data["status"] == "approve"
@@ -45,3 +45,4 @@ class CommentMapper
   end
   
 end
+
