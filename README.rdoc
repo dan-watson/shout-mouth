@@ -1,5 +1,4 @@
 ===Features For Version 2.0
-- MySql For Production ENV - Cannot get do_mysql gem to behave!!!
 - Implement Auto-setup
 - Administration System
 	- manage users 
@@ -11,6 +10,8 @@
 
 ===Known Issues
 - Error relating to permissions on the db folder and shout_mouth.db file (Cannot connect to readonly database) - change permissions on the file and folder to rectify this. rake:sqlite_file_permissions 
+
+- Error writing to the public/cache directory - you need to fix permissions so that the webservers process can read/write from/to the folder.
  
 ===Demo Information
 
