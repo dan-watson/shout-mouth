@@ -6,7 +6,6 @@
 	- manage categories
 	- manage settings (will need to move settings from yaml to db)
 	- manage edit / add posts
-- Notification of comment.
 - Tags url & Categories url should be made safe (for upgrade we will need legacy redirects for these now.)
 
 ===Known Issues
