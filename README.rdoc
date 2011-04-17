@@ -7,7 +7,6 @@
 	- manage settings (will need to move settings from yaml to db)
 	- manage edit / add posts
 - Tags url & Categories url should be made safe (for upgrade we will need legacy redirects for these now.)
-- When marking comments as changed need to invalidate the cache for the post.
 
 ===Known Issues
 - Error relating to permissions on the db folder and shout_mouth.db file (Cannot connect to readonly database) - change permissions on the file and folder to rectify this. rake:sqlite_file_permissions 

@@ -103,8 +103,7 @@ class Post
     comment = Comment.create(comment)
     if comment.saved? 
       comments << comment
-      clear_cache_for link
-      
+            
       Pony.mail(:to =>      Blog.administrator_email, 
                 :from =>    Blog.site_email, 
                 :subject => "#{Blog.site_name} - Comment Added", 

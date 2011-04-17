@@ -22,6 +22,7 @@ class Comment
 
   before :save do
     self.is_spam = spam?
+    self.post.invalidate_cache
   end
 
   #Instance Methods
