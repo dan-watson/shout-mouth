@@ -156,18 +156,18 @@ class ShoutMouth < Sinatra::Base
   get '/*' do
     legacy_route = LegacyRoute.first(:slug => params[:splat])
     redirect legacy_route.post.permalink, 301 unless legacy_route.nil?
-    
+        
+    status 404
+  end
+  
+  #Default Handler In Sinatra for 404 errors....
+  not_found do
     #Dont bother caching the 404's because the webserver will not render the correct status code....
     #Breaking the cache from the gem does not work - Manual deletion
     cached_file = File.join(File.dirname(__FILE__), "..", "public", "cache", params[:splat])
     cached_file += ".html" if File.extname(cached_file) == ''
     FileUtils.rm_rf(cached_file)
     
-    status 404
-  end
-  
-  #Default Handler In Sinatra for 404 errors....
-  not_found do
     haml :not_found
   end
 
