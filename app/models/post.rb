@@ -87,6 +87,8 @@ class Post
     clear_cache_for "/posts/date/#{year}-#{month}"
     #Remove index cache
     clear_cache_for "index"
+    #Remove sitemap
+    clear_cache_for "sitemap", "xml"
   end
 
   def permalink
@@ -166,7 +168,7 @@ class Post
      File.join(File.dirname(__FILE__) , "..","..", "public", "cache")
   end
   
-  def clear_cache_for page
-    FileUtils.rm_rf(File.join(cache_path, "#{page.to_s}.html"))
+  def clear_cache_for page, type = "html"
+    FileUtils.rm_rf(File.join(cache_path, "#{page.to_s}.#{type}"))
   end
 end
