@@ -69,7 +69,26 @@ class Blog
   def self.use_google_analytics
     self.google_analytics_key.length > 0
   end
-
+  
+  def self.smtp_settings
+    {
+        :host     =>  configuration['smtp_host'],     #'smtp.yourserver.com',
+        :port     =>  configuration['smtp_port'],     #'25',
+        :user     =>  configuration['smtp_user'],     #'user',
+        :password =>  configuration['smtp_password'], #'pass',
+        :auth     => :plain,                          #:login, :cram_md5, no auth by default
+        :domain   =>  configuration['smtp_domain']    #example.com - the HELO domain provided by the client to the server
+      }
+  end
+  
+  def self.site_email
+    configuration['site_email']
+  end
+  
+  def self.administrator_email
+    configuration['administrator_email']
+  end
+  
   private
   def self.configuration
     configuration_directory = "#{Dir.pwd}/config/"

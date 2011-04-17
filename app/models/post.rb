@@ -2,7 +2,6 @@ require Dir.pwd + '/app/models/base/shout_record'
 
 class Post
   include Shout::Record
-  include Sinatra::Cache::Helpers
   
   property :title, String, :length => 1000
   property :persisted_slug, String, :length => 1000
@@ -102,8 +101,17 @@ class Post
 
   def add_comment comment
     comment = Comment.create(comment)
-    comments << comment if comment.saved?
-    clear_cache_for link
+    if comment.saved? 
+      comments << comment
+      clear_cache_for link
+      
+      Pony.mail(:to =>      Blog.administrator_email, 
+                :from =>    Blog.site_email, 
+                :subject => "#{Blog.site_name} - Comment Added", 
+                :body =>    "A comment has been added to #{title}",
+                :via =>     :smtp,
+                :smtp =>    Blog.smtp_settings)
+    end
     comment
   end
   

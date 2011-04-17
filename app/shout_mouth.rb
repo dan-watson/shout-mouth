@@ -1,6 +1,7 @@
 require 'rubygems'
 require 'sinatra'
 require 'sinatra/cache'
+require 'pony'
 require 'haml'
 require 'json'
 require 'xmlrpc/marshal'

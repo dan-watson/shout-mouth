@@ -67,4 +67,21 @@ describe Blog, "configuration" do
     Blog.use_google_analytics.should be_true
   end
   
+  it "should return the correct hash of smtp settings" do
+    smtp_settings = Blog.smtp_settings
+    smtp_settings[:host].should == "smtp.yourserver.com"
+    smtp_settings[:port].should == "25"
+    smtp_settings[:user].should == "user"
+    smtp_settings[:password].should == "pass"
+    smtp_settings[:domain].should == "yourserver.com"
+  end
+  
+  it "should return the correct site email addresss" do
+    Blog.site_email.should == "user@yourserver.com"
+  end
+  
+  it "should return the correct administrator email" do
+    Blog.administrator_email.should == "admin@yourserver.com"
+  end
+  
 end

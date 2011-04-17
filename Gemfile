@@ -9,7 +9,8 @@ gem "akismetor"
 gem "i18n"
 gem "aws-s3"
 gem "dm-sqlite-adapter"
-	
+gem "pony"	
+
 group :development do
 	gem "shotgun"
 	gem 'passenger'

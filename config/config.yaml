@@ -16,6 +16,13 @@ defaults: &defaults
   use_file_based_storage: true #Stop amazons3 being used as a image/document store.
   footer_more_text: "<br /><br />Disclaimer: The opinions expressed herein are my own personal opinions and do not represent my employer's view in any way."
   google_analytics_key: "UA-0000000-0" #Empty string will supress google analytics - ""
+  smtp_host: "smtp.yourserver.com"
+  smtp_port: "25"
+  smtp_user: "user"
+  smtp_password: "pass"
+  smtp_domain: "yourserver.com"
+  site_email: "user@yourserver.com"
+  administrator_email: "admin@yourserver.com"
     
 development:
   <<: *defaults
@@ -37,6 +44,13 @@ test: &test
   use_file_based_storage: true
   footer_more_text: "Footer More"
   google_analytics_key: "UA-0000000-0"
+  smtp_host: "smtp.yourserver.com"
+  smtp_port: "25"
+  smtp_user: "user"
+  smtp_password: "pass"
+  smtp_domain: "yourserver.com"
+  site_email: "user@yourserver.com"
+  administrator_email: "admin@yourserver.com"
 
 production:
   <<: *defaults
