@@ -1,3 +1,10 @@
+namespace :cache do
+  desc "Clear all files from the cache"
+  task :clear do |t, args|
+    Dir[File.join(File.dirname(__FILE__), "public/cache/**/*")].each{|entry| FileUtils.rm_rf(entry)}
+  end
+end
+
 namespace :db do
   require 'fileutils'
   require 'dm-core'
