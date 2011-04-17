@@ -164,7 +164,7 @@ class ShoutMouth < Sinatra::Base
     
     #Breaking the cache from the gem does not work - Manual deletion
     
-    cached_file = File.join(File.dirname(__FILE__) , "..","..", "public", "cache", params[:splat])
+    cached_file = File.join(File.dirname(__FILE__), "..", "public", "cache", params[:splat])
     cached_file += ".html" if File.extname(cached_file) == ''
     FileUtils.rm_rf(cached_file)
   end
