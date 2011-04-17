@@ -168,7 +168,7 @@ class ShoutMouth < Sinatra::Base
   
   #Default Handler In Sinatra for 404 errors....
   not_found do    
-    haml :not_found
+    haml :not_found, :cache => false
   end
 
 
