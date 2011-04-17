@@ -11,15 +11,15 @@
 				%tr
 					%td=post.url_date 
 					%td
-						%a{:href => post.permalink, :rel => "follow"}
+						%a{:href => post.link, :rel => "follow"}
 							=post.title
 					%td
 						- post.tags.each do |tag|
-							%a{:href => "#{tag.permalink}", :rel => "follow"}
+							%a{:href => "#{tag.link}", :rel => "follow"}
 								=tag.tag
 					%td
 						- post.categories.each do |category|
-							%a{:href => "#{category.permalink}", :rel => "follow"}
+							%a{:href => "#{category.link}", :rel => "follow"}
 								=category.category
 					
 				

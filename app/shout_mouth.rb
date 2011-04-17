@@ -73,14 +73,38 @@ class ShoutMouth < Sinatra::Base
 
   get '/category/:category' do
     prepend_title(params[:category])
-    @posts = Category.all(:category => params[:category]).posts
-    haml :archive
+    category = Category.first(:persisted_slug => params[:category])
+    
+    unless category.nil?
+      @posts = category.posts
+      halt haml :archive
+    end
+    
+    #If the category has been typed in by name or is legacy from an older version of shoutmouth
+    #then send the browser to the new url safe version
+    category = Category.first(:category => params[:category])
+    redirect category.permalink, 301 unless category.nil?
+    
+    #When no category can be found - send to catch all route where a 404 will be returned.....
+    redirect "/notfound", 301
   end
 
   get '/tag/:tag' do
     prepend_title(params[:tag])
-    @posts = Tag.all(:tag => params[:tag]).posts
-    haml :archive
+    tag = Tag.first(:persisted_slug => params[:tag])
+
+    unless tag.nil?
+      @posts = tag.posts
+      halt haml :archive
+    end
+    
+    #If the tag has been typed in by name or is legacy from an older version of shoutmouth
+    #then send the browser to the new url safe version    
+    tag = Tag.first(:tag => params[:tag])
+    redirect tag.permalink, 301 unless tag.nil?
+    
+    #When no tag can be found - send to catch all route where a 404 will be returned.....
+    redirect "/notfound", 301
   end
 
   get '/posts/date/:year-:month' do
@@ -134,7 +158,9 @@ class ShoutMouth < Sinatra::Base
     redirect legacy_route.post.permalink, 301 unless legacy_route.nil?
     
     status 404
-    haml :not_found
+    #Dont bother caching the 404's because the webserver will not render the correct
+    #status code....
+    haml :not_found, :cache => false
   end
 
 

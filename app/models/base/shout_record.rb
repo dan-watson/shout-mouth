@@ -23,6 +23,15 @@ module Shout
         def created_at_iso8601
           created_at.strftime("%Y%m%dT%H:%M:%S")
         end
+        
+        def to_url_safe_string string
+          #a slug is a URL-safe string that echoes the title
+          #in this method we want to remove any weird punctuation and spaces
+          string = string.gsub(/[^a-zA-Z0-9 ]/,"").downcase
+          string = string.gsub(/[ ]+/," ")
+          string = string.gsub(/ /,"-")
+          string
+        end
       end
     end
   end

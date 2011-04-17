@@ -4,16 +4,27 @@ class Category
   include Shout::Record
 
   property :category, String, :length => 1000
+  property :persisted_slug, String, :length => 1000
+  
   has n,   :posts, :through => Resource, :is_active => true, :order => [ :created_at.desc ]
+  
+  before :save do
+    self.persisted_slug = self.slug
+  end
 
-  #Instance MEthods
+  #Instance Methods
   def permalink
     "#{Blog.url}#{link}"
   end
   
   def link
-    "/category/#{category}"
+    "/category/#{slug}"
   end
+  
+  def slug
+    to_url_safe_string category
+  end
+
 
   #Factory Methods Input
   def self.categories_from_array(array)

@@ -4,9 +4,15 @@ class Tag
   include Shout::Record
 
   property :tag, String, :length => 1000
+  property :persisted_slug, String, :length => 1000
+  
   has n,   :posts, :through => Resource, :is_active => true, :order => [ :created_at.desc ]
 
   validates_uniqueness_of :tag
+
+  before :save do
+    self.persisted_slug = self.slug
+  end
 
   #Instance Methods
   def permalink
@@ -14,7 +20,11 @@ class Tag
   end
   
   def link
-    "/tag/#{tag}"
+    "/tag/#{slug}"
+  end
+  
+  def slug
+    to_url_safe_string tag
   end
   
   #Factory Methods Input
