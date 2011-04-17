@@ -160,7 +160,8 @@ class ShoutMouth < Sinatra::Base
     status 404
     #Dont bother caching the 404's because the webserver will not render the correct
     #status code....
-    haml(:not_found, :cache => false)
+    haml :not_found
+    cache_expire("/#{params[:splat]}")
   end
 
 
