@@ -27,7 +27,6 @@ class Post
     self.persisted_slug = self.slug
     self.month = created_at.strftime("%B")
     self.year = created_at.year
-    puts "here"
     invalidate_cache
   end
   
@@ -74,21 +73,20 @@ class Post
   def invalidate_cache
     #Seems to be a bug in the Sinatra::Cache library when removing the cached page
     #so re-written here
-    cache_path = File.join(File.dirname(__FILE__) , "..","..", "public", "cache")
     #Remove page / post cache
-    FileUtils.rm_rf(File.join(cache_path, link + ".html"))
+    clear_cache_for link
     #Remove tag cache
-    tags.each{|tag| FileUtils.rm_rf(File.join(cache_path, tag.link + ".html"))}
+    tags.each{|tag| clear_cache_for tag.link }
     #Remove archive cache
-    FileUtils.rm_rf(File.join(cache_path, "archive.html"))
+    clear_cache_for "archive"
     #Remove rss cache
-    FileUtils.rm_rf(File.join(cache_path, "rss.html"))
+    clear_cache_for "rss"
     #Remove category cache
-    categories.each{|category| FileUtils.rm_rf(File.join(cache_path, category.link + ".html"))}
+    categories.each{|category| clear_cache_for category.link}
     #Remove date cache
-    FileUtils.rm_rf(File.join(cache_path, "/posts/date/#{year}-#{month}.html"))
+    clear_cache_for "/posts/date/#{year}-#{month}"
     #Remove index cache
-    FileUtils.rm_rf(File.join(cache_path, "index.html"))
+    clear_cache_for "index"
   end
 
   def permalink
@@ -100,6 +98,13 @@ class Post
     "/page/#{slug}"
   end
 
+  def add_comment comment
+    comment = Comment.create(comment)
+    comments << comment if comment.saved?
+    clear_cache_for link
+    comment
+  end
+  
   def allow_comments?
     return true if Blog.comments_open_for_days == 0
     (created_at.to_date.to_datetime + Blog.comments_open_for_days) > DateTime.now.to_date.to_datetime
@@ -154,5 +159,14 @@ class Post
     post = Post.get(post_id)
     post.is_active = false
     post.save
+  end
+  
+  private 
+  def cache_path
+     File.join(File.dirname(__FILE__) , "..","..", "public", "cache")
+  end
+  
+  def clear_cache_for page
+    FileUtils.rm_rf(File.join(cache_path, "#{page.to_s}.html"))
   end
 end
