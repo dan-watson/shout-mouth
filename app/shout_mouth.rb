@@ -165,7 +165,7 @@ class ShoutMouth < Sinatra::Base
   end
   
   after do
-      if response.status == 404
+      if reponse && response.status.to_i == 404
         #Dont bother caching the 404's because the webserver will not render the correct status code....
         #Breaking the cache from the gem does not work - Manual deletion
          puts "Here"
