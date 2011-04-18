@@ -161,19 +161,16 @@ class ShoutMouth < Sinatra::Base
 
   #Default Handler In Sinatra for 404 errors....
   not_found do    
-     haml :not_found
+     haml :not_found, :cache => false
   end
   
   after do
       if response && response.status.to_i == 404
         #Dont bother caching the 404's because the webserver will not render the correct status code....
         #Breaking the cache from the gem does not work - Manual deletion
-         puts "Here"
          file = request.env["PATH_INFO"].to_s
-         puts file
          cached_file = File.join(File.dirname(__FILE__), "..", "public", "cache", file)
          cached_file += ".html" if File.extname(cached_file) == ''
-         puts cached_file
          FileUtils.rm_rf(cached_file)
       end
   end
