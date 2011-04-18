@@ -32,6 +32,10 @@ class ShoutMouth < Sinatra::Base
   set :cache_output_dir, Proc.new { File.join(public,'cache') }
   
   get '/' do
+    
+    #STOP legacy urls breaking the cache - eg http://www.yoursite.com?tags=gamer
+    redirect "/notfound", 301 if params.length > 0
+    
     prepend_title("Home")
     @articles = Post.all_active_posts.all(:limit => Blog.posts_on_home_page.to_i)
     halt haml :index unless @articles.none?
