@@ -168,9 +168,12 @@ class ShoutMouth < Sinatra::Base
       if response.status == 404
         #Dont bother caching the 404's because the webserver will not render the correct status code....
         #Breaking the cache from the gem does not work - Manual deletion
+         puts "Here"
          file = request.env["PATH_INFO"].to_s
+         puts file
          cached_file = File.join(File.dirname(__FILE__), "..", "public", "cache", file)
          cached_file += ".html" if File.extname(cached_file) == ''
+         puts cached_file
          FileUtils.rm_rf(cached_file)
       end
   end
