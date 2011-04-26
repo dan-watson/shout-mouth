@@ -1011,6 +1011,52 @@ describe "metaweblog api" do
        find_value(last_response.body, "rss_url", ["member", "name", "value", "string"], 1).should == ""           
      end
      
+     it "should return the true when the edit tag method is called" do
+      old_tag_name = Tag.first.tag
+      post '/xmlrpc/', "<methodCall>
+                        <methodName>shoutmouth.editTag</methodName>
+                        <params>
+                           <param>
+                            <value>
+                               <string>2000</string>
+                            </value>
+                           </param>
+                           <param>
+                              <value>
+                               <string>#{@user.email}</string>
+                            </value>
+                           </param>
+                           <param>
+                              <value>
+                               <string>password123</string>
+                            </value>
+                           </param>
+                           <param>
+                            <value>
+                           <struct>
+                            <member>
+                             <name>tag_id</name>
+                             <value>
+                              <string>#{Tag.first.id}</string>
+                             </value>
+                            </member>
+                            <member>
+                             <name>name</name>
+                             <value>
+                              <string>opencms</string>
+                             </value>
+                            </member>
+                           </struct>
+                           </value>
+                          </param>
+                         </params>
+                        </methodCall>" 
+
+         last_response.body.should include("<boolean>1</boolean>")
+         tag = Tag.first
+         tag.tag = old_tag_name
+         tag.save
+     end
   
      it "should return create a new record when the newCategory method is called" do
 

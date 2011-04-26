@@ -12,6 +12,9 @@ class Tag
 
   before :save do
     self.persisted_slug = self.slug
+    self.posts.each do |post|
+      post.invalidate_cache
+    end
   end
 
   #Instance Methods

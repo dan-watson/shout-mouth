@@ -177,6 +177,12 @@ module Metaweblog
     Tag.all.map{|tag| TagPresenter.new(tag).to_metaweblog}
   end
   
+  def edit_tag(xmlrpc_call)
+    tag = TagMapper.new(xmlrpc_call).edit_tag_from_xmlrpc_payload
+    return raise_xmlrpc_error(4003, tag.errors.full_messages.to_s) unless tag.save
+    true
+  end
+
   def new_category(xmlrpc_call)
     category = CategoryMapper.new(xmlrpc_call).new_category_from_xmlrpc_payload
     category.id
@@ -443,7 +449,8 @@ module Metaweblog
     "wp.newPage",
     "wp.getPages",
     "wp.getPage",
-    "wp.getUsersBlogs"]
+    "wp.getUsersBlogs",
+    "shoutmouth.editTag"]
     
     methods
   end
