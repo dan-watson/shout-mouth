@@ -1116,7 +1116,56 @@ describe "metaweblog api" do
        last_response.body.should include("<int>#{category.id.to_s}</int>")
 
      end
-  
+     it "should edit the category when the editCategory method is called" do
+
+       category = Category.first(:category => "Category - Metaweblog")
+       
+       post '/xmlrpc/', "<methodCall>
+                        <methodName>shoutmouth.editCategory</methodName>
+                        <params>
+                           <param>
+                            <value>
+                             <string>2000</string>
+                            </value>
+                           </param>
+                           <param>
+                            <value>
+                             <string>#{@user.email}</string>
+                            </value>
+                           </param>
+                           <param>
+                            <value>
+                             <string>password123</string>
+                            </value>
+                           </param>
+                           <param>
+                           <value>
+                           <struct>
+                            <member>
+                             <name>category_id</name>
+                             <value>
+                              <string>#{category.id}</string>
+                             </value>
+                            </member>
+                            <member>
+                             <name>category</name>
+                             <value>
+                              <string>edit_category</string>
+                             </value>
+                            </member>
+                            </struct>
+                            </value>
+                           </param>
+                        </params>"
+            category.reload
+            category.category.should == "edit_category"
+            last_response.body.should include("<boolean>1</boolean>")
+            
+            #tear down
+            category.category = "Category - Metaweblog"
+            category.save
+     end
+
      it "should mark a record as inactive when the deleteCategory method is called" do
        category = Category.first(:category => "Category - Metaweblog")
 

@@ -188,6 +188,12 @@ module Metaweblog
     category.id
   end
   
+  def edit_category(xmlrpc_call)
+    category = CategoryMapper.new(xmlrpc_call).edit_category_from_xmlrpc_payload
+    return raise_xmlrpc_error(4003, category.errors.full_messages.to_s) unless category.save
+    true
+  end
+
   def delete_category(xmlrpc_call)
     CategoryMapper.new(xmlrpc_call).mark_as_inactive_from_xmlrpc_payload
   end
