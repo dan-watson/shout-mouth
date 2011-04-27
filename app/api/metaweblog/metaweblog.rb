@@ -456,7 +456,8 @@ module Metaweblog
     "wp.getPages",
     "wp.getPage",
     "wp.getUsersBlogs",
-    "shoutmouth.editTag"]
+    "shoutmouth.editTag",
+    "shoutmouth.editCategory"]
     
     methods
   end
