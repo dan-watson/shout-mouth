@@ -1328,7 +1328,7 @@ describe "metaweblog api" do
                 </param>
                 </params>
               </methodCall>"
-       find_value(last_response.body, "software_name", ["member", "name", "value", "struct/member/name[text()='value']/../value/string"]).should == "ShoutMouth"
+       find_value(last_response.body, "software_name", ["member", "name", "value", "struct/member/name[text()='value']/../value/string"]).should == "Shout Mouth Blog Engine"
        find_value(last_response.body, "blog_url", ["member", "name", "value", "struct/member/name[text()='value']/../value/string"]).should == Blog.url
        find_value(last_response.body, "blog_title", ["member", "name", "value", "struct/member/name[text()='value']/../value/string"]).should == Blog.site_name
        find_value(last_response.body, "blog_tagline", ["member", "name", "value", "struct/member/name[text()='value']/../value/string"]).should == Blog.site_description

@@ -16,22 +16,27 @@ class BlogPresenter
   
   def to_wordpress_options
     {
-      :software_name => {:desc => "Software Name", :readonly => true, :value => "ShoutMouth"},
-      :software_version => {:desc => "Software Version", :readonly => true, :value => "MU"},
-      :blog_url => {:desc => "Site URL", :readonly => true, :value => @blog.url},
-      :time_zone => {:desc => "Time Zone", :readonly => true, :value => "0"}, #wordpress readonly is false
-      :blog_title => {:desc => "Site Title", :readonly => true, :value => @blog.site_name}, #wordpress readonly is false
-      :blog_tagline => {:desc => "Site Tagline", :readonly => true, :value => @blog.site_description}, #wordpress readonly is false
-      :date_format => {:desc => "Date Format", :readonly => true, :value => "F j, Y"}, #wordpress readonly is false - wtf? F j y????
-      :time_format => {:desc => "Time Format", :readonly => true, :value => "g:i a"}, #wordpress readonly is false - wtf? g:i a????
-      :users_can_register => {:desc => "Allow new users to sign up", :readonly => true, :value => false}, #wordpress readonly is false
-      :thumbnail_size_w => {:desc => "Thumbnail Width", :readonly => true, :value => 150}, #wordpress readonly is false
-      :thumbnail_size_h => {:desc => "Thumbnail Height", :readonly => true, :value => 150}, #wordpress readonly is false
-      :thumbnail_crop => {:desc => "Crop thumbnail to exact dimensions", :readonly => true, :value => 0}, #wordpress readonly is false
-      :medium_size_w => {:desc => "Medium size image width", :readonly => true, :value => "300"}, #wordpress readonly is false
-      :medium_size_h => {:desc => "Medium size image height", :readonly => true, :value => "300"}, #wordpress readonly is false
-      :large_size_w => {:desc => "Large size image width", :readonly => true, :value => "1024"}, #wordpress readonly is false
-      :large_size_h => {:desc => "Large size image height", :readonly => true, :value => "1024"} #wordpress readonly is false
+      :software_name => {:desc => "Software Name", :readonly => true, :value => "Shout Mouth Blog Engine"},
+      :blog_url => {:desc => "Site URL", :readonly => false, :value => @blog.url},
+      :blog_title => {:desc => "Site Title", :readonly => false, :value => @blog.site_name},
+      :blog_tagline => {:desc => "Site Tagline", :readonly => false, :value => @blog.site_description},
+      :posts_on_home_page => {:desc => "Posts to display on home page", :readonly => false, :value => @blog.posts_on_home_page},
+      :aksimet_key => {:desc => "Akismet Key", :readonly => false, :value => @blog.akismet_key},
+      :amazon_s3_key => {:desc => "Amazon S3 Key", :readonly => false, :value => @blog.amazon_s3_key},
+      :amazon_secret_key => {:desc => "Amazon Secret Key", :readonly => false, :value => @blog.amazon_s3_secret_key},
+      :amazon_s3_bucket => {:desc => "Amazon S3 Bucket", :readonly => false, :value => @blog.amazon_s3_bucket},
+      :amazon_s3_file_location => {:desc => "Amazon S3 URL", :readonly => false, :value => @blog.amazon_s3_file_location},
+      :theme => {:desc => "Site Theme", :readonly => false, :value => @blog.theme},
+      :twitter_account => {:desc => "Twitter Account", :readonly => false, :value => @blog.twitter_account},
+      :check_spam => {:desc => "Check for spam?", :readonly => false, :value => @blog.check_spam},
+      :comments_open_for_days => {:desc => "How many days should comments be open for?", :readonly => false, :value => @blog.comments_open_for_days},
+      :use_file_based_storage => {:desc => "Use filesystem to store assets instead of Amazon S3?", :readonly => false, :value => @blog.use_file_based_storage},
+      :footer_more_text => {:desc => "Text to display in the footer", :readonly => false, :value => @blog.footer_more_text},
+      :google_analytics_key => {:desc => "Google Analytics Key", :readonly => false, :value => @blog.google_analytics_key},
+      :use_google_analytics => {:desc => "Use Google analytics?", :readonly => false, :value => @blog.use_google_analytics},
+      :smtp_settings => {:desc => "SMTP Settings", :readonly => false, :value => @blog.smtp_settings},
+      :site_email => {:desc => "Email address the site send's mail from", :readonly => false, :value => @blog.site_email},
+      :administrator_email => {:desc => "Email address of the author / site administrator", :readonly => false, :value => @blog.administrator_email}
     }
   end
   
