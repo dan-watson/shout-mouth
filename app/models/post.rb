@@ -1,4 +1,5 @@
 require Dir.pwd + '/app/models/base/shout_record'
+require Dir.pwd + '/app/api/cache/cache'
 
 class Post
   include Shout::Record
@@ -67,21 +68,21 @@ class Post
     #Seems to be a bug in the Sinatra::Cache library when removing the cached page
     #so re-written here
     #Remove page / post cache
-    clear_cache_for link
+    Cache.clear_cache_for link
     #Remove tag cache
-    tags.each{|tag| clear_cache_for tag.link }
+    tags.each{|tag| Cache.clear_cache_for tag.link }
     #Remove archive cache
-    clear_cache_for "archive"
+    Cache.clear_cache_for "archive"
     #Remove rss cache
-    clear_cache_for "rss"
+    Cache.clear_cache_for "rss"
     #Remove category cache
-    categories.each{|category| clear_cache_for category.link}
+    categories.each{|category| Cache.clear_cache_for category.link}
     #Remove date cache
-    clear_cache_for "/posts/date/#{year}-#{month}"
+    Cache.clear_cache_for "/posts/date/#{year}-#{month}"
     #Remove index cache
-    clear_cache_for "index"
+    Cache.clear_cache_for "index"
     #Remove sitemap
-    clear_cache_for "sitemap", "xml"
+    Cache.clear_cache_for "sitemap", "xml"
   end
 
   def permalink
@@ -162,14 +163,5 @@ class Post
     post = Post.get(post_id)
     post.is_active = false
     post.save
-  end
-  
-  private 
-  def cache_path
-     File.join(File.dirname(__FILE__) , "..","..", "public", "cache")
-  end
-  
-  def clear_cache_for page, type = "html"
-    FileUtils.rm_rf(File.join(cache_path, "#{page.to_s}.#{type}"))
   end
 end

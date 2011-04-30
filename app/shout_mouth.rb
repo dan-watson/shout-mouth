@@ -17,7 +17,9 @@ require Dir.pwd + '/app/models/category'
 require Dir.pwd + '/app/api/metaweblog/metaweblog'
 require Dir.pwd + '/app/lib/fixnum'
 require Dir.pwd + '/app/lib/string'
+require Dir.pwd + '/app/lib/object'
 require Dir.pwd + '/app/api/plugin/plugin_factory'
+require Dir.pwd + '/app/api/cache/cache'
 
 class ShoutMouth < Sinatra::Base
   include Metaweblog

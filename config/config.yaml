@@ -1,5 +1,5 @@
 defaults: &defaults
-  posts_on_home_page: "3"
+  posts_on_home_page: 3
   site_name: "Your Site Name"
   site_description: "Description"
   url: http://yoursite.com
@@ -12,7 +12,7 @@ defaults: &defaults
   twitter_account: '@twitter'
   check_spam: true
   # 0 is forever
-  comments_open_for_days: "14" 
+  comments_open_for_days: 14 
   use_file_based_storage: true #Stop amazons3 being used as a image/document store.
   footer_more_text: "<br /><br />Disclaimer: The opinions expressed herein are my own personal opinions and do not represent my employer's view in any way."
   google_analytics_key: "UA-0000000-0" #Empty string will supress google analytics - ""
@@ -28,7 +28,7 @@ development:
   <<: *defaults
 
 test: &test
-  posts_on_home_page: "3"
+  posts_on_home_page: 3
   site_name: "Test Site"
   site_description: "Description"
   url: http://192.168.1.68:9393
@@ -40,7 +40,7 @@ test: &test
   theme: 'default'
   twitter_account: '@twitter'
   check_spam: false
-  comments_open_for_days: "14" 
+  comments_open_for_days: 14 
   use_file_based_storage: true
   footer_more_text: "Footer More"
   google_analytics_key: "UA-0000000-0"

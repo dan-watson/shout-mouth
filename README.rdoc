@@ -16,7 +16,7 @@ Runs the site on test data (bundler must be installed)
 
 
 ===Rake Tasks
-	rake db:create  (Create The Database)
+	rake db:create  (Create The Database) - Will also add settings to the settings table from config.yaml - first time load of settings
 	
 	rake db:delete  (Delete Database)
 	
@@ -24,17 +24,6 @@ Runs the site on test data (bundler must be installed)
 	
 	rake db:update    (Upgrade The Database To The Latest Schema Version)
 	
-	rake import:posts url=http://yourblog.com user=username password=password posts=number_of_posts current_user_email=email from_blog_engine={{your_engine}}
-	Currently only supports blogengine.net for the from_blog_engine argument - this is just used to set legacy redirects
-	Before running this rake task you should run rake users:create and then set the current_user_email argument to the freshly created users email 
-
-
-	rake import:remove_height_and_width_from_images (Remove all image tags height and width attributes from all posts - I have found that some blog clients add height and width attributes to image tags)
-    
-
-	rake import:repoint_images upload=1 
-	(Updates all images paths to point to your Amazon S3 account - if upload is set to 0 then the s3 upload will not occur but all image tags stored in each post will be repointed to your amazon s3 account - rake task uses the amazon s3 production settings located inside config/config.yaml)
-
 	rake specs:run_all - (Run All The Specs)
 
 	rake user:create  create email=email password=password firstname=firstname lastname=lastname (Create a user)  
