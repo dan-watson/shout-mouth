@@ -125,7 +125,7 @@ class ShoutMouth < Sinatra::Base
     haml :archive
   end
 
-  get '/rss' do
+  get '/rss.rss' do
     content_type 'application/rss+xml'
     @posts = Post.all_active_posts
     builder :rss, :layout => false
