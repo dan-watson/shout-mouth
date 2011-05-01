@@ -228,37 +228,8 @@ module Metaweblog
   end
   
   def set_options(xmlrpc_call)
-    #INPUT
-    # int blog_id
-    # string username
-    # string password
-    #   array
-    #     struct
-    #       string name
-    #       string value
-    #OUTPUT
-    # array
-    #   struct
-    #     string option
-    #     string value
-    # WILL IMPLEMENT IN NEXT VERSION - WILL USE A KEY/VALUE STORE FOR OPTIONS 
-    #return raise_xmlrpc_error(4003, "Options cannot be set for Shout Mouth blogs via the client api. Please update your /config/config.yaml file.")
-    
-    
-    #BASICALLY THIS NEEDS REWRITING TO BE BLOGMAPPER.update_settings......
-    #Check method call on xcv.com and also change admin api to send multiple settings at one....
-    
-    data = xmlrpc_call[3]
-    output = []
-    data.each do |setting|
-      begin
-        Blog.send("#{setting[0]}=", setting[1])
-        output << {:name => setting[0], :value => setting[1]}
-      rescue
-        #do nothing as just returning the changed settings....
-      end
-    end
-    output
+    settings = BlogMapper.new(xmlrpc_call).update_settings 
+    BlogPresenter.new(Blog).to_wordpress_options_subset(settings)
   end
   
   def get_comment(xmlrpc_call)
@@ -452,7 +423,7 @@ module Metaweblog
     "wp.deleteComment",
     "wp.getComments",
     "wp.getComment",
-    "wp.setOptions", #NOT IMPLEMENTED 
+    "wp.setOptions",
     "wp.getOptions",
     "wp.getPageTemplates",
     "wp.getPageStatusList",

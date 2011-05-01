@@ -1329,9 +1329,9 @@ describe "metaweblog api" do
                 </params>
               </methodCall>"
        find_value(last_response.body, "software_name", ["member", "name", "value", "struct/member/name[text()='value']/../value/string"]).should == "Shout Mouth Blog Engine"
-       find_value(last_response.body, "blog_url", ["member", "name", "value", "struct/member/name[text()='value']/../value/string"]).should == Blog.url
-       find_value(last_response.body, "blog_title", ["member", "name", "value", "struct/member/name[text()='value']/../value/string"]).should == Blog.site_name
-       find_value(last_response.body, "blog_tagline", ["member", "name", "value", "struct/member/name[text()='value']/../value/string"]).should == Blog.site_description
+       find_value(last_response.body, "url", ["member", "name", "value", "struct/member/name[text()='value']/../value/string"]).should == Blog.url
+       find_value(last_response.body, "site_name", ["member", "name", "value", "struct/member/name[text()='value']/../value/string"]).should == Blog.site_name
+       find_value(last_response.body, "site_description", ["member", "name", "value", "struct/member/name[text()='value']/../value/string"]).should == Blog.site_description
      end
      
      it "should return the correct comments when the getComments method is called" do
@@ -1648,7 +1648,44 @@ describe "metaweblog api" do
        
        
      end
-  
+ 
+  it "should edit a setting when the set option method is called" do
+      post '/xmlrpc/', "<methodCall>
+                  <methodName>wp.setOptions</methodName>
+                  <params>
+                  <param>
+                    <value>
+                      <string>1</string>
+                    </value>
+                  </param>
+                  <param>
+                    <value>
+                      <string>#{@user.email}</string>
+                    </value>
+                  </param>
+                  <param>
+                    <value>
+                      <string>password123</string>
+                    </value>
+                  </param>
+                  <param>
+                    <value>
+                      <struct>
+                        <member>
+                          <name>footer_more_text</name>
+                          <value>
+                            <string>more more more</string>
+                          </value>
+                        </member>
+                      </struct>
+                    </value>
+                  </param>
+                </params>
+              </methodCall>"
+
+     Blog.footer_more_text.should == "more more more"
+  end
+
   private 
   def find_value(xml, find, hierarchy = [], nth = nil)
     return Nokogiri::XML(xml).xpath("//#{hierarchy[0]}/#{hierarchy[1]}[text()='#{find}']")[nth.nil? ? 0 : nth].parent.xpath("#{hierarchy[2]}/#{hierarchy[3]}").text

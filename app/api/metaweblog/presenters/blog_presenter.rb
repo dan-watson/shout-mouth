@@ -17,9 +17,9 @@ class BlogPresenter
   def to_wordpress_options
     {
       :software_name => {:desc => "Software Name", :readonly => true, :value => "Shout Mouth Blog Engine"},
-      :blog_url => {:desc => "Site URL", :readonly => false, :value => @blog.url},
-      :blog_title => {:desc => "Site Title", :readonly => false, :value => @blog.site_name},
-      :blog_tagline => {:desc => "Site Tagline", :readonly => false, :value => @blog.site_description},
+      :url => {:desc => "Site URL", :readonly => false, :value => @blog.url},
+      :site_name => {:desc => "Site Title", :readonly => false, :value => @blog.site_name},
+      :site_description => {:desc => "Site Tagline", :readonly => false, :value => @blog.site_description},
       :posts_on_home_page => {:desc => "Posts to display on home page", :readonly => false, :value => @blog.posts_on_home_page},
       :aksimet_key => {:desc => "Akismet Key", :readonly => false, :value => @blog.akismet_key},
       :amazon_s3_key => {:desc => "Amazon S3 Key", :readonly => false, :value => @blog.amazon_s3_key},
@@ -40,4 +40,7 @@ class BlogPresenter
     }
   end
   
+  def to_wordpress_options_subset options
+    to_wordpress_options.reject { |key,_| !options.include? key }
+  end
 end
