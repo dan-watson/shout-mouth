@@ -13,10 +13,43 @@ class TestDataHelper
     Comment.destroy
     User.destroy
     Post.destroy
-    Category.destroy
+     Category.destroy
     Tag.destroy
   end
   
+  #Settings
+  def self.settings
+   settings = {
+      "posts_on_home_page"=>3, 
+      "site_name"=>"Test Site", 
+      "url"=>"http://shout_mouth.dev", 
+      "site_description"=>"Description", 
+      "akismet_key"=>"123456789", 
+      "amazon_s3_key"=>"NO", 
+      "amazon_s3_secret_key"=>"NO", 
+      "amazon_s3_bucket"=>"NO", 
+      "amazon_s3_file_location"=>"http://s3.amazonaws.com/", 
+      "theme"=>"default", 
+      "twitter_account"=>"@twitter", 
+      "check_spam"=>false, 
+      "comments_open_for_days"=>14, 
+      "use_file_based_storage"=>true, 
+      "footer_more_text"=>"Footer More", 
+      "google_analytics_key"=>"UA-0000000-0", 
+      "smtp_host"=>"smtp.yourserver.com", 
+      "smtp_port"=>"25", 
+      "smtp_user"=>"user", 
+      "smtp_password"=>"pass", 
+      "smtp_domain"=>"yourserver.com", 
+      "site_email"=>"user@yourserver.com", 
+      "administrator_email"=>"admin@yourserver.com"
+   }
+
+   settings.each{|setting|
+     Blog.send("#{setting[0]}=", setting[1])
+   }
+  end
+
   #Users
   def self.valid_user
     user = Factory.build(:valid_user)

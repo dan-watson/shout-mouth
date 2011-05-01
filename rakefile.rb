@@ -17,7 +17,6 @@ namespace :db do
   task :create do |t, args|
     DataMapper.auto_migrate!
     Rake::Task["db:sqlite_file_permissions"].invoke
-    Rake::Task["db:seed_settings_from_configuration_file"].invoke
   end
 
   desc "Upgrade The Database"
@@ -30,21 +29,11 @@ namespace :db do
     FileUtils.rm_rf(File.dirname(__FILE__) + "/db/shout_mouth.db")
   end
 
-  desc "Seed Data Into Settings Table From config/config.yaml - used to set defaults on initial setup"
-  task :seed_settings_from_configuration_file do |t, args|
-    
-    configuration_directory = File.expand_path("../config/", __FILE__)
-    configuration_file = File.exist?("#{configuration_directory}/_config.yaml") ? "#{configuration_directory}/_config.yaml" : "#{configuration_directory}/config.yaml"
-    settings = YAML.load_file(configuration_file)["#{ENV['RACK_ENV'].to_s}"]
-    settings.each{|setting|
-      Blog.send("#{setting[0]}=", setting[1])
-    }
-  end
-  
   desc "Seed Demo Data"
     task :demo_data do |t, args|
       Rake::Task["db:create"].invoke
       TestDataHelper.wipe_database
+      TestDataHelper.settings
       TestDataHelper.valid_post
       TestDataHelper.valid_post1
       TestDataHelper.valid_post2
@@ -67,6 +56,7 @@ namespace :specs do
   desc "Run All The Specs"
   task :run_all do |t, args|
     Rake::Task["db:create"].invoke
+    TestDataHelper.settings  
     exec 'rspec -c ' + File.dirname(__FILE__) + '/tests/*.rb'
   end
 end

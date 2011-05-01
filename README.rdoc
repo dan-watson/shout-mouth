@@ -1,5 +1,4 @@
-===Known Issues
-- Error relating to permissions on the db folder and shout_mouth.db file (Cannot connect to readonly database) - change permissions on the file and folder to rectify this. rake:sqlite_file_permissions 
+===Known Issues:w
 
 - Error writing to the public/cache directory - you need to fix permissions so that the webservers process can read/write from/to the folder.
  
@@ -14,9 +13,12 @@ Runs the site on test data (bundler must be installed)
 	connect your blogging client to http://localhost:9393/xmlrpc or http://localhost:9393/xmlrpc.php (default wordpress) 
 	with username: dan@shout_mouth.com password: password123
 
+===Setting Up Live Enviroment
+  Setup shout mouth on your server and browse to http://yourblog.com
+  Follow the on screen instructions
 
 ===Rake Tasks
-	rake db:create  (Create The Database) - Will also add settings to the settings table from config.yaml - first time load of settings
+	rake db:create  (Create The Database)
 	
 	rake db:delete  (Delete Database)
 	
