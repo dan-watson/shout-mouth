@@ -13,7 +13,7 @@ class TestDataHelper
     Comment.destroy
     User.destroy
     Post.destroy
-     Category.destroy
+    Category.destroy
     Tag.destroy
   end
   

@@ -13,7 +13,7 @@ Runs the site on test data (bundler must be installed)
 	connect your blogging client to http://localhost:9393/xmlrpc or http://localhost:9393/xmlrpc.php (default wordpress) 
 	with username: dan@shout_mouth.com password: password123
 
-===Setting Up Live Enviroment
+===Setting Up Live Enviroment (AUTOSETUP)
   Setup shout mouth on your server and browse to http://yourblog.com
   Follow the on screen instructions
 
