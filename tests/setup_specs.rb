@@ -12,13 +12,12 @@ describe "blog setup" do
   end
 
   before(:all) do
-    #delete database so the application is tricked into thinking its a new instance.
-    FileUtils.rm_rf(File.expand_path("../../db/shout_mouth.db", __FILE__))
+    Blog.repository.adapter.execute("DROP TABLE settings;")
   end
 
   after(:all) do
-    #Reset settings back to test defaults
-    DataMapper.auto_upgrade!
+    #Reset settings back to test defaultsI
+    DataMapper.auto_migrate!
     TestDataHelper.settings  
   end
 
