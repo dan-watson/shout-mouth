@@ -55,7 +55,7 @@ class ShoutMouth < Sinatra::Base
   post '/setup' do
     #Not a good idea to let people modify settings when setup has already been completed....
     if setup?
-
+      "Gonna process your settings but not yet implemented"
     else
       redirect "/"
     end

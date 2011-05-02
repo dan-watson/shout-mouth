@@ -2,95 +2,205 @@
 %html{:xmlns => "http://www.w3.org/1999/xhtml"}
   %head
     %title="Shout Mouth Setup"
+  %style{:type => "text/css", :media => "screen"}
+    :plain
+      body{
+        background-color:#ffffff;
+        color:#222222;
+        font-family: Georgia, 'Times New Roman', 'Bitstream Charter', Times, serif;
+      }
+      fieldset{
+          width:600px;
+          margin:0 auto;
+          background-color:#f9f9f9;
+          border-bottom-left-radius:4px;
+          border-bottom-right-radius:4px;
+          border-bottom-style:solid;
+          border-bottom-width:1px;
+          border-left-style:solid;
+          border-left-width:1px;
+          border-right-style:solid;
+          border-right-width:1px;
+          border-top-left-radius:4px;
+          border-top-right-radius:4px;
+          border-top-style:solid;
+          border-top-width:1px;
+          border-bottom-color:#DFDFDF;
+          border-left-color:#DFDFDF;
+          border-right-color:#DFDFDF;
+          border-top-color:#DFDFDF;
+      }
+      h2 {
+          font:italic normal normal 24px/29px Georgia, 'Times New Roman', 'Bitstream Charter', Times, serif;
+          line-height:35px;
+          margin-bottom:0;
+          margin-left:0;
+          margin-right:0;
+          margin-top:0;
+          padding-bottom:3px;
+          padding-left:0;
+          padding-right:15px;
+          padding-top:14px;
+          text-shadow:#FFFFFF 0 1px 0;
+      }
+      div{
+          font-size:0.8em;
+      }
+      div:after {
+          content: ".";
+          display: block;
+          height: 10px;
+          clear: both;
+          visibility: hidden;
+      }
+      label{
+          float:left;
+          width:200px;
+          vertical-align:middle;
+          padding-top:10px;
+      }
+      span{
+          position:relative;
+          top:-8px;
+          margin-right:15px;
+      }
+      textarea,
+      input,
+      select {
+            border-bottom-left-radius:4px 4px;
+            border-bottom-right-radius:4px 4px;
+            border-bottom-style:solid;
+            border-bottom-width:1px;
+            border-left-style:solid;
+            border-left-width:1px;
+            border-right-style:solid;
+            border-right-width:1px;
+            border-top-left-radius:4px 4px;
+            border-top-right-radius:4px 4px;
+            border-top-style:solid;
+            border-top-width:1px;
+            background-color:#FFFFFF;
+            border-bottom-color:#DFDFDF;
+            border-left-color:#DFDFDF;
+            border-right-color:#DFDFDF;
+            border-top-color:#DFDFDF;
+            float:left;
+            width:300px;
+            height:30px;
+      }
+      .checkbox{
+        float:none;
+        width:15px;
+      }
+      .submit{
+        margin-left:200px;
+      }
   %body
     %fieldset
-      %legend Settings
-      %div
-        %label Url
-        %input 
-      %div
-        %label Sitename
-        %input
-      %div
-        %label Site description
-        %input
-      %div
-        %label Number of posts to display on homepage
-        %input
-      %div
-        %label Akismet key (info about akismet)
-        %input
-      %div
-        %label Amazon S3 key
-        %input
-      %div 
-        %label Amazon S3 secret key
-        %input
-      %div
-        %label Amazon S3 bucket
-        %input
-      %div
-        %label Amazon S3 Url
-        %input
-      %div
-        %label Theme
-        %select
-          %option Default
-      %div
-        %label Twitter account
-        %input
-      %div
-        %label Check for spam?
-        %input{:type => "radio", :name => "check_for_spam", :value => true} Yep
-        %input{:type => "radio", :name => "check_for_spam", :value => false} Nope
-      %div 
-        %label Comments open for days (0 = forever)
-        %input 
-      %div 
-        %label Use file based storage?
-        %input{:type => "radio", :name => "check_for_spam", :value => true} Yep
-        %input{:type => "radio", :name => "check_for_spam", :value => false} Nope
-      %div
-        %label Footer text
-        %input
-      %div
-        %label Google analytics key (no key will stop the tracking script)
-        %input
-      %div
-        %label SMTP host
-        %input 
-      %div
-        %label SMTP port
-        %input
-      %div
-        %label SMTP user
-        %input 
-      %div
-        %label SMTP password
-        %input
-      %div
-        %label SMTP domain (HELO yourdomin.com)
-        %input
-      %div
-        %label Site email (email address the website will use to send mail)
-        %input
-      %div
-        %label Administrator email
-        %input
-      %div
-        %label Firstname
-        %input
-      %div
-        %label Lastname
-        %input
-      %div
-        %label Email (your)
-        %input 
-      %div 
-        %label Password
-        %input{:type => "password"}
-      %div
-        %label Confirm password
-        %input{:type => "password"}
-
+      %form{:method => "post", :action => "/setup"}
+        %h2 Setup your blog....
+        %div
+          %p
+            Just answer these few question below to get your blog up and running....
+        %h2 General
+        %div
+          %label Url
+          %input{:name => "url"} 
+        %div
+          %label Sitename
+          %input{:name => "site_name"}
+        %div
+          %label Site description
+          %input{:name => "site_description"}
+        %div
+          %label Number of posts on homepage
+          %input{:name => "posts_on_home_page"}
+        %div
+          %label Footer text
+          %textarea{:name => "footer_more_text", :rows => "10", :style => "height:100px"}
+        %h2 Comments
+        %div
+          %label Check for spam?
+          %input{:type => "radio", :name => "check_spam", :value => true, :class => "checkbox"} 
+          %span Yes
+          %input{:type => "radio", :name => "check_spam", :value => false, :class => "checkbox"} 
+          %span No
+        %div
+          %label Akismet key
+          %input{:name => "akismet_key"} https://akismet.com/signup/ - Akismet from $0 
+        %div 
+          %label Comments open for days
+          %input{:name => "comments_open_for_days"} (0 = forever)
+        %h2 Asset Storage
+        %div 
+          %label Asset storage
+          %input{:type => "radio", :name => "use_file_based_storage", :value => true, :class => "checkbox"} 
+          %span Filesystem
+          %input{:type => "radio", :name => "use_file_based_storage", :value => false, :class => "checkbox"} 
+          %span Amazon S3
+        %div
+          %label Amazon S3 key
+          %input{:name => "amazon_s3_key"}
+        %div 
+          %label Amazon S3 secret key
+          %input{:name => "amazon_s3_secret_key"}
+        %div
+          %label Amazon S3 bucket
+          %input{:name => "amazon_s3_bucket"}
+        %div
+          %label Amazon S3 Url
+          %input{:name => "amazon_s3_file_location"}
+        %h2 Themes
+        %div
+          %label Theme
+          %select{:name => "theme"}
+            %option{:value => "default"} Default
+        %h2 Social
+        %div
+          %label Twitter account
+          %input{:name => "twitter_account"}
+        %h2 Analytics
+        %div
+          %label Google analytics key (no key will stop the tracking script)
+          %input{:name => "google_analytics_key"}
+        %h2 Email Settings
+        %div
+          %label SMTP host
+          %input{:name => "smtp_host"}
+        %div
+          %label SMTP port
+          %input{:name => "smtp_port"}
+        %div
+          %label SMTP user
+          %input{:name => "smtp_user"}
+        %div
+          %label SMTP password
+          %input{:name => "smtp_password"}
+        %div
+          %label SMTP domain (HELO yourdomin.com)
+          %input{:name => "smtp_domain"}
+        %div
+          %label Site email (email address the website will use to send mail)
+          %input{:name => "site_email"}
+        %div
+          %label Administrator email
+          %input{:name => "administrator_email"}
+        %h2 User Information
+        %div
+          %label Firstname
+          %input{:name => "user[firstname]"}
+        %div
+          %label Lastname
+          %input{:name => "user[lastname]"}
+        %div
+          %label Email (your)
+          %input{:name => "user[email]"}
+        %div 
+          %label Password
+          %input{:type => "password", :name => "user[password]"}
+        %div
+          %label Confirm password
+          %input{:type => "password", :name => "user[password_confirm]"}
+        %div
+          %input{:type => "submit", :value => "submit", :class => "submit"}
 
