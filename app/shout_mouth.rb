@@ -35,13 +35,30 @@ class ShoutMouth < Sinatra::Base
   
   get '/' do
     
-    #STOP legacy urls breaking the cache - eg http://www.yoursite.com?tags=gamer
-    redirect "/notfound", 301 if params.length > 0
-    
-    prepend_title("Home")
-    @articles = Post.all_active_posts.all(:limit => Blog.posts_on_home_page.to_i)
-    halt haml :index unless @articles.none?
-    haml :nodata
+    begin
+      #STOP legacy urls breaking the cache - eg http://www.yoursite.com?tags=gamer
+      redirect "/notfound", 301 if params.length > 0
+      
+      prepend_title("Home")
+      @articles = Post.all_active_posts.all(:limit => Blog.posts_on_home_page.to_i)
+      halt haml :index unless @articles.none?
+      haml :nodata
+    rescue DataObjects::SyntaxError
+      #A SQL syntax error is raised when the database has not been created..
+      #This does not necessarily mean that we need to go into setup mode eg => (lost connection to db or even someone playing directly with tables....)
+      #Lets make a second check to be sure.....
+      #If the setup flag exists then lets go for it
+      halt haml :setup, :layout => false if setup?
+    end
+  end
+
+  post '/setup' do
+    #Not a good idea to let people modify settings when setup has already been completed....
+    if setup?
+
+    else
+      redirect "/"
+    end
   end
 
   #DRY - This route matches for both pages and posts as the program flow is the same
@@ -242,6 +259,10 @@ class ShoutMouth < Sinatra::Base
     
     def meta_keywords
       Tag.usable_active_tags.map{|tag| tag.tag}.join(", ")
+    end
+
+    def setup?
+      File.exists?(File.expand_path("../../setup", __FILE__))
     end
   end
 end

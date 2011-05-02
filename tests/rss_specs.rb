@@ -14,12 +14,12 @@ describe "rss feed" do
   end
   
   it "should return the correct response" do
-    get '/rss'
+    get '/rss.xml'
     last_response.should be_ok
   end
   
   it "should contain the blog details" do
-    get '/rss'
+    get '/rss.xml'
     
     last_response.body.should include(Blog.url)
     last_response.body.should include(Blog.site_name)

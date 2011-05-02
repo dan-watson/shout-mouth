@@ -1,0 +1,96 @@
+!!!
+%html{:xmlns => "http://www.w3.org/1999/xhtml"}
+  %head
+    %title="Shout Mouth Setup"
+  %body
+    %fieldset
+      %legend Settings
+      %div
+        %label Url
+        %input 
+      %div
+        %label Sitename
+        %input
+      %div
+        %label Site description
+        %input
+      %div
+        %label Number of posts to display on homepage
+        %input
+      %div
+        %label Akismet key (info about akismet)
+        %input
+      %div
+        %label Amazon S3 key
+        %input
+      %div 
+        %label Amazon S3 secret key
+        %input
+      %div
+        %label Amazon S3 bucket
+        %input
+      %div
+        %label Amazon S3 Url
+        %input
+      %div
+        %label Theme
+        %select
+          %option Default
+      %div
+        %label Twitter account
+        %input
+      %div
+        %label Check for spam?
+        %input{:type => "radio", :name => "check_for_spam", :value => true} Yep
+        %input{:type => "radio", :name => "check_for_spam", :value => false} Nope
+      %div 
+        %label Comments open for days (0 = forever)
+        %input 
+      %div 
+        %label Use file based storage?
+        %input{:type => "radio", :name => "check_for_spam", :value => true} Yep
+        %input{:type => "radio", :name => "check_for_spam", :value => false} Nope
+      %div
+        %label Footer text
+        %input
+      %div
+        %label Google analytics key (no key will stop the tracking script)
+        %input
+      %div
+        %label SMTP host
+        %input 
+      %div
+        %label SMTP port
+        %input
+      %div
+        %label SMTP user
+        %input 
+      %div
+        %label SMTP password
+        %input
+      %div
+        %label SMTP domain (HELO yourdomin.com)
+        %input
+      %div
+        %label Site email (email address the website will use to send mail)
+        %input
+      %div
+        %label Administrator email
+        %input
+      %div
+        %label Firstname
+        %input
+      %div
+        %label Lastname
+        %input
+      %div
+        %label Email (your)
+        %input 
+      %div 
+        %label Password
+        %input{:type => "password"}
+      %div
+        %label Confirm password
+        %input{:type => "password"}
+
+
