@@ -2,6 +2,12 @@
 %html{:xmlns => "http://www.w3.org/1999/xhtml"}
   %head
     %title="Shout Mouth Setup"
+  %script{:type => "text/javascript", :src => "/scripts/jquery-1.5.min.js"}
+  %script{:type => "text/javascript", :src => "/scripts/jquery.dom.window.js"}
+  :javascript
+    $(document).ready(function(){
+    });
+
   %style{:type => "text/css", :media => "screen"}
     :plain
       body{
@@ -40,7 +46,7 @@
           padding-bottom:3px;
           padding-left:0;
           padding-right:15px;
-          padding-top:14px;
+          padding-top:10px;
           text-shadow:#FFFFFF 0 1px 0;
       }
       div{
@@ -95,6 +101,15 @@
       .submit{
         margin-left:200px;
       }
+      .information{
+        margin-left:8px;
+      }
+      .information img{
+        margin-top:5px;
+      }
+      .hide{
+        display:none;
+      }
   %body
     %fieldset
       %form{:method => "post", :action => "/setup"}
@@ -121,33 +136,38 @@
         %h2 Comments
         %div
           %label Check for spam?
-          %input{:type => "radio", :name => "check_spam", :value => true, :class => "checkbox"} 
+          %input{:type => "radio", :name => "check_spam", :value => "true", :class => "checkbox"} 
           %span Yes
-          %input{:type => "radio", :name => "check_spam", :value => false, :class => "checkbox"} 
+          %input{:type => "radio", :name => "check_spam", :value => "false", :class => "checkbox", :checked => "checked"} 
           %span No
-        %div
+        %div.hide.akismet_section
           %label Akismet key
-          %input{:name => "akismet_key"} https://akismet.com/signup/ - Akismet from $0 
+          %input{:name => "akismet_key"} 
+          %a{:href => "#akismet", :class => "information akismet_modal"}
+            %img{:src => "/information_icon.png", :alt => "help"}
+              
         %div 
           %label Comments open for days
           %input{:name => "comments_open_for_days"} (0 = forever)
         %h2 Asset Storage
         %div 
           %label Asset storage
-          %input{:type => "radio", :name => "use_file_based_storage", :value => true, :class => "checkbox"} 
+          %input{:type => "radio", :name => "use_file_based_storage", :value => "true", :class => "checkbox", :checked => "checked"} 
           %span Filesystem
-          %input{:type => "radio", :name => "use_file_based_storage", :value => false, :class => "checkbox"} 
+          %input{:type => "radio", :name => "use_file_based_storage", :value => "false", :class => "checkbox"}
           %span Amazon S3
-        %div
+        %div.hide.amazon_section
           %label Amazon S3 key
           %input{:name => "amazon_s3_key"}
-        %div 
+          %a{:href => "#amazon", :class => "information amazon_modal"}
+            %img{:src => "/information_icon.png", :alt => "help"}
+        %div.hide.amazon_section
           %label Amazon S3 secret key
           %input{:name => "amazon_s3_secret_key"}
-        %div
+        %div.hide.amazon_section
           %label Amazon S3 bucket
           %input{:name => "amazon_s3_bucket"}
-        %div
+        %div.hide.amazon_section
           %label Amazon S3 Url
           %input{:name => "amazon_s3_file_location"}
         %h2 Themes
@@ -159,14 +179,26 @@
         %div
           %label Twitter account
           %input{:name => "twitter_account"}
+          %a{:href => "#twitter", :class => "information twitter_modal"}
+            %img{:src => "/information_icon.png", :alt => "help"}
         %h2 Analytics
-        %div
+        %div 
+          %label Use google analytics?
+          %input{:type => "radio", :name => "use_google_analytics", :value => "true", :class => "checkbox"} 
+          %span Yes
+          %input{:type => "radio", :name => "use_file_based_storage", :value => "false", :class => "checkbox", :checked => "checked"}
+          %span No
+        %div.hide.google_analytics_section
           %label Google analytics key (no key will stop the tracking script)
           %input{:name => "google_analytics_key"}
+          %a{:href => "#google", :class => "information google_modal"}
+            %img{:src => "/information_icon.png", :alt => "help"}
         %h2 Email Settings
         %div
           %label SMTP host
           %input{:name => "smtp_host"}
+          %a{:href => "#smtp", :class => "information smtp_modal"}
+            %img{:src => "/information_icon.png", :alt => "help"}
         %div
           %label SMTP port
           %input{:name => "smtp_port"}
