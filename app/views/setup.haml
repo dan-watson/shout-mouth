@@ -6,6 +6,15 @@
   %script{:type => "text/javascript", :src => "/scripts/jquery.dom.window.js"}
   :javascript
     $(document).ready(function(){
+      $(".check_for_spam").click(function(){
+         if($(this).val() == "true"){
+          $(".akismet_section").show();  
+         }
+         else{
+          $(".akismet_section").hide();  
+          $("input[name='akismet_key']").val(null);
+         }
+      });
     });
 
   %style{:type => "text/css", :media => "screen"}
@@ -136,9 +145,9 @@
         %h2 Comments
         %div
           %label Check for spam?
-          %input{:type => "radio", :name => "check_spam", :value => "true", :class => "checkbox"} 
+          %input{:type => "radio", :name => "check_spam", :value => "true", :class => "checkbox check_for_spam"} 
           %span Yes
-          %input{:type => "radio", :name => "check_spam", :value => "false", :class => "checkbox", :checked => "checked"} 
+          %input{:type => "radio", :name => "check_spam", :value => "false", :class => "checkbox check_for_spam", :checked => "checked"} 
           %span No
         %div.hide.akismet_section
           %label Akismet key
@@ -152,9 +161,9 @@
         %h2 Asset Storage
         %div 
           %label Asset storage
-          %input{:type => "radio", :name => "use_file_based_storage", :value => "true", :class => "checkbox", :checked => "checked"} 
+          %input{:type => "radio", :name => "use_file_based_storage", :value => "true", :class => "checkbox check_for_storage", :checked => "checked"} 
           %span Filesystem
-          %input{:type => "radio", :name => "use_file_based_storage", :value => "false", :class => "checkbox"}
+          %input{:type => "radio", :name => "use_file_based_storage", :value => "false", :class => "checkbox check_for_storage"}
           %span Amazon S3
         %div.hide.amazon_section
           %label Amazon S3 key
