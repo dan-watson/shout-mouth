@@ -6,15 +6,53 @@
   %script{:type => "text/javascript", :src => "/scripts/jquery.dom.window.js"}
   :javascript
     $(document).ready(function(){
-      $(".check_for_spam").click(function(){
+    
+    $("input[name='url']").val(document.location.href);
+  
+    $(".check_for_spam").click(function(){
          if($(this).val() == "true"){
-          $(".akismet_section").show();  
+          $(".akismet_section").show(); 
          }
          else{
           $(".akismet_section").hide();  
-          $("input[name='akismet_key']").val(null);
+          $(".akismet_section > input").val(null);
          }
       });
+
+      $(".check_for_storage").click(function(){
+        if($(this).val() == "false"){
+          $(".amazon_section").show();
+        }
+        else{
+          $(".amazon_section").hide();
+          $(".amazon_section > input").val(null);
+        }
+      });
+
+      $(".check_google_analytics").click(function(){
+        if($(this).val() == "true"){
+          $(".google_analytics_section").show();
+        }
+        else{
+          $(".google_analytics_section").hide();
+          $(".google_analytics_section > input").val(null);
+        }
+      });
+    
+      $(".check_allow_unlimited_comments").click(function(){
+        if($(this).val() == "true"){
+          $(".comments_open_for_days_section").show();
+        }
+        else{
+          $(".comments_open_for_days_section").hide();
+          $(".comments_open_for_days_section > select").val("0");
+        }
+      });
+
+      $('.akismet_modal').openDOMWindow({ 
+        eventType:'click'
+      }); 
+
     });
 
   %style{:type => "text/css", :media => "screen"}
@@ -27,7 +65,6 @@
       fieldset{
           width:600px;
           margin:0 auto;
-          background-color:#f9f9f9;
           border-bottom-left-radius:4px;
           border-bottom-right-radius:4px;
           border-bottom-style:solid;
@@ -109,6 +146,10 @@
       }
       .submit{
         margin-left:200px;
+        font-weight:bold;
+        border-color:#000000;
+        height:50px;
+        font-size:1.2em;
       }
       .information{
         margin-left:8px;
@@ -154,10 +195,31 @@
           %input{:name => "akismet_key"} 
           %a{:href => "#akismet", :class => "information akismet_modal"}
             %img{:src => "/information_icon.png", :alt => "help"}
-              
-        %div 
-          %label Comments open for days
-          %input{:name => "comments_open_for_days"} (0 = forever)
+        #akismet{:style => "display:none;"}
+          Lets Go!!!!
+        %div
+          %label Limit days comments are open?
+          %input{:type => "radio", :name => "comments_open_for_days_check", :value => "true", :class => "checkbox check_allow_unlimited_comments"} 
+          %span Set a limit
+          %input{:type => "radio", :name => "comments_open_for_days_check", :value => "false", :class => "checkbox check_allow_unlimited_comments", :checked => "checked"} 
+          %span No limit - open forever.
+        %div.hide.comments_open_for_days_section 
+          %label Days
+          %select{:name => "comments_open_for_days"}
+            %option{:value => "0"} --choose time period--
+            %option{:value => "1"} one day
+            %option{:value => "3"} three day's
+            %option{:value => "5"} five day's
+            %option{:value => "10"} ten day's
+            %option{:value => "15"} fifteen day's
+            %option{:value => "20"} twenty day's
+            %option{:value => "30"} thirty day's
+            %option{:value => "60"} sixty day's
+            %option{:value => "90"} ninety day's
+            %option{:value => "120"} one hundred and twenty day's
+            %option{:value => "180"} one hundred and eighty day's
+            %option{:value => "240"} two hundred and fourty day's
+            %option{:value => "365"} one year
         %h2 Asset Storage
         %div 
           %label Asset storage
@@ -193,12 +255,12 @@
         %h2 Analytics
         %div 
           %label Use google analytics?
-          %input{:type => "radio", :name => "use_google_analytics", :value => "true", :class => "checkbox"} 
+          %input{:type => "radio", :name => "use_google_analytics", :value => "true", :class => "checkbox check_google_analytics"} 
           %span Yes
-          %input{:type => "radio", :name => "use_file_based_storage", :value => "false", :class => "checkbox", :checked => "checked"}
+          %input{:type => "radio", :name => "use_google_analytics", :value => "false", :class => "checkbox check_google_analytics", :checked => "checked"}
           %span No
         %div.hide.google_analytics_section
-          %label Google analytics key (no key will stop the tracking script)
+          %label Google analytics key
           %input{:name => "google_analytics_key"}
           %a{:href => "#google", :class => "information google_modal"}
             %img{:src => "/information_icon.png", :alt => "help"}
@@ -218,10 +280,10 @@
           %label SMTP password
           %input{:name => "smtp_password"}
         %div
-          %label SMTP domain (HELO yourdomin.com)
+          %label SMTP domain
           %input{:name => "smtp_domain"}
         %div
-          %label Site email (email address the website will use to send mail)
+          %label Site email address
           %input{:name => "site_email"}
         %div
           %label Administrator email
@@ -234,7 +296,7 @@
           %label Lastname
           %input{:name => "user[lastname]"}
         %div
-          %label Email (your)
+          %label Email
           %input{:name => "user[email]"}
         %div 
           %label Password
@@ -243,5 +305,5 @@
           %label Confirm password
           %input{:type => "password", :name => "user[password_confirm]"}
         %div
-          %input{:type => "submit", :value => "submit", :class => "submit"}
+          %input{:type => "submit", :value => "get bloggin!", :class => "submit"}
 
