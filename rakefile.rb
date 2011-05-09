@@ -3,6 +3,13 @@ namespace :cache do
   task :clear do |t, args|
     Dir[File.join(File.dirname(__FILE__), "public/cache/**/*")].each{|entry| FileUtils.rm_rf(entry)}
   end
+  
+  desc "Create the cache folder"
+  task :create do
+    cache_directory = File.join(File.dirname(__FILE__), "public/cache")
+    FileUtils.mkdir(cache_directory) unless File.exists?(File.join(cache_directory))
+    File.chmod(0777, cache_directory)
+  end
 end
 
 namespace :db do
