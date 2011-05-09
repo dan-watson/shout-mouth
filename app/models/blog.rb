@@ -1,5 +1,4 @@
 require 'yaml'
-require Dir.pwd + '/app/api/cache/cache'
 
 class Blog
     include Shout::Record
@@ -18,7 +17,7 @@ class Blog
   
   def self.posts_on_home_page=(value)
     create_or_update 'posts_on_home_page', value
-    Cache.clear_cache_for 'index'
+    CacheCleaner.clear_cache_for 'index'
   end
   #----------------------------#
   def self.url
@@ -27,7 +26,7 @@ class Blog
   
   def self.url=(value)
     create_or_update 'url', value
-    Cache.clear_cache
+    CacheCleaner.clear_cache
   end
   #----------------------------#
   def self.akismet_key
@@ -76,7 +75,7 @@ class Blog
   
   def self.theme=(value)
     create_or_update 'theme', value
-    Cache.clear_cache
+    CacheCleaner.clear_cache
   end
   #----------------------------#
   def self.site_name
@@ -85,7 +84,7 @@ class Blog
   
   def self.site_name=(value)
     create_or_update 'site_name', value
-    Cache.clear_cache
+    CacheCleaner.clear_cache
   end
   #----------------------------#
   def self.site_description
@@ -94,7 +93,7 @@ class Blog
   
   def self.site_description=(value)
     create_or_update 'site_description', value
-    Cache.clear_cache
+    CacheCleaner.clear_cache
   end
   #----------------------------#
   def self.twitter_account
@@ -103,7 +102,7 @@ class Blog
   
   def self.twitter_account=(value)
     create_or_update 'twitter_account', value
-    Cache.clear_cache
+    CacheCleaner.clear_cache
   end
   #----------------------------#
   def self.check_spam
@@ -120,7 +119,7 @@ class Blog
   
   def self.comments_open_for_days=(value)
     create_or_update 'comments_open_for_days', value
-    Cache.clear_cache
+    CacheCleaner.clear_cache
   end
   #----------------------------#  
   def self.use_file_based_storage
@@ -137,7 +136,7 @@ class Blog
   
   def self.footer_more_text=(value)
     create_or_update 'footer_more_text', value
-    Cache.clear_cache
+    CacheCleaner.clear_cache
   end
   #----------------------------#
   def self.google_analytics_key
@@ -146,7 +145,7 @@ class Blog
   
   def self.google_analytics_key=(value)
     create_or_update 'google_analytics_key', value
-    Cache.clear_cache
+    CacheCleaner.clear_cache
   end
   #----------------------------#
   def self.use_google_analytics

@@ -15,6 +15,10 @@ class User
 
   has n, :posts
 
+  before :save do
+    CacheCleaner.clear_cache
+  end
+  
   #Constructor
   def initialize(attributes = nil)
     super(attributes)

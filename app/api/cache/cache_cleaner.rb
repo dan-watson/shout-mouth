@@ -1,4 +1,4 @@
-class Cache
+class CacheCleaner
   def self.clear_cache
     FileUtils.rm_rf(Dir.glob("#{cache_path}/*"))
   end

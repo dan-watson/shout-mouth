@@ -22,7 +22,7 @@ class Comment
 
   before :save do
     self.is_spam = spam?
-    self.post.invalidate_cache
+    CacheCleaner.clear_cache_for self.post.link
   end
 
   #Instance Methods

@@ -1,5 +1,4 @@
 require Dir.pwd + '/app/models/base/shout_record'
-require Dir.pwd + '/app/api/cache/cache'
 
 class Post
   include Shout::Record
@@ -27,7 +26,7 @@ class Post
     self.persisted_slug = self.slug
     self.month = created_at.strftime("%B")
     self.year = created_at.year
-    invalidate_cache
+    CacheCleaner.clear_cache
   end
   
   def parent_page
@@ -63,28 +62,6 @@ class Post
     to_url_safe_string title
   end
   
-  
-  def invalidate_cache
-    #Seems to be a bug in the Sinatra::Cache library when removing the cached page
-    #so re-written here
-    #Remove page / post cache
-    Cache.clear_cache_for link
-    #Remove tag cache
-    tags.each{|tag| Cache.clear_cache_for tag.link }
-    #Remove archive cache
-    Cache.clear_cache_for "archive"
-    #Remove rss cache
-    Cache.clear_cache_for "rss"
-    #Remove category cache
-    categories.each{|category| Cache.clear_cache_for category.link}
-    #Remove date cache
-    Cache.clear_cache_for "/posts/date/#{year}-#{month}"
-    #Remove index cache
-    Cache.clear_cache_for "index"
-    #Remove sitemap
-    Cache.clear_cache_for "sitemap", "xml"
-  end
-
   def permalink
     "#{Blog.url}#{link}"
   end
