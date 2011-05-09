@@ -76,12 +76,3 @@ namespace :user do
     User.new(:email => args.email, :password => args.password, :firstname => args.firstname, :lastname => args.lastname).save
   end
 end
-
-#Deployment using vlad
-begin
-  require 'rubygems'
-  require 'vlad'
-  Vlad.load :scm => :git
-rescue LoadError => e
-  puts "Unable to load Vlad #{e}."
-end

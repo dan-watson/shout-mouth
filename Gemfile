@@ -15,9 +15,9 @@ group :development do
 	gem "shotgun"
 	gem 'passenger'
 	gem 'racksh'
-  gem 'vlad'
-  gem 'vlad-git'
-  gem 'vlad-nginx'
+  #gem 'vlad'
+  #gem 'vlad-git'
+  #gem 'vlad-nginx'
 end
 
 group :test do
