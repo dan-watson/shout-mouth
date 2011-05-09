@@ -24,6 +24,15 @@ namespace :db do
     DataMapper.auto_upgrade!
   end
 
+  desc "Create Or Update The Database"
+  task :migrate do |t, args|
+    unless File.exists?(File.dirname(__FILE__) + "/db/shout_mouth.db")
+      Rake::Task["db:create"].invoke
+    else
+      DataMapper.auto_migrate! 
+    end 
+  end
+
   desc "Delete Database File"
   task :delete do |t, args|
     FileUtils.rm_rf(File.dirname(__FILE__) + "/db/shout_mouth.db")
@@ -66,4 +75,13 @@ namespace :user do
   task :create do |t, args|
     User.new(:email => args.email, :password => args.password, :firstname => args.firstname, :lastname => args.lastname).save
   end
+end
+
+#Deployment using vlad
+begin
+  require 'rubygems'
+  require 'vlad'
+  Vlad.load :scm => :git
+rescue LoadError => e
+  puts "Unable to load Vlad #{e}."
 end
