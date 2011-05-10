@@ -3,11 +3,14 @@
   %head
     %title="Shout Mouth Setup"
   %script{:type => "text/javascript", :src => "/scripts/jquery-1.5.min.js"}
-  %script{:type => "text/javascript", :src => "/scripts/jquery.dom.window.js"}
   :javascript
     $(document).ready(function(){
     
-    $("input[name='url']").val(document.location.href);
+    blog_url = document.location.href.toString()
+    if(blog_url.charAt((blog_url.length -1)) == '/')
+      blog_url = blog_url.slice(0, -1)
+    
+    $("input[name='url']").val(blog_url);
   
     $(".check_for_spam").click(function(){
          if($(this).val() == "true"){
@@ -48,11 +51,6 @@
           $(".comments_open_for_days_section > select").val("0");
         }
       });
-
-      $('.akismet_modal').openDOMWindow({ 
-        eventType:'click'
-      }); 
-
     });
 
   %style{:type => "text/css", :media => "screen"}
@@ -194,9 +192,6 @@
           %label Akismet key
           %input{:name => "akismet_key"} 
           %a{:href => "#akismet", :class => "information akismet_modal"}
-            %img{:src => "/information_icon.png", :alt => "help"}
-        #akismet{:style => "display:none;"}
-          Lets Go!!!!
         %div
           %label Limit days comments are open?
           %input{:type => "radio", :name => "comments_open_for_days_check", :value => "true", :class => "checkbox check_allow_unlimited_comments"} 
@@ -230,8 +225,6 @@
         %div.hide.amazon_section
           %label Amazon S3 key
           %input{:name => "amazon_s3_key"}
-          %a{:href => "#amazon", :class => "information amazon_modal"}
-            %img{:src => "/information_icon.png", :alt => "help"}
         %div.hide.amazon_section
           %label Amazon S3 secret key
           %input{:name => "amazon_s3_secret_key"}
@@ -250,8 +243,6 @@
         %div
           %label Twitter account
           %input{:name => "twitter_account"}
-          %a{:href => "#twitter", :class => "information twitter_modal"}
-            %img{:src => "/information_icon.png", :alt => "help"}
         %h2 Analytics
         %div 
           %label Use google analytics?
@@ -262,14 +253,10 @@
         %div.hide.google_analytics_section
           %label Google analytics key
           %input{:name => "google_analytics_key"}
-          %a{:href => "#google", :class => "information google_modal"}
-            %img{:src => "/information_icon.png", :alt => "help"}
         %h2 Email Settings
         %div
           %label SMTP host
           %input{:name => "smtp_host"}
-          %a{:href => "#smtp", :class => "information smtp_modal"}
-            %img{:src => "/information_icon.png", :alt => "help"}
         %div
           %label SMTP port
           %input{:name => "smtp_port"}
