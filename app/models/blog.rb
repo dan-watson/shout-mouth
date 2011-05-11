@@ -158,7 +158,7 @@ class Blog
         :port     =>  configuration('smtp_port'),     #'25',
         :user     =>  configuration('smtp_user'),     #'user',
         :password =>  configuration('smtp_password'), #'pass',
-        :auth     => :plain,                          #:login, :cram_md5, no auth by default
+        :auth     =>  configuration('smtp_auth').nil? ? :plain : configuration('smtp_auth').to_sym,  #:login, :cram_md5, no auth by default
         :domain   =>  configuration('smtp_domain')    #example.com - the HELO domain provided by the client to the server
       }
   end
@@ -178,7 +178,11 @@ class Blog
   def self.smtp_password=(value)
     create_or_update 'smtp_password', value
   end
-  
+ 
+  def self.smtp_auth=(value)
+    create_or_update 'smtp_auth', value
+  end
+
   def self.smtp_domain=(value)
     create_or_update 'smtp_domain', value
   end

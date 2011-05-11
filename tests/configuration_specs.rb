@@ -74,6 +74,7 @@ describe Blog, "configuration" do
     smtp_settings[:user].should == "user"
     smtp_settings[:password].should == "pass"
     smtp_settings[:domain].should == "yourserver.com"
+    smtp_settings[:auth].should == :plain
   end
   
   it "should return the correct site email addresss" do
