@@ -149,14 +149,20 @@
         height:50px;
         font-size:1.2em;
       }
-      .information{
-        margin-left:8px;
-      }
-      .information img{
-        margin-top:5px;
-      }
       .hide{
         display:none;
+      }
+      .clear{clear:both;}
+      .information{
+        font-size:1.0em;
+        margin-left:200px;
+        margin-top:5px;
+        width:290px;
+        padding:35px 5px 0px 5px;
+        border:solid 1px #DFDFDF;
+        border-radius:4px 4px 4px 4px;
+        background-image:url('/information.png');
+        background-repeat:no-repeat;
       }
   %body
     %fieldset
@@ -177,7 +183,17 @@
           %input{:name => "site_description"}
         %div
           %label Number of posts on homepage
-          %input{:name => "posts_on_home_page"}
+          %select{:name => "posts_on_home_page"}
+            %option{:value => "1"} One
+            %option{:value => "2"} Two
+            %option{:value => "3"} Three
+            %option{:value => "4"} Four
+            %option{:value => "5"} Five
+            %option{:value => "6"} Six
+            %option{:value => "7"} Seven
+            %option{:value => "8"} Eight
+            %option{:value => "9"} Nine
+            %option{:value => "10"} Ten
         %div
           %label Footer text
           %textarea{:name => "footer_more_text", :rows => "10", :style => "height:100px"}
@@ -191,7 +207,16 @@
         %div.hide.akismet_section
           %label Akismet key
           %input{:name => "akismet_key"} 
-          %a{:href => "#akismet", :class => "information akismet_modal"}
+          %div.clear  
+          %div.information
+            Akismet filters out your comment
+            and track-back spam for you, so you
+            can focus on more important things.
+            %br
+            %br
+            You can sign up for an api key for free 
+            %a{:href => "https://akismet.com/", :target => "_blank"} here 
+            at akismet.com
         %div
           %label Limit days comments are open?
           %input{:type => "radio", :name => "comments_open_for_days_check", :value => "true", :class => "checkbox check_allow_unlimited_comments"} 
