@@ -292,6 +292,12 @@
           %label SMTP password
           %input{:name => "smtp_password"}
         %div
+          %label SMTP authentication type
+          %select{:name => "smtp_auth"}
+            %option{:value => "plain"} plain
+            %option{:value => "login"} login
+            %option{:value => "cram_md5"} cram_md5
+        %div
           %label SMTP domain
           %input{:name => "smtp_domain"}
         %div
