@@ -76,13 +76,18 @@ class Post
     if comment.saved? 
       comments << comment
             
+      begin
       Pony.mail(:to =>      Blog.administrator_email, 
                 :from =>    Blog.site_email, 
                 :subject => "#{Blog.site_name} - Comment Added", 
                 :body =>    "A comment has been added to #{title}",
                 :via =>     :smtp,
                 :smtp =>    Blog.smtp_settings)
-    end
+      rescue
+        #so many things can go wrong with email - just rescue everything and do nothing.
+        #will log this when logging is introduced.
+      end
+   end
     comment
   end
   
