@@ -258,7 +258,14 @@
           %input{:name => "amazon_s3_bucket"}
         %div.hide.amazon_section
           %label Amazon S3 Url
-          %input{:name => "amazon_s3_file_location"}
+          %input{:name => "amazon_s3_file_location", :value => "http://s3.amazonaws.com/"}
+          %div.clear  
+          %div.information
+            Amazon S3 is storage for the Internet. It is designed to make web-scale computing easier for developers.
+            %br
+            %br
+            Sign up for Amazon S3
+            %a{:href => "http://aws.amazon.com/s3/", :target => "_blank"} here.
         %h2 Themes
         %div
           %label Theme
@@ -268,6 +275,10 @@
         %div
           %label Twitter account
           %input{:name => "twitter_account"}
+          %div.clear
+          %div.information
+            Be social and have a twitter account sign up
+            %a{:href => "http://twitter.com/", :target => "_blank"} here.
         %h2 Analytics
         %div 
           %label Use google analytics?
@@ -278,6 +289,16 @@
         %div.hide.google_analytics_section
           %label Google analytics key
           %input{:name => "google_analytics_key"}
+          %div.clear
+          %div.information
+            Google Analytics is the enterprise-class web analytics solution that gives you rich insights into your website traffic and marketing effectiveness. Powerful, flexible and easy-to-use features now let you see and analyze your traffic data in an entirely new way. With Google Analytics, you're more prepared to write better-targeted ads, strengthen your marketing initiatives and create higher converting websites.
+            %br
+            %br
+            Sign up for a Google analytics account
+            %a{:href => "http://www.google.com/analytics/", :target => "_blank"} here.
+            %br
+            %br
+            Google analytics key example UA-000000-0 (Do not paste in the entire tracking script just the id)
         %h2 Email Settings
         %div
           %label SMTP host
