@@ -70,7 +70,7 @@ class Comment
 
   #Factory Methods Output
   def self.all_active_and_ham
-    all_active.all(:is_spam => false)
+    all_active.all(:is_spam => false, :order => [:created_at.asc])
   end
 
   def self.all_active_and_spam
