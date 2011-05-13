@@ -154,16 +154,23 @@
       }
       .clear{clear:both;}
       .information{
-        font-size:1.0em;
-        margin-left:200px;
+        font-size:0.9em;
         margin-top:5px;
+        color:#008B00;
         width:290px;
+        margin-left:200px;
         padding:35px 5px 0px 5px;
-        border:solid 1px #DFDFDF;
+        border:solid 1px #458B00;
         border-radius:4px 4px 4px 4px;
         background-image:url('/information.png');
         background-repeat:no-repeat;
+        background-color:#C1FFC1;
       }
+      .small{
+        background-image:none !important;
+        padding-top:5px;
+      }
+      .information a, a:visited{color:#008B00}
   %body
     %fieldset
       %form{:method => "post", :action => "/setup"}
@@ -261,7 +268,8 @@
           %input{:name => "amazon_s3_file_location", :value => "http://s3.amazonaws.com/"}
           %div.clear  
           %div.information
-            Amazon S3 is storage for the Internet. It is designed to make web-scale computing easier for developers.
+            Amazon S3 is storage for the Internet. It is designed to make web-scale computing easier for developers. 
+            Let us store your images and assets for your posts up at S3.
             %br
             %br
             Sign up for Amazon S3
@@ -291,7 +299,7 @@
           %input{:name => "google_analytics_key"}
           %div.clear
           %div.information
-            Google Analytics is the enterprise-class web analytics solution that gives you rich insights into your website traffic and marketing effectiveness. Powerful, flexible and easy-to-use features now let you see and analyze your traffic data in an entirely new way. With Google Analytics, you're more prepared to write better-targeted ads, strengthen your marketing initiatives and create higher converting websites.
+            Google Analytics is the enterprise-class web analytics solution that gives you rich insights into your website traffic.
             %br
             %br
             Sign up for a Google analytics account
@@ -303,30 +311,54 @@
         %div
           %label SMTP host
           %input{:name => "smtp_host"}
+          %div.clear
+          %div.information.small
+            Host name of your smtp provider (example - smtp.provider.com)
         %div
           %label SMTP port
           %input{:name => "smtp_port"}
+          %div.clear
+          %div.information.small
+            Port number of your smtp server (example - 25)
         %div
           %label SMTP user
           %input{:name => "smtp_user"}
+          %div.clear
+          %div.information.small
+            Username to use in order to authenticate against your SMTP server. (example - user@mysite.com)
         %div
           %label SMTP password
           %input{:name => "smtp_password"}
+          %div.clear
+          %div.information.small
+            Password to use in order to authenticate against your SMTP server. (example - password)
         %div
           %label SMTP authentication type
           %select{:name => "smtp_auth"}
             %option{:value => "plain"} plain
             %option{:value => "login"} login
             %option{:value => "cram_md5"} cram_md5
+          %div.clear
+          %div.information.small
+            Check with your SMTP provider for more information (if unsure use plain)
         %div
           %label SMTP domain
           %input{:name => "smtp_domain"}
+          %div.clear
+          %div.information.small
+            Domain name to use to say HELO with. Tells the SMTP server information about who is trying to communicate (example - mysite.com)
         %div
           %label Site email address
           %input{:name => "site_email"}
+          %div.clear
+          %div.information.small
+            Used in the from field when sending mail (example - noreply@mysite.com)
         %div
           %label Administrator email
           %input{:name => "administrator_email"}
+          %div.clear
+          %div.information.small
+            Used to send notifications such as new comments (example - administrator@mysite.com)
         %h2 User Information
         %div
           %label Firstname
