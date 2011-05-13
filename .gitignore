@@ -6,4 +6,4 @@ config/_config.yaml
 logs/
 public/uploads
 public/cache
-tmp/
+tmp/*.*
