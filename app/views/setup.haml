@@ -54,8 +54,10 @@
       $(".information").click(function(){
         if($(this).hasClass("information_show"))
           $($(this)).removeClass("information_show");
-        else
+        else{
+          $(".information").removeClass("information_show");
           $($(this)).addClass("information_show");
+        }
       });
     });
 
@@ -168,11 +170,11 @@
         margin-top:1px;
         margin-left:4px;
         display:block;
-        border:solid 1px #458B00;
+        border:solid 1px #A2B5CD;
         border-radius:4px 4px 4px 4px;
         background-image:url('/information.png');
         background-repeat:no-repeat;
-        background-color:#C1FFC1;
+        background-color:#CAE1FF;
         background-position:right top;
         cursor:pointer;
       }
