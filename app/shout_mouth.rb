@@ -18,6 +18,8 @@ require Dir.pwd + '/app/api/metaweblog/metaweblog'
 require Dir.pwd + '/app/lib/fixnum'
 require Dir.pwd + '/app/lib/string'
 require Dir.pwd + '/app/lib/object'
+require Dir.pwd + '/app/lib/hash'
+require Dir.pwd + '/app/lib/regexp'
 require Dir.pwd + '/app/api/plugin/plugin_factory'
 require Dir.pwd + '/app/api/cache/cache_cleaner'
 
@@ -48,6 +50,8 @@ class ShoutMouth < Sinatra::Base
       #This does not necessarily mean that we need to go into setup mode eg => (lost connection to db or even someone playing directly with tables....)
       #Lets make a second check to be sure.....
       #If the setup flag exists then lets go for it
+      @errors = []
+      @values = {"user" => ""}
       halt haml :setup, :layout => false if setup?
     end
   end
@@ -55,9 +59,14 @@ class ShoutMouth < Sinatra::Base
   post '/setup' do
     #Not a good idea to let people modify settings when setup has already been completed....
     if setup?
-      "Gonna process your settings but not yet implemented <br />
-      #{params.to_s}"
-      
+      response = Blog.setup(params)
+      if response == true
+        redirect "/"
+      else
+        @errors = response
+        @values = params
+        halt haml :setup, :layout => false
+      end
     else
       redirect "/"
     end
@@ -266,5 +275,6 @@ class ShoutMouth < Sinatra::Base
     def setup?
       File.exists?(File.expand_path("../../setup", __FILE__))
     end
+
   end
 end

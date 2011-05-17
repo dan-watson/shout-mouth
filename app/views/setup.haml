@@ -3,14 +3,29 @@
   %head
     %title="Shout Mouth Setup"
   %script{:type => "text/javascript", :src => "/scripts/jquery-1.5.min.js"}
+  -@posts_on_home_page = @values["posts_on_home_page"].nil? ? "" : @values["posts_on_home_page"]
+  -@check_for_spam = @values["check_spam"].nil? ? "" : @values["check_spam"]
   :javascript
     $(document).ready(function(){
-    
+
+    if("#{@posts_on_home_page}" != ""){
+      $("#posts_on_home_page").val('#{@posts_on_home_page}')
+    }
+
+    if("#{@check_for_spam}" != ""){
+      if("#{@check_for_spam}" == "true"){
+        $(".akismet_section").show();
+      }
+      var check_spam_radios = $("input[name='check_spam']");
+      check_spam_radios.filter('[value=#{@check_for_spam}]').attr('checked',true);  
+    }
+
     blog_url = document.location.href.toString()
     if(blog_url.charAt((blog_url.length -1)) == '/')
       blog_url = blog_url.slice(0, -1)
-    
-    $("input[name='url']").val(blog_url);
+
+    if(blog_url.indexOf("setup") == -1)
+      $("input[name='url']").val(blog_url);
   
     $(".check_for_spam").click(function(){
          if($(this).val() == "true"){
@@ -59,6 +74,7 @@
           $($(this)).addClass("information_show");
         }
       });
+      
     });
 
   %style{:type => "text/css", :media => "screen"}
@@ -189,7 +205,28 @@
         padding:20px;
       }
       .information_show a, a:visited{color:#000000;}
+      .errors{
+        position:fixed;
+        top:0px;
+        right:5px;
+        color: #D8000C;
+        border:solid 1px #D8000C;
+        border-radius:4px 4px 4px 4px;
+        background-color: #FFBABA;
+        padding: 10px;
+      }
+      .errors li{
+        list-style-type:none;
+        font-size:0.8em;
+        margin-top:3px;
+      }
   %body
+    -if @errors.any?
+      %ul.errors
+        -@errors.each do |error|
+          %li
+            =error
+
     %fieldset
       %form{:method => "post", :action => "/setup"}
         %h2 Setup your blog....
@@ -199,16 +236,16 @@
         %h2 General
         %div
           %label Url
-          %input{:name => "url"} 
+          %input{:name => "url", :value => @values["url"]} 
         %div
           %label Sitename
-          %input{:name => "site_name"}
+          %input{:name => "site_name", :value => @values["site_name"]}
         %div
           %label Site description
-          %input{:name => "site_description"}
+          %input{:name => "site_description", :value => @values["site_description"]}
         %div
           %label Number of posts on homepage
-          %select{:name => "posts_on_home_page"}
+          %select{:name => "posts_on_home_page", :id => "posts_on_home_page"}
             %option{:value => "1"} One
             %option{:value => "2"} Two
             %option{:value => "3"} Three
@@ -222,6 +259,7 @@
         %div
           %label Footer text
           %textarea{:name => "footer_more_text", :rows => "10", :style => "height:100px"}
+            =@values["footer_more_text"]
         %h2 Comments
         %div
           %label Check for spam?
@@ -231,7 +269,7 @@
           %span No
         %div.hide.akismet_section
           %label Akismet key
-          %input{:name => "akismet_key"} 
+          %input{:name => "akismet_key", :value => @values["akismet_key"]} 
           %div.information
             Akismet filters out your comment
             and track-back spam for you, so you
@@ -249,7 +287,7 @@
           %span No limit - open forever.
         %div.hide.comments_open_for_days_section 
           %label Days
-          %select{:name => "comments_open_for_days"}
+          %select{:name => "comments_open_for_days", :value => @values["comments_open_for_days"]}
             %option{:value => "0"} --choose time period--
             %option{:value => "1"} one day
             %option{:value => "3"} three day's
@@ -273,7 +311,7 @@
           %span Amazon S3
         %div.hide.amazon_section
           %label Amazon S3 key
-          %input{:name => "amazon_s3_key"}
+          %input{:name => "amazon_s3_key", :value => @values["amazon_s3_key"]}
           %div.information
             Amazon S3 is storage for the Internet. It is designed to make web-scale computing easier for developers. 
             Let us store your images and assets for your posts up at S3.
@@ -283,10 +321,10 @@
             %a{:href => "http://aws.amazon.com/s3/", :target => "_blank"} here.
         %div.hide.amazon_section
           %label Amazon S3 secret key
-          %input{:name => "amazon_s3_secret_key"}
+          %input{:name => "amazon_s3_secret_key", :value => @values["amazon_s3_secret_key"]}
         %div.hide.amazon_section
           %label Amazon S3 bucket
-          %input{:name => "amazon_s3_bucket"}
+          %input{:name => "amazon_s3_bucket", :value => @values["amazon_s3_bucket"]}
         %div.hide.amazon_section
           %label Amazon S3 Url
           %input{:name => "amazon_s3_file_location", :value => "http://s3.amazonaws.com/"}
@@ -298,7 +336,7 @@
         %h2 Social
         %div
           %label Twitter account
-          %input{:name => "twitter_account"}
+          %input{:name => "twitter_account", :value => @values["twitter_account"]}
           %div.information
             Be social and have a twitter account sign up
             %a{:href => "http://twitter.com/", :target => "_blank"} here.
@@ -311,7 +349,7 @@
           %span No
         %div.hide.google_analytics_section
           %label Google analytics key
-          %input{:name => "google_analytics_key"}
+          %input{:name => "google_analytics_key", :value => @values["google_analytics_key"]}
           %div.information
             Google Analytics is the enterprise-class web analytics solution that gives you rich insights into your website traffic.
             %br
@@ -324,7 +362,7 @@
         %h2 Email Settings
         %div
           %label SMTP host
-          %input{:name => "smtp_host"}
+          %input{:name => "smtp_host", :value => @values["smtp_host"]}
           %div.information
             SMTP host - name of your smtp provider (example - smtp.provider.com)
             %br
@@ -351,43 +389,47 @@
             %br
         %div
           %label SMTP port
-          %input{:name => "smtp_port"}
+          %input{:name => "smtp_port", :value => @values["smtp_port"]}
         %div
           %label SMTP user
-          %input{:name => "smtp_user"}
+          %input{:name => "smtp_user", :value => @values["smtp_user"]}
         %div
           %label SMTP password
-          %input{:name => "smtp_password"}
+          %input{:name => "smtp_password", :value => @values["smtp_password"]}
         %div
           %label SMTP authentication type
-          %select{:name => "smtp_auth"}
+          %select{:name => "smtp_auth", :value => @values["smtp_auth"]}
             %option{:value => "plain"} plain
             %option{:value => "login"} login
             %option{:value => "cram_md5"} cram_md5
         %div
           %label SMTP domain
-          %input{:name => "smtp_domain"}
+          %input{:name => "smtp_domain", :value => @values["smtp_domain"]}
         %div
           %label Site email address
-          %input{:name => "site_email"}
+          %input{:name => "site_email", :value => @values["site_email"]}
         %div
           %label Administrator email
-          %input{:name => "administrator_email"}
+          %input{:name => "administrator_email", :value => @values["administrator_email"]}
+        %h2 Categories
+        %div
+          %label Categories (comma separated)
+          %input{:name => "categories", :value => @values["categories"]}
         %h2 User Information
         %div
           %label Firstname
-          %input{:name => "user[firstname]"}
+          %input{:name => "user[firstname]", :value => @values["user"]["firstname"]}
         %div
           %label Lastname
-          %input{:name => "user[lastname]"}
+          %input{:name => "user[lastname]", :value => @values["user"]["lastname"]}
         %div
           %label Email
-          %input{:name => "user[email]"}
+          %input{:name => "user[email]", :value => @values["user"]["email"]}
         %div 
           %label Password
-          %input{:type => "password", :name => "user[password]"}
+          %input{:type => "password", :name => "user[password]", :value => @values["user"]["password"]}
         %div
           %label Confirm password
-          %input{:type => "password", :name => "user[password_confirm]"}
+          %input{:type => "password", :name => "user[password_confirm]", :value => @values["user"]["password_confirm"]}
         %div
           %input{:type => "submit", :value => "get bloggin!", :class => "submit"}

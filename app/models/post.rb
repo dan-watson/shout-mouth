@@ -80,7 +80,12 @@ class Post
       Pony.mail(:to =>      Blog.administrator_email, 
                 :from =>    Blog.site_email, 
                 :subject => "#{Blog.site_name} - Comment Added", 
-                :body =>    "A comment has been added to #{title}",
+                :body =>    "A comment has been added to #{title}. 
+                            \r\n Comment Author - #{comment.comment_author}
+                            \r\n Comment Author Email - #{comment.comment_author_email}
+                            \r\n Comment Author URL - #{comment.comment_author_url}
+                            \r\n Comment - #{comment.comment_content}
+                            \r\n Comments spam status - #{comment.is_spam? ? "spam" : "ham"}",
                 :via =>     :smtp,
                 :smtp =>    Blog.smtp_settings)
       rescue

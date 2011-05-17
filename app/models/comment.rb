@@ -21,7 +21,7 @@ class Comment
   belongs_to :post
 
   before :save do
-    self.is_spam = spam?
+    Blog.check_spam ? self.is_spam = spam? : self.is_spam = false
     CacheCleaner.clear_cache_for self.post.link
   end
 

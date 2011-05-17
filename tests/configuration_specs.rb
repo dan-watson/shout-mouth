@@ -85,4 +85,85 @@ describe Blog, "configuration" do
     Blog.administrator_email.should == "admin@yourserver.com"
   end
   
+  it "setup should verify when not all the settings have been passed to the method that the method will return false" do
+    settings = {}
+    Blog.setup(settings).should be_false
+  end
+
+  it "should not allow invalid configuration settings to be created on setup" do
+    settings = {"url"=>"httpsdfsdfsdf/", 
+                "site_name"=>"", 
+                "site_description"=>"", 
+                "posts_on_home_page"=>"sdfdsf", 
+                "footer_more_text"=>"", 
+                "check_spam"=>"true", 
+                "akismet_key"=>"", 
+                "comments_open_for_days_check"=>"false", 
+                "comments_open_for_days"=>"df", 
+                "use_file_based_storage"=>"false",
+                "amazon_s3_key"=>"", 
+                "amazon_s3_secret_key"=>"", 
+                "amazon_s3_bucket"=>"", 
+                "amazon_s3_file_location"=>"",
+                "theme"=>"", 
+                "twitter_account"=>"", 
+                "use_google_analytics"=>"true", 
+                "google_analytics_key"=>"", 
+                "smtp_host"=>"", 
+                "smtp_port"=>"", 
+                "smtp_user"=>"", 
+                "smtp_password"=>"", 
+                "smtp_auth"=>"plain", 
+                "smtp_domain"=>"", 
+                "site_email"=>"kdfm",
+                "administrator_email"=>"dsfsdf", 
+                "user"=>{"firstname"=>"", "lastname"=>"", "email"=>"sdfsdfs", "password"=>"sdf", "password_confirm"=>""},
+                "categories" => ""}
+    Blog.setup(settings).count.should == 25
+    #Teardown
+    TestDataHelper.settings
+  end
+
+  it "should create configuration settings when the settings are valid" do
+    settings = {"url"=>"http://localhost", "site_name"=>"Sitename", "site_description"=>"Site description", "posts_on_home_page"=>"4", "footer_more_text"=>"Some more text", "check_spam"=>"true", "akismet_key"=>"1234567", "comments_open_for_days_check"=>"true", "comments_open_for_days"=>"5", "use_file_based_storage"=>"false", "amazon_s3_key"=>"key", "amazon_s3_secret_key"=>"secret key", "amazon_s3_bucket"=>"bucket", "amazon_s3_file_location"=>"http://s3.amazonaws.com/", "theme"=>"default", "twitter_account"=>"@twitter", "use_google_analytics"=>"true", "google_analytics_key"=>"UA-00001", "smtp_host"=>"host", "smtp_port"=>"89", "smtp_user"=>"user", "smtp_password"=>"pass", "smtp_auth"=>"plain", "smtp_domain"=>"domain", "site_email"=>"email@email.com", "administrator_email"=>"email@email.com", "user"=>{"firstname"=>"Daniel", "lastname"=>"Watson", "email"=>"setup@shoutmouth.com", "password"=>"Passed", "password_confirm"=>"Passed"}, "categories" => "dan , jake"}
+
+    Blog.setup(settings)
+    Blog.url.should == "http://localhost"
+    Blog.site_name.should == "Sitename"
+    Blog.site_description.should == "Site description"
+    Blog.posts_on_home_page.should == 4
+    Blog.footer_more_text.should == "Some more text"
+    Blog.check_spam.should be_true
+    Blog.akismet_key.should == "1234567"
+    Blog.comments_open_for_days.should == 5
+    Blog.use_file_based_storage.should == false
+    Blog.amazon_s3_key.should == "key"
+    Blog.amazon_s3_secret_key.should == "secret key"
+    Blog.amazon_s3_bucket.should == "bucket"
+    Blog.amazon_s3_file_location.should == "http://s3.amazonaws.com/"
+    Blog.theme.should == "default"
+    Blog.twitter_account.should == "@twitter"
+    Blog.use_google_analytics.should be_true
+    Blog.google_analytics_key.should == "UA-00001"
+    Blog.smtp_settings[:host].should == "host"
+    Blog.smtp_settings[:port].should == "89"
+    Blog.smtp_settings[:user].should == "user"
+    Blog.smtp_settings[:password].should == "pass"
+    Blog.smtp_settings[:auth].should == :plain
+    Blog.smtp_settings[:domain].should == "domain"
+    Blog.site_email.should == "email@email.com"
+    Blog.administrator_email.should == "email@email.com"
+
+    Category.all[0].category.should == "dan"
+    Category.all[1].category.should == "jake"
+
+    user = User.first(:email => "setup@shoutmouth.com")
+    user.firstname.should == "Daniel"
+    user.lastname.should == "Watson"
+    user.authenticate("Passed").should be_true
+
+    Category.destroy
+    TestDataHelper.settings
+  end
+
 end
