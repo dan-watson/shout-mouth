@@ -1,4 +1,4 @@
-===Known Issues:w
+===Known Issues
 
 - Error writing to the public/cache directory - you need to fix permissions so that the webservers process can read/write from/to the folder.
  

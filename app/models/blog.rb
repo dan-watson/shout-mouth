@@ -206,8 +206,6 @@ class Blog
   #----------------------------#
   
   def self.setup(settings)
-   #Create the database
-   system "rake -f rakefile.rb db:create" 
    #Settings needed to valid blog setup
    settings_needed = ["url", "site_name", "site_description", "posts_on_home_page", "footer_more_text", "check_spam", "akismet_key", "comments_open_for_days_check", 
                       "comments_open_for_days", "use_file_based_storage","amazon_s3_key", "amazon_s3_secret_key", "amazon_s3_bucket", "amazon_s3_file_location",
@@ -251,8 +249,10 @@ class Blog
    errors << "Password and password confirmation must match" unless settings["user"]["password"] == settings["user"]["password_confirm"]
    return errors if errors.any?
     
+   #Create the database
+   system "rake -f rakefile.rb db:create" 
+   
    #Time to update the settings
-
    settings.each{|setting|
      begin 
       Blog.send("#{setting[0]}=", setting[1])

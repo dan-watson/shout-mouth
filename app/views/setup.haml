@@ -5,6 +5,10 @@
   %script{:type => "text/javascript", :src => "/scripts/jquery-1.5.min.js"}
   -@posts_on_home_page = @values["posts_on_home_page"].nil? ? "" : @values["posts_on_home_page"]
   -@check_for_spam = @values["check_spam"].nil? ? "" : @values["check_spam"]
+  -@comments_open_for_days_check = @values["comments_open_for_days_check"].nil? ? "" : @values["comments_open_for_days_check"]
+  -@comments_open_for_days = @values["comments_open_for_days"].nil? ? "" : @values["comments_open_for_days"]
+  -@use_file_based_storage = @values["use_file_based_storage"].nil? ? "" : @values["use_file_based_storage"]
+  -@use_google_analytics = @values["use_google_analytics"].nil? ? "" : @values["use_google_analytics"]
   :javascript
     $(document).ready(function(){
 
@@ -18,6 +22,34 @@
       }
       var check_spam_radios = $("input[name='check_spam']");
       check_spam_radios.filter('[value=#{@check_for_spam}]').attr('checked',true);  
+    }
+
+    if("#{@comments_open_for_days_check}" != ""){
+      if("#{@comments_open_for_days_check}" == "true"){
+        $(".comments_open_for_days_section").show();
+      }
+      var comments_open_for_days_radios = $("input[name='comments_open_for_days_check']");
+      comments_open_for_days_radios.filter('[value=#{@comments_open_for_days_check}]').attr('checked', true);
+    }
+
+    if("#{@comments_open_for_days}" != ""){
+      $("select[name='comments_open_for_days']").val('#{@comments_open_for_days}')
+    }
+
+    if("#{@use_file_based_storage}" != ""){
+      if("#{@use_file_based_storage}" == "false"){
+        $(".amazon_section").show();
+      }
+      var use_file_based_storage_radios = $("input[name='use_file_based_storage']");
+      use_file_based_storage_radios.filter('[value=#{@use_file_based_storage}]').attr('checked', true);
+    }
+
+    if("#{@use_google_analytics}" != ""){
+      if("#{@use_google_analytics}" == "true"){
+        $(".google_analytics_section").show();
+      }
+      var use_google_analytics_radios = $("input[name='use_google_analytics']");
+      use_google_analytics_radios.filter('[value=#{@use_google_analytics}]').attr('checked', true);
     }
 
     blog_url = document.location.href.toString()
