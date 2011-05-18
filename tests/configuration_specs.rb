@@ -87,7 +87,7 @@ describe Blog, "configuration" do
   
   it "setup should verify when not all the settings have been passed to the method that the method will return false" do
     settings = {}
-    Blog.setup(settings).should be_false
+    Blog.setup(settings).should == :invalid
   end
 
   it "should not allow invalid configuration settings to be created on setup" do
