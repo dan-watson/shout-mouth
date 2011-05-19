@@ -72,7 +72,7 @@ module Metaweblog
   end
 
   def get_categories(xmlrpc_call)
-    Category.all.map{|category| CategoryPresenter.new(category).to_metaweblog}
+    Category.all(:category.not => "page").map{|category| CategoryPresenter.new(category).to_metaweblog}
   end
   
   def get_post_categories(xmlrpc_call)
@@ -199,11 +199,11 @@ module Metaweblog
   end
   
   def suggest_categories(xmlrpc_call)
-    Category.all(:category.like => "%#{xmlrpc_call[1][3]}%", :limit => xmlrpc_call[1][4]).map{|category| CategoryPresenter.new(category).to_minimal_metaweblog}
+    Category.all(:category.not => "page", :category.like => "%#{xmlrpc_call[1][3]}%", :limit => xmlrpc_call[1][4]).map{|category| CategoryPresenter.new(category).to_minimal_metaweblog}
   end
   
   def get_category_list(xmlrpc_call)
-    Category.all.map{|category| CategoryPresenter.new(category).to_movable_type_category_list_item}
+    Category.all(:category.not => "page").map{|category| CategoryPresenter.new(category).to_movable_type_category_list_item}
   end
   
   def get_comment_count(xmlrpc_call)
