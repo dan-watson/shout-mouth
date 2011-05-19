@@ -173,6 +173,18 @@ module Metaweblog
     users.map{|u| UserPresenter.new(u).to_wordpress_author}
   end
 
+  def add_user(xmlrpc_call)
+    raise "Not Implemented"
+  end
+
+  def edit_user(xmlrpc_call)
+    raise "Not Implemented"
+  end
+
+  def delete_user(xmlrpc_call)
+    raise "Not Implemented"
+  end
+
   def get_tags(xmlrpc_call)
     Tag.all.map{|tag| TagPresenter.new(tag).to_metaweblog}
   end
@@ -444,7 +456,10 @@ module Metaweblog
     "wp.getPage",
     "wp.getUsersBlogs",
     "shoutmouth.editTag",
-    "shoutmouth.editCategory"]
+    "shoutmouth.editCategory",
+    "shoutmouth.addUser",
+    "shoutmouth.editUser",
+    "shoutmouth.deleteUser"]
     
     methods
   end
