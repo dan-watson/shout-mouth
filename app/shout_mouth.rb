@@ -232,7 +232,11 @@ class ShoutMouth < Sinatra::Base
 
     #if everything with the request is fine send the payload onto the method in the metaweblog module
     response.headers['Content-Type'] = 'text/xml;'
-    data = send(method, call)
+    begin
+      data = send(method, call)
+    rescue NoMethodError
+      halt 200, {'Content-Type' => 'text/xml'}, dump_response(raise_xmlrpc_error(-32601, "server error. requested method #{call[0]} does not exist."))
+    end
     #metaweblog module method - to dump the data to an xmlrpc response
     dump_response(data)
   end
