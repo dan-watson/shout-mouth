@@ -40,6 +40,23 @@ To run all the tests
 ===Rails Style Console
 racksh - when in the application root -eg RACK_ENV=production racksh
 
+===Code Syntax Highlighting For Posts
+Automated syntax highlighting will occur for any techincal posts by wrapping your code inside a pre tag with the prettyprint class.
+  <pre class="prettyprint"> 
+  class Blog
+    include Shout::Record
+        
+    storage_names[:default] = "settings"
+
+    property :key_name, String, :length => 200
+    property :value, String, :length => 200
+    property :type, String, :length => 50
+    
+    validates_presence_of :key_name, :value, :type
+    
+  end
+  </pre> 
+
 ===Caching On NGINX
 -place the following code in the server block of the nginx config
 	
