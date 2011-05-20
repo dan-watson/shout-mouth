@@ -216,6 +216,14 @@ class Blog
    return SetupCommand.new.run(settings)
   end  
 
+  def self.urls
+    urls = Post.all_active_posts_and_pages.map{|articles| {:page => articles.permalink, :created_at => articles.created_at}}
+    Tag.all_active.map{|tag| urls << {:page => tag.permalink, :created_at => tag.created_at}}
+    Category.all_active.map{|category| urls << {:page => category.permalink, :created_at => category.created_at}}
+    Post.month_year_counter.each{|group| urls << {:page => "#{Blog.url}/posts/date/#{group[0]}", :created_at => Date.strptime(group[0], '%Y-%B').to_datetime}}
+    urls
+  end
+
   private
   def self.configuration setting
     entry = Blog.first(:key_name => setting) 
