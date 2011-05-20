@@ -1,4 +1,6 @@
-class SetupValidator
+require Dir.pwd + '/app/api/validator/validator'
+
+class SetupValidator < Validator
   def validate(settings)
     #Settings needed to valid blog setup
     settings_needed = ["url", "site_name", "site_description", "posts_on_home_page", "footer_more_text", "check_spam", "akismet_key", "comments_open_for_days_check", 

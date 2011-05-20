@@ -1,6 +1,5 @@
 require 'yaml'
 require 'rake'
-require Dir.pwd + '/app/validators/setup_validator'
 require Dir.pwd + '/app/commands/setup_command'
 
 class Blog
@@ -208,12 +207,9 @@ class Blog
   #----------------------------#
   
   def self.setup(settings)
-   #validate the settings
-   response = SetupValidator.new.validate(settings)
-   #response could be :invalid, :valid or array of errors
-   return response unless response == :valid
-   #setup the blog 
-   return SetupCommand.new.run(settings)
+   command_handler = CommandHandler.new
+   command_handler.register_command SetupCommand.new(settings)
+   command_handler.execute
   end  
 
   def self.urls

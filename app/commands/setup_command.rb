@@ -1,10 +1,12 @@
-class SetupCommand
-  def run(settings)
+require Dir.pwd + '/app/api/command/command'
+
+class SetupCommand < Command
+  def execute
     #Create the database
     system "rake -f rakefile.rb db:create" 
 
     #Time to update the settings
-    settings.each{|setting|
+    @settings.each{|setting|
       begin 
        Blog.send("#{setting[0]}=", setting[1])
       rescue NoMethodError
@@ -12,12 +14,12 @@ class SetupCommand
       end
     }
 
-    Category.categories_from_array(settings["categories"].split(",").each{|i| i.strip!})
+    Category.categories_from_array(@settings["categories"].split(",").each{|i| i.strip!})
 
-    User.new(:email => settings["user"]["email"], 
-             :password => settings["user"]["password"], 
-             :firstname => settings["user"]["firstname"],
-             :lastname => settings["user"]["lastname"]).save
+    User.new(:email => @settings["user"]["email"], 
+             :password => @settings["user"]["password"], 
+             :firstname => @settings["user"]["firstname"],
+             :lastname => @settings["user"]["lastname"]).save
 
     return true
   end
