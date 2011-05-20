@@ -283,7 +283,8 @@ pre {
 	color:#999999;
 	font-size:0.8em;
 }
-
+/*ajax page block message color whilst processing*/
+.blockUI h1{color:#FFFFFF}  
 
 
 

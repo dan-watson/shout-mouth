@@ -279,6 +279,9 @@ class ShoutMouth < Sinatra::Base
     def setup?
       File.exists?(File.expand_path("../../setup", __FILE__))
     end
-
+    
+    def version
+      "v1m6"
+    end
   end
 end
