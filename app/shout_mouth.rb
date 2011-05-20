@@ -161,7 +161,7 @@ class ShoutMouth < Sinatra::Base
 
   get '/sitemap.xml' do
     content_type 'text/xml'
-     @pages = Blog.urls
+    @pages = Blog.urls
     builder :sitemap, :layout => false
   end
 
