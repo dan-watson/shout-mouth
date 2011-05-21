@@ -10,6 +10,26 @@ namespace :cache do
     FileUtils.mkdir(cache_directory) unless File.exists?(File.join(cache_directory))
     File.chmod(0777, cache_directory)
   end
+
+  desc "Prime the cache"
+  task :prime do
+    resp = Net::HTTP.get_response(URI.parse(Blog.url))
+    puts "status: #{resp.code} - #{Blog.url}"
+
+    resp = Net::HTTP.get_response(URI.parse("#{Blog.url}/archive"))
+    puts "status: #{resp.code} - #{Blog.url}/archive"
+
+    resp = Net::HTTP.get_response(URI.parse("#{Blog.url}/sitemap.xml"))
+    puts "status: #{resp.code} - #{Blog.url}/sitemap.xml"
+
+    resp = Net::HTTP.get_response(URI.parse("#{Blog.url}/rss.xml"))
+    puts "status: #{resp.code} - #{Blog.url}/rss.xml"
+
+    Blog.urls.each do |url|
+      resp = Net::HTTP.get_response(URI.parse(url[:page]))
+      puts "status: #{resp.code} - #{url[:page]}"
+    end
+  end
 end
 
 namespace :db do
