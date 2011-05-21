@@ -1,7 +1,3 @@
-===Known Issues
-
-- Error writing to the public/cache directory - you need to fix permissions so that the webservers process can read/write from/to the folder.
- 
 ===Demo Information
 
 Runs the site on test data (bundler must be installed)
@@ -18,6 +14,12 @@ Runs the site on test data (bundler must be installed)
   Follow the on screen instructions
 
 ===Rake Tasks
+  rake cache:clear (Clear The Cache)
+
+  rake cache:prime (Prime The Cache)
+
+  rake cache:create (Create The Cache Folder With The Correct Permissions)
+
 	rake db:create  (Create The Database)
 	
 	rake db:delete  (Delete Database)
