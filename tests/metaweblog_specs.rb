@@ -1685,6 +1685,165 @@ describe "metaweblog api" do
 
      Blog.footer_more_text.should == "more more more"
   end
+  
+  it "should add a user when the add user method is called" do
+    post '/xmlrpc/', "<methodCall>
+    <methodName>shoutmouth.addUser</methodName>
+    <params>
+      <param>
+        <value>
+          <string>1</string>
+        </value>
+      </param>
+      <param>
+        <value>
+          <string>#{@user.email}</string>
+        </value>
+      </param>
+      <param>
+        <value>
+          <string>password123</string>
+        </value>
+      </param>
+      <param>
+        <value>
+          <struct>
+            <member>
+              <name>email</name>
+              <value>
+                <string>email@address.com</string>
+              </value>
+            </member>
+            <member>
+              <name>password</name>
+              <value>
+                <string>password</string>
+              </value>
+            </member>
+            <member>
+              <name>firstname</name>
+              <value>
+                <string>firstname</string>
+              </value>
+            </member>
+            <member>
+              <name>lastname</name>
+              <value>
+                <string>lastname</string>
+              </value>
+            </member>
+          </struct>
+        </value>
+      </param>
+    </params>
+  </methodCall>"
+
+  user = User.first(:email => "email@address.com")
+  user.nil?.should be_false
+  user.firstname.should == "firstname"
+  user.lastname.should == "lastname"
+  user.authenticate("password").should be_true
+
+  end
+  
+  it "should edit a user when the editUser methods is called" do
+    user = User.first(:email => "email@address.com")
+    
+    post '/xmlrpc/', "<methodCall>
+                    <methodName>shoutmouth.editUser</methodName>
+                    <params>
+                      <param>
+                        <value>
+                          <string>1</string>
+                        </value>
+                      </param>
+                      <param>
+                        <value>
+                          <string>#{@user.email}</string>
+                        </value>
+                      </param>
+                      <param>
+                        <value>
+                          <string>password123</string>
+                        </value>
+                      </param>
+                      <param>
+                        <value>
+                          <struct>
+                            <member>
+                              <name>user_id</name>
+                              <value>
+                                <string>#{user.id}</string>
+                              </value>
+                            </member>
+                            <member>
+                              <name>email</name>
+                              <value>
+                                <string>emailedit@address.com</string>
+                              </value>
+                            </member>
+                            <member>
+                              <name>password</name>
+                              <value>
+                                <string>passwordg</string>
+                              </value>
+                            </member>
+                            <member>
+                              <name>firstname</name>
+                              <value>
+                                <string>firstnameedit</string>
+                              </value>
+                            </member>
+                            <member>
+                              <name>lastname</name>
+                              <value>
+                                <string>lastnameedit</string>
+                              </value>
+                            </member>
+                          </struct>
+                        </value>
+                      </param>
+                    </params>
+                  </methodCall>"
+
+  user = User.first(:email => "emailedit@address.com")
+  user.nil?.should be_false
+  user.firstname.should == "firstnameedit"
+  user.lastname.should == "lastnameedit"
+  user.authenticate("passwordg").should be_true
+  end
+  
+  it "should delete a user when the deleteUser methods is called" do
+    user = User.first(:email => "emailedit@address.com")
+
+    post '/xmlrpc/', "<methodCall>
+      <methodName>shoutmouth.deleteUser</methodName>
+      <params>
+        <param>
+          <value>
+            <string>1</string>
+          </value>
+        </param>
+        <param>
+          <value>
+            <string>#{@user.email}</string>
+          </value>
+        </param>
+        <param>
+          <value>
+            <string>password123</string>
+          </value>
+        </param>
+        <param>
+          <value>
+            <i4>#{user.id}</i4>
+          </value>
+        </param>
+      </params>
+    </methodCall>"
+
+    User.find_user("emailedit@address.com").should be_nil
+  end
 
   private 
   def find_value(xml, find, hierarchy = [], nth = nil)

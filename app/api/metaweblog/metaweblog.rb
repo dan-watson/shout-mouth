@@ -169,20 +169,24 @@ module Metaweblog
   end
 
   def get_authors(xmlrpc_call)
-    users = [] << User.find_user(xmlrpc_call[1][1])
+    users = User.all_active
     users.map{|u| UserPresenter.new(u).to_wordpress_author}
   end
 
   def add_user(xmlrpc_call)
-    raise "Not Implemented"
+    user = UserMapper.new(xmlrpc_call).new_user_from_xmlrpc_payload
+    return raise_xmlrpc_error(4003, user.errors.full_messages.to_s) unless user.save
+    true  
   end
 
   def edit_user(xmlrpc_call)
-    raise "Not Implemented"
+    user = UserMapper.new(xmlrpc_call).edit_user_from_xmlrpc_payload
+    return raise_xmlrpc_error(4003, user.errors.full_messages.to_s) unless user.save
+    true
   end
 
   def delete_user(xmlrpc_call)
-    raise "Not Implemented"
+    return UserMapper.new(xmlrpc_call).delete_user_from_xmlrpc_payload
   end
 
   def get_tags(xmlrpc_call)

@@ -41,6 +41,10 @@ class User
   def fullname
     "#{firstname} #{lastname}"
   end
+  
+  def encrypt_password_from_plain password
+    self.password = encrypt_password password, self.salt
+  end
 
   #Factory Methods
   def self.find_user email
