@@ -35,7 +35,7 @@ class CommandHandler
     
     begin
       #run the validator
-      return Class.class_eval("#{name.capitalize}Validator").new.validate(@command.settings)
+      return Object::const_get("#{name.capitalize}Validator").new.validate(@command.settings)
     rescue NameError => e
       #no validation class is avaliable for the command so convention states validation is not necessary
       return :valid

@@ -469,7 +469,7 @@ module Metaweblog
   end
 
   def authentication_details_from(method, xmlrpc_call)
-      Class.class_eval("#{client_from(xmlrpc_call)}Strategy").new.authentication_details_from(method, xmlrpc_call)
+      Object::const_get("#{client_from(xmlrpc_call)}Strategy").new.authentication_details_from(method, xmlrpc_call)
   end
   
   def authenticated?(authentication_details)

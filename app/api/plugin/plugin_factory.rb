@@ -5,7 +5,7 @@ class PluginFactory
  include ::Singleton
   
   def get_plugin(symbol)
-      Class.class_eval("#{symbol.to_s.split("_").each{|s| s.capitalize!}.join}Plugin").new
+      Object::const_get("#{symbol.to_s.split("_").each{|s| s.capitalize!}.join}Plugin").new
   end
     
   private 
