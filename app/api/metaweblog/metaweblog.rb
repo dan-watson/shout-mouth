@@ -228,10 +228,10 @@ module Metaweblog
      return PostPresenter.new(post).to_wordpress_comment_count unless id == 0
      
      {
-        :approved => Comments.all_active_and_ham.count.to_s,
+        :approved => Comment.all_active_and_ham.count.to_s,
         :awaiting_moderation => 0,         
-        :spam => Comments.all_active_and_spam.count.to_s,
-        :total_comments => Comments.all_active.count
+        :spam => Comment.all_active_and_spam.count.to_s,
+        :total_comments => Comment.all_active.count
      }
   end
   
