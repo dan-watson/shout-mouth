@@ -224,15 +224,11 @@ module Metaweblog
   
   def get_comment_count(xmlrpc_call)
      id = xmlrpc_call[1][3].to_i
-     id == 0 ? data = Post.all_active_posts : data = Post.first(:id => id)
-     return PostPresenter.new(post).to_wordpress_comment_count unless id == 0
-     
-     {
-        :approved => Comment.all_active_and_ham.count.to_s,
-        :awaiting_moderation => 0,         
-        :spam => Comment.all_active_and_spam.count.to_s,
-        :total_comments => Comment.all_active.count
-     }
+     unless id == 0
+      post = Post.first(:id => id)
+      return PostPresenter.new(post).to_wordpress_comment_count
+     end
+     return CommentsPresenter.new(Comments.all).to_wordpress_comment_count   
   end
   
   def get_post_status_list(xmlrpc_call)
