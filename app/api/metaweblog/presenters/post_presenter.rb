@@ -113,10 +113,10 @@ class PostPresenter
   
   def to_wordpress_comment_count
     {
-      :approved => @post.comments.all_active_and_ham.count.to_s,
+      :approved => @post.comments.nil? ? "0" : @post.comments.all_active_and_ham.count.to_s,
       :awaiting_moderation => 0, #comments are auto-moderated with askimet
-      :spam => @post.comments.all_active_and_spam.count.to_s,
-      :total_comments => @post.comments.all_active.count
+      :spam => @post.comments.nil? ? "0" : @post.comments.all_active_and_spam.count.to_s,
+      :total_comments => @post.comments.nil? ? 0 : @post.comments.all_active.count
     }
   end
   
