@@ -282,7 +282,7 @@ class ShoutMouth < Sinatra::Base
     end
     
     def version
-      "v1m7"
+      "v1m8"
     end
   end
 end
