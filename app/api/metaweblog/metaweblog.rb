@@ -224,7 +224,7 @@ module Metaweblog
   
   def get_comment_count(xmlrpc_call)
      id = xmlrpc_call[1][3].to_i
-     data = if id == 0 ? Post.all_active_posts : Post.first(:id => id)
+     id == 0 ? data = Post.all_active_posts : data = Post.first(:id => id)
      return PostPresenter.new(post).to_wordpress_comment_count unless id == 0
      
      {
