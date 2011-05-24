@@ -15,7 +15,7 @@ class CommentMapper
     comments = comments.all(:is_active => true) if data["status"] == "active"
     comments = comments.all(:is_spam => true) if data["status"] == "spam"
     comments = comments.all(:is_active => false, :is_spam => false) if data["status"] == "hold" 
-    comments = comments.all(:post => {:id => post_id}) unless post_id.nil? || post_id == "0"
+    comments = comments.all(:post => {:id => post_id}) unless post_id.nil? || post_id == ""
     comments = comments.all(:limit => limit) unless limit.nil?
     
     comments
