@@ -228,7 +228,7 @@ module Metaweblog
       post = Post.first(:id => id)
       return PostPresenter.new(post).to_wordpress_comment_count
      end
-     return CommentsPresenter.new(Comments.all).to_wordpress_comment_count   
+     return CommentsPresenter.new(Comment.all).to_wordpress_comment_count   
   end
   
   def get_post_status_list(xmlrpc_call)
