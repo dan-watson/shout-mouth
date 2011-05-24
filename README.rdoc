@@ -20,17 +20,17 @@ Runs the site on test data (bundler must be installed)
 
   rake cache:create (Create The Cache Folder With The Correct Permissions)
 
-	rake db:create  (Create The Database)
-	
-	rake db:delete  (Delete Database)
-	
-	rake db:demo_data  (Seed Demo Data)
-	
-	rake db:update    (Upgrade The Database To The Latest Schema Version)
-	
-	rake specs:run_all - (Run All The Specs)
+  rake db:create  (Create The Database)
 
-	rake user:create  create email=email password=password firstname=firstname lastname=lastname (Create a user)  
+  rake db:delete  (Delete Database)
+
+  rake db:demo_data  (Seed Demo Data)
+
+  rake db:update    (Upgrade The Database To The Latest Schema Version)
+
+  rake specs:run_all - (Run All The Specs)
+
+  rake user:create  create email=email password=password firstname=firstname lastname=lastname (Create a user)  
 
 ===Rails Style Console
  	type racksh inside the console when in the shout_mouth directory - (supports reload!)
