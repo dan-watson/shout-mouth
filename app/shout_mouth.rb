@@ -216,7 +216,7 @@ class ShoutMouth < Sinatra::Base
   post %r{/xmlrpc([*.[a-z]/]+)} do
     #generate the xml
     xml =  load_xml_from_request(@request.body.read, @request.params)
-    puts "xmlpassed: #{xml}"
+    #puts "xmlpassed: #{xml}"
     #create xmlrpc request call
     call = XMLRPC::Marshal.load_call(xml.to_valid_xmlrpc_request)
     # convert *.getPost to get_post
