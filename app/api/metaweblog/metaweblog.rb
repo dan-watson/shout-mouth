@@ -142,7 +142,7 @@ module Metaweblog
   end
 
   def get_pages(xmlrpc_call)
-    pages = Post.all(:is_page => true, :limit => xmlrpc_call[1][3])
+    pages = Post.all(:is_page => true, :limit => xmlrpc_call[1][3] || 100000)
     pages.map{|p| PostPresenter.new(p).to_wordpress_page}
   end
 
