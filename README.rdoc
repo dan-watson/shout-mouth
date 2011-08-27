@@ -15,7 +15,7 @@ Runs the site on test data (bundler must be installed)
   with username: dan@shout_mouth.com password: password123
 
 ===Setting Up Live Enviroment 
-  Setup shout mouth on your server and browse to http://yourblog.com and follow the on screen instructions
+  Deploy shout mouth to your server and browse to http://yourblog.com and follow the on screen instructions
 
 ===Rake Tasks
   rake cache:clear (Clear The Cache)
