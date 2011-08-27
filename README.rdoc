@@ -3,15 +3,19 @@
 Runs the site on test data (bundler must be installed)
 
   bundle install (I would recommend using RVM to manage your GEMSETS - ruby 1.9.2) 
+  
   rake db:demo_data
+  
   shotgun --env=test
+  
   browse to the http://localhost:9393
+  
   connect your blogging client to http://localhost:9393/xmlrpc or http://localhost:9393/xmlrpc.php (default wordpress) 
+  
   with username: dan@shout_mouth.com password: password123
 
-===Setting Up Live Enviroment (AUTOSETUP - the application will do into setup mode when no database exists and the setup file is in the applications root directory)
-  Setup shout mouth on your server and browse to http://yourblog.com
-  Follow the on screen instructions
+===Setting Up Live Enviroment 
+  Setup shout mouth on your server and browse to http://yourblog.com and follow the on screen instructions
 
 ===Rake Tasks
   rake cache:clear (Clear The Cache)
@@ -39,9 +43,6 @@ Runs the site on test data (bundler must be installed)
 To run all the tests
   rake specs:run_all
 	
-===Rails Style Console
-  racksh - when in the application root -eg RACK_ENV=production racksh
-
 ===Code Syntax Highlighting For Posts
 Automated syntax highlighting will occur for any techincal posts by wrapping your code inside a pre tag with the prettyprint class.
   <pre class="prettyprint"> 
@@ -89,13 +90,12 @@ Automated syntax highlighting will occur for any techincal posts by wrapping you
 
 1) Create a directory structure inside the app/plugins folder as shown below.
 - Convention matters	
-
-  -app
-  ----plugins
-  -----------easy_rider
-  ---------------easy_rider_plugin.rb
-  -----------view
-  -------------easy_rider_plugin.haml
+    -app
+    ----plugins
+    -----------easy_rider
+    ---------------easy_rider_plugin.rb
+    -----------view
+    -------------easy_rider_plugin.haml
 
 2) The information below is based on writing a new plugin called "easy rider"
 
@@ -121,6 +121,5 @@ Automated syntax highlighting will occur for any techincal posts by wrapping you
 
 3) To place a plugin on one of your pages just call the following code (example is for easy rider).
 - please note you may need to restart your application for your plugin to register
-
-  = plugin(PluginFactory.instance.get_plugin(:easy_rider))
+  =plugin(PluginFactory.instance.get_plugin(:easy_rider))
 
