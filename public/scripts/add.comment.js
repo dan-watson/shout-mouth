@@ -1,5 +1,13 @@
 $(document).ready(function() {
 
+    if($.cookie("comment_user").length != undefined) {
+      values = $.cookie("comment_user").replace("?", "").replace("+", " ").split("&");
+      
+      $.each(values, function(index, value) { 
+          $('input[name="comment[' + value.split("=")[0] + ']"]').val(value.split("=")[1]);
+      });
+      
+    }
     var comment_form = $('#commentform');
 
     comment_form.submit(function() {

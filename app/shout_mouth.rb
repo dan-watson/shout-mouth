@@ -91,6 +91,7 @@ class ShoutMouth < Sinatra::Base
 
   post '/post/:slug/add_comment' do
     content_type :json
+    
     post = Post.first(:persisted_slug => params[:slug])
     comment = params[:comment].merge(
     {
@@ -102,7 +103,17 @@ class ShoutMouth < Sinatra::Base
     comment = post.add_comment comment
     #even if the comment is marked as spam send it back so it will show on the page to satisfy the spammer / bot has
     #done its job correctly
-    comment.save ? comment.to_simple_comment.to_json :  comment.errors.map{|error| {:error => error}}.to_json
+    if comment.valid?
+      response.set_cookie("comment_user", :value => params[:comment].except("comment_content").to_query_string,
+                                 :domain => request.host,
+                                 :path => "/",
+                                 :expires => Time.new + (60 * 60 * 24 * 365)) #1 Year
+
+      comment.to_simple_comment.to_json
+    else
+      comment.errors.map{ |error| {:error => error}}.to_json
+    end
+
   end
 
 
