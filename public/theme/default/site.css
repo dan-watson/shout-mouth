@@ -185,12 +185,13 @@ pre {
 }
 .comment_avatar{
 	float:left;
-	margin-top:12px;
+	margin-top:18px;
 	width:15%;
 }
 .comment_body{
 	float:left;
 	width:85%;
+  margin-top:5px;
 }
 .comment_body pre{
   width:100%;
