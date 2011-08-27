@@ -2,12 +2,12 @@
 
 Runs the site on test data (bundler must be installed)
 
-	bundle install (I would recommend using RVM to manage your GEMSETS - ruby 1.9.2) 
-	rake db:demo_data
-	shotgun --env=test
-	browse to the http://localhost:9393
-	connect your blogging client to http://localhost:9393/xmlrpc or http://localhost:9393/xmlrpc.php (default wordpress) 
-	with username: dan@shout_mouth.com password: password123
+  bundle install (I would recommend using RVM to manage your GEMSETS - ruby 1.9.2) 
+  rake db:demo_data
+  shotgun --env=test
+  browse to the http://localhost:9393
+  connect your blogging client to http://localhost:9393/xmlrpc or http://localhost:9393/xmlrpc.php (default wordpress) 
+  with username: dan@shout_mouth.com password: password123
 
 ===Setting Up Live Enviroment (AUTOSETUP - the application will do into setup mode when no database exists and the setup file is in the applications root directory)
   Setup shout mouth on your server and browse to http://yourblog.com
@@ -33,14 +33,14 @@ Runs the site on test data (bundler must be installed)
   rake user:create  create email=email password=password firstname=firstname lastname=lastname (Create a user)  
 
 ===Rails Style Console
- 	type racksh inside the console when in the shout_mouth directory - (supports reload!)
+  type racksh inside the console when in the shout_mouth directory - (supports reload!)
 
 ===Tests
 To run all the tests
-	rake specs:run_all
+  rake specs:run_all
 	
 ===Rails Style Console
-racksh - when in the application root -eg RACK_ENV=production racksh
+  racksh - when in the application root -eg RACK_ENV=production racksh
 
 ===Code Syntax Highlighting For Posts
 Automated syntax highlighting will occur for any techincal posts by wrapping your code inside a pre tag with the prettyprint class.
@@ -61,70 +61,66 @@ Automated syntax highlighting will occur for any techincal posts by wrapping you
 
 ===Caching On NGINX
 -place the following code in the server block of the nginx config
-	
-	if (-f $request_filename)
-	{
-	  break;
-	}
 
-	if (-f $document_root/cache$request_filename)
-	{
-	  rewrite (.*) /cache$1 break;
-	  break;
-	}
+  if (-f $request_filename)
+  {
+    break;
+  }
 
-	if (-f $document_root/cache$request_uri.html)
-	{
-	  rewrite (.*) /cache$1.html break;
-	  break;
-	}
+  if (-f $document_root/cache$request_filename)
+  {
+    rewrite (.*) /cache$1 break;
+    break;
+  }
 
-	if (-f $document_root/cache$request_uri/index.html)
-	{
-	  rewrite (.*) /cache$1/index.html break;
-	  break;
-	}
-	
+  if (-f $document_root/cache$request_uri.html)
+  {
+    rewrite (.*) /cache$1.html break;
+    break;
+  }
+
+  if (-f $document_root/cache$request_uri/index.html)
+  {
+    rewrite (.*) /cache$1/index.html break;
+    break;
+  }
+
 ===Writing Plugins For Shout Mouth
 
 1) Create a directory structure inside the app/plugins folder as shown below.
 - Convention matters	
 
-	-app
-	----plugins
-	-----------easy_rider
-	---------------easy_rider_plugin.rb
-	-----------view
-	-------------easy_rider_plugin.haml
-	
+  -app
+  ----plugins
+  -----------easy_rider
+  ---------------easy_rider_plugin.rb
+  -----------view
+  -------------easy_rider_plugin.haml
+
 2) The information below is based on writing a new plugin called "easy rider"
 
 - our easy_rider plugin should contain a class file named easy_rider_plugin.rb whose class name should be EasyRiderPlugin
 - our easy_rider_plugin.rb file needs to reside in a folder called easy_rider under the plugins directory (see above)
 - EasyRiderPlugin class should inherit the base class Plugin (see below)
 - EasyRiderPlugin class should implement one method from the base class which is data (see below)
-		
-		class EasyRiderPlugin < Plugin
-			def data
-				Post.all_active #or any other data from the model api
-			end
-		end
-		
-		
+
+    class EasyRiderPlugin < Plugin
+      def data
+        Post.all_active #or any other data from the model api
+      end
+    end
+
 - All classes that inherit from Plugin have access to all of shout mouths model classes and data
 - our EasyRiderPlugin classes data method can return any object and will be passed down to the view
 - a HAML layout file should be included in the view folder called easy_rider_plugin.haml. The view folder should reside under the easy rider directory
 - by convention the variable name containing the returned data inside the view will be called easy_rider
-	
-		-easy_rider.each do |easy_rider|
-			%li
-				%a{:href => "/bikes/#{easy_rider.bike}", :rel => "follow"}=easy_rider.bike
-				
-				
+
+    -easy_rider.each do |easy_rider|
+      %li
+        %a{:href => "/bikes/#{easy_rider.bike}", :rel => "follow"}=easy_rider.bike
+
 3) To place a plugin on one of your pages just call the following code (example is for easy rider).
 - please note you may need to restart your application for your plugin to register
 
-		= plugin(PluginFactory.instance.get_plugin(:easy_rider))
-
-
+  = plugin(PluginFactory.instance.get_plugin(:easy_rider))
 
