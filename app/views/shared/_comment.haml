@@ -4,5 +4,6 @@
 	%div.comment_time=comment.readable_date
 	%div.comment_avatar 
 		%img{:class => "photo", :src => comment.avatar, :alt => "gravatar"}
-	%div.comment_body=comment.comment_content
+	%div.comment_body
+		%pre=comment.comment_content
 	%div.clear

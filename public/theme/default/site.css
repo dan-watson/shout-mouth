@@ -29,7 +29,6 @@ pre {
 	overflow: auto;
 	width:600px;
 	font-family:'Monaco', 'Consolas';
-	padding:10px 2px 10px 0px !important;
 }
 /* no vertical scrollbars for IE 7 */
 *:first-child+html pre {
@@ -135,6 +134,9 @@ pre {
 .post_body blockquote{
 	margin:0;
 }
+.post_body pre{
+	padding:12px 0px 0px 0px !important;
+}
 .post_information{
 	margin-bottom:15px;
 	text-align:left;
@@ -183,13 +185,19 @@ pre {
 }
 .comment_avatar{
 	float:left;
-	margin-top:10px;
+	margin-top:12px;
 	width:15%;
 }
 .comment_body{
 	float:left;
-	margin-top:10px;
 	width:85%;
+}
+.comment_body pre{
+  width:100%;
+  white-space: pre-wrap;
+	font-family:Georgia, 'Lucida Grande', Helvetica, Arial, Verdana, sans-serif;
+	font-size:0.8em;
+  overflow:hidden;
 }
 .add_comment{
 	
