@@ -23,6 +23,7 @@ require Dir.pwd + '/app/lib/regexp'
 require Dir.pwd + '/app/api/plugin/plugin_factory'
 require Dir.pwd + '/app/api/cache/cache_cleaner'
 require Dir.pwd + '/app/api/command/command_handler'
+DataMapper.finalize
 
 class ShoutMouth < Sinatra::Base
   include Metaweblog
