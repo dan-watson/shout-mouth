@@ -27,14 +27,14 @@ require Dir.pwd + '/app/api/command/command_handler'
 class ShoutMouth < Sinatra::Base
   include Metaweblog
 
-  set :public, File.dirname(__FILE__) + '/../public'
+  set :public_folder, File.dirname(__FILE__) + '/../public'
   set :views, File.dirname(__FILE__) + '/views'
   set :root, File.dirname(__FILE__)
   
   #Cache Setup
   register(Sinatra::Cache)
   set :cache_enabled, true
-  set :cache_output_dir, Proc.new { File.join(public,'cache') }
+  set :cache_output_dir, Proc.new { File.join(public_folder,'cache') }
   
   get '/' do
     
