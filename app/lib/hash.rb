@@ -5,4 +5,10 @@ class Hash
     end
     true
   end
+
+  def except(*blacklist)
+    {}.tap do |h|
+      (keys - blacklist).each { |k| h[k] = self[k] }
+    end
+  end
 end

@@ -23,10 +23,13 @@ require Dir.pwd + '/app/lib/regexp'
 require Dir.pwd + '/app/api/plugin/plugin_factory'
 require Dir.pwd + '/app/api/cache/cache_cleaner'
 require Dir.pwd + '/app/api/command/command_handler'
+require Dir.pwd + '/app/api/mobile_detector/mobile_detector'
+
 DataMapper.finalize
 
 class ShoutMouth < Sinatra::Base
   include Metaweblog
+  include MobileDetector
 
   set :public_folder, File.dirname(__FILE__) + '/../public'
   set :views, File.dirname(__FILE__) + '/views'

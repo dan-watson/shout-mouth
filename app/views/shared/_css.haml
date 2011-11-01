@@ -1,3 +1,5 @@
 %link{:rel => "stylesheet", :href => "/theme/#{Blog.theme}/site.css?#{version}", :type => "text/css", :media => "screen"}
 %link{:rel => "stylesheet", :href => "/prettyforms/pretty.forms.css?#{version}", :type => "text/css", :media => "screen"}
 %link{:rel => "stylesheet", :href => "/prettify/prettify.css?#{version}", :type => "text/css"}
+-if is_mobile?
+  %link{:rel => "stylesheet", :href => "/theme/#{Blog.theme}/mobile.css?#{version}", :type => "text/css"}
