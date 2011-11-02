@@ -56,32 +56,6 @@ Automated syntax highlighting will occur for any techincal posts by wrapping you
   end
   </pre> 
 
-===Caching On NGINX
--place the following code in the server block of the nginx config
-
-  if (-f $request_filename)
-  {
-    break;
-  }
-
-  if (-f $document_root/cache$request_filename)
-  {
-    rewrite (.*) /cache$1 break;
-    break;
-  }
-
-  if (-f $document_root/cache$request_uri.html)
-  {
-    rewrite (.*) /cache$1.html break;
-    break;
-  }
-
-  if (-f $document_root/cache$request_uri/index.html)
-  {
-    rewrite (.*) /cache$1/index.html break;
-    break;
-  }
-
 ===Writing Plugins For Shout Mouth
 
 1) Create a directory structure inside the app/plugins folder as shown below.
