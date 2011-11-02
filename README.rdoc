@@ -18,6 +18,8 @@ Runs the site on test data (bundler must be installed)
   Deploy shout mouth to your server and browse to http://yourblog.com and follow the on screen instructions
 
 ===Rake Tasks
+  rake check:all_urls (Send a get request to every url shout-mouth has will show a status code - sanity check that the blog is performing correctly
+  
   rake db:create  (Create The Database)
 
   rake db:delete  (Delete Database)

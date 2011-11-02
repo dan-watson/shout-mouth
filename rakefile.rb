@@ -1,18 +1,6 @@
-namespace :cache do
-  desc "Clear all files from the cache"
-  task :clear do |t, args|
-    Dir[File.join(File.dirname(__FILE__), "public/cache/**/*")].each{|entry| FileUtils.rm_rf(entry)}
-  end
-  
-  desc "Create the cache folder"
-  task :create do
-    cache_directory = File.join(File.dirname(__FILE__), "public/cache")
-    FileUtils.mkdir(cache_directory) unless File.exists?(File.join(cache_directory))
-    File.chmod(0777, cache_directory)
-  end
-
-  desc "Prime the cache"
-  task :prime do
+namespace :check do
+  desc "Call all urls in the application"
+  task :all_urls do
     resp = Net::HTTP.get_response(URI.parse(Blog.url))
     puts "status: #{resp.code} - #{Blog.url}"
 
