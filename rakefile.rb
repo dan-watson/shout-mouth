@@ -1,5 +1,5 @@
 namespace :check do
-  desc "Call all urls in the application"
+  desc "Send a get request to all urls ShoutMouth has generated"
   task :all_urls do
     resp = Net::HTTP.get_response(URI.parse(Blog.url))
     puts "status: #{resp.code} - #{Blog.url}"
