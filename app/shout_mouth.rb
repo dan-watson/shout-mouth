@@ -1,6 +1,5 @@
 require 'rubygems'
 require 'sinatra'
-require 'sinatra/cache'
 require 'pony'
 require 'haml'
 require 'json'
@@ -21,7 +20,6 @@ require Dir.pwd + '/app/lib/object'
 require Dir.pwd + '/app/lib/hash'
 require Dir.pwd + '/app/lib/regexp'
 require Dir.pwd + '/app/api/plugin/plugin_factory'
-require Dir.pwd + '/app/api/cache/cache_cleaner'
 require Dir.pwd + '/app/api/command/command_handler'
 require Dir.pwd + '/app/api/mobile_detector/mobile_detector'
 
@@ -34,11 +32,6 @@ class ShoutMouth < Sinatra::Base
   set :public_folder, File.dirname(__FILE__) + '/../public'
   set :views, File.dirname(__FILE__) + '/views'
   set :root, File.dirname(__FILE__)
-  
-  #Cache Setup
-  register(Sinatra::Cache)
-  set :cache_enabled, true
-  set :cache_output_dir, Proc.new { File.join(public_folder,'cache') }
   
   get '/' do
     
@@ -210,18 +203,6 @@ class ShoutMouth < Sinatra::Base
     haml :not_found
   end
   
-  after do
-      if response && response.status.to_i == 404
-        #Dont bother caching the 404's because the webserver will not render the correct status code....
-        #Breaking the cache from the gem does not work - Manual deletion
-         file = request.env["PATH_INFO"].to_s
-         cached_file = File.join(File.dirname(__FILE__), "..", "public", "cache", file)
-         cached_file += ".html" if File.extname(cached_file) == ''
-         FileUtils.rm_rf(cached_file)
-      end
-  end
-
-
   #----------------------------------------------------------------------------------#
   #-------------Metaweblog/Blogger/WordPress API-------------------------------------#
   #------send: see methods in the metaweblog api module------------------------------#

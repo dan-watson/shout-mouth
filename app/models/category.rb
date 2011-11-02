@@ -10,7 +10,6 @@ class Category
   
   before :save do
     self.persisted_slug = self.slug
-    CacheCleaner.clear_cache
   end
 
   #Instance Methods

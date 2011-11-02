@@ -2,7 +2,6 @@ source "http://rubygems.org/"
 
 gem "sqlite3-ruby"
 gem "sinatra" 
-gem "sinatra-cache"
 gem "datamapper"
 gem "haml"
 gem "akismetor"

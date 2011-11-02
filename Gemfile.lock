@@ -107,11 +107,6 @@ GEM
       rack (~> 1.3, >= 1.3.4)
       rack-protection (~> 1.1, >= 1.1.2)
       tilt (~> 1.3, >= 1.3.3)
-    sinatra-cache (0.3.7)
-      sinatra (>= 1.1.0)
-      sinatra-outputbuffer (>= 0.1.0)
-    sinatra-outputbuffer (0.1.0)
-      sinatra (>= 1.0.a)
     sqlite3 (1.3.4)
     sqlite3-ruby (1.3.3)
       sqlite3 (>= 1.3.3)
@@ -141,5 +136,4 @@ DEPENDENCIES
   rspec
   shotgun
   sinatra
-  sinatra-cache
   sqlite3-ruby

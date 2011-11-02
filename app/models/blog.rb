@@ -19,7 +19,6 @@ class Blog
   
   def self.posts_on_home_page=(value)
     create_or_update 'posts_on_home_page', value.to_i
-    CacheCleaner.clear_cache_for 'index'
   end
   #----------------------------#
   def self.url
@@ -28,7 +27,6 @@ class Blog
   
   def self.url=(value)
     create_or_update 'url', value
-    CacheCleaner.clear_cache
   end
   #----------------------------#
   def self.akismet_key
@@ -77,7 +75,6 @@ class Blog
   
   def self.theme=(value)
     create_or_update 'theme', value
-    CacheCleaner.clear_cache
   end
   #----------------------------#
   def self.site_name
@@ -86,7 +83,6 @@ class Blog
   
   def self.site_name=(value)
     create_or_update 'site_name', value
-    CacheCleaner.clear_cache
   end
   #----------------------------#
   def self.site_description
@@ -95,7 +91,6 @@ class Blog
   
   def self.site_description=(value)
     create_or_update 'site_description', value
-    CacheCleaner.clear_cache
   end
   #----------------------------#
   def self.twitter_account
@@ -104,7 +99,6 @@ class Blog
   
   def self.twitter_account=(value)
     create_or_update 'twitter_account', value
-    CacheCleaner.clear_cache
   end
   #----------------------------#
   def self.check_spam
@@ -121,7 +115,6 @@ class Blog
   
   def self.comments_open_for_days=(value)
     create_or_update 'comments_open_for_days', value.to_i
-    CacheCleaner.clear_cache
   end
   #----------------------------#  
   def self.use_file_based_storage
@@ -138,7 +131,6 @@ class Blog
   
   def self.footer_more_text=(value)
     create_or_update 'footer_more_text', value
-    CacheCleaner.clear_cache
   end
   #----------------------------#
   def self.google_analytics_key
@@ -147,7 +139,6 @@ class Blog
   
   def self.google_analytics_key=(value)
     create_or_update 'google_analytics_key', value
-    CacheCleaner.clear_cache
   end
   #----------------------------#
   def self.use_google_analytics

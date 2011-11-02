@@ -22,7 +22,6 @@ class Comment
 
   before :save do
     Blog.check_spam ? self.is_spam = spam? : self.is_spam = false
-    CacheCleaner.clear_cache_for self.post.link
   end
 
   #Instance Methods

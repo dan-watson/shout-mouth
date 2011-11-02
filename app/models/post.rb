@@ -26,7 +26,6 @@ class Post
     self.persisted_slug = self.slug
     self.month = created_at.strftime("%B")
     self.year = created_at.year
-    CacheCleaner.clear_cache
   end
   
   def parent_page

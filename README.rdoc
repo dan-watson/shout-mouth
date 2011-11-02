@@ -18,12 +18,6 @@ Runs the site on test data (bundler must be installed)
   Deploy shout mouth to your server and browse to http://yourblog.com and follow the on screen instructions
 
 ===Rake Tasks
-  rake cache:clear (Clear The Cache)
-
-  rake cache:prime (Prime The Cache)
-
-  rake cache:create (Create The Cache Folder With The Correct Permissions)
-
   rake db:create  (Create The Database)
 
   rake db:delete  (Delete Database)
