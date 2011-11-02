@@ -84,6 +84,11 @@ describe Blog, "configuration" do
   it "should return the correct administrator email" do
     Blog.administrator_email.should == "admin@yourserver.com"
   end
+
+  it "should be able to create and retrieve a phantom key via method missing" do
+    Blog.whats_the_time_mr_wolf = "10:00pm"
+    Blog.whats_the_time_mr_wolf.should == "10:00pm"
+  end
   
   it "setup should verify when not all the settings have been passed to the method that the method will return false" do
     settings = {}

@@ -211,6 +211,17 @@ class Blog
     urls
   end
 
+  #----Now add or retrieve any key you like! ----#
+  def self.method_missing(method, *arguments, &block)
+    if method.to_s =~ /=/
+      #setter
+      return self.create_or_update method.to_s.gsub("=", ""), arguments.first
+    else
+      #getter
+      return configuration method.to_s
+    end
+  end
+
   private
   def self.configuration setting
     entry = Blog.first(:key_name => setting) 

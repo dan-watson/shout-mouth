@@ -18,7 +18,7 @@ Runs the site on test data (bundler must be installed)
   Deploy shout mouth to your server and browse to http://yourblog.com and follow the on screen instructions
 
 ===Rake Tasks
-  rake check:all_urls (Send a get request to every url ShoutMouth has generated and will show a status code - sanity check that the blog is performing correctly
+  rake check:all_urls (Send a GET request to every url ShoutMouth has generated and will show a status code - sanity check that the blog is performing correctly
   
   rake db:create  (Create The Database)
 
@@ -84,6 +84,7 @@ Automated syntax highlighting will occur for any techincal posts by wrapping you
 - our EasyRiderPlugin classes data method can return any object and will be passed down to the view
 - a HAML layout file should be included in the view folder called easy_rider_plugin.haml. The view folder should reside under the easy rider directory
 - by convention the variable name containing the returned data inside the view will be called easy_rider
+- you can also add global settings by calling Blog.your_setting = "your value" which can be retrieved using Blog.your_setting
 
     -easy_rider.each do |easy_rider|
       %li
